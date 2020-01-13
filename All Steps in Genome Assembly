@@ -3,7 +3,9 @@ TO REMEMBER:
 GENOME=“MGWA_VELO045”
 USER=“USER6”
 
-November 29, 2019: Running the Genome Assembly for MacGuillivray's Warbler Species
+******************************************************************************************************************************
+
+STEP1:::November 29, 2019: Running the Genome Assembly for MacGuillivray's Warbler Species
 #Code run: Done
 
 #######################################################################
@@ -26,8 +28,9 @@ November 29, 2019: Running the Genome Assembly for MacGuillivray's Warbler Speci
    /opt/NGS_Mapping/supernova-2.1.1/supernova run --id=${SPECIES}__DATE__600mill --fastqs=$BASE_DIR --localcores=28 --localmem=185 --maxreads=$NREADS
 #######################################################################
 
+******************************************************************************************************************************
 
-January 13, 2020: Downloading Conda in node instead of server:
+STEP2:::January 13, 2020: Downloading Conda in node instead of server:
 #Code run: DONE
 #install Miniconda
 cd ~
@@ -56,8 +59,9 @@ conda install -c anaconda cython
 conda install -c anaconda pandas 
 conda install -c conda-forge matplotlib 
 
+******************************************************************************************************************************
 
-January 13, 2020: Making FASTA Files:
+STEP 1:::January 13, 2020: Making FASTA Files:
 #Code run: Pending
 #Define some variables, change them for your species
 GENOME="MGWA_VELO045" #for example, "FOSP_JTW4086", the name of your folder in 0_BIOD98_GENOMES1
@@ -69,6 +73,123 @@ mkdir /hhome/0_BIOD98_GENOMES1/"$GENOME"/"$GENOME"__29Nov2019__750mill/FASTAOUTP
 #run supernova mkoutput, do not need to change anything
 /home/0_PROGRAMS/supernova-2.1.1/supernova mkoutput --style=pseudohap --asmdir=/hhome/0_BIOD98_GENOMES1/"$GENOME"/"$GENOME"__29Nov2019__750mill/outs/assembly --outprefix=/hhome/0_BIOD98_GENOMES1/"$GENOME"/"$GENOME"__29Nov2019__750mill/FASTAOUTPUT/"$GENOME" --minsize=1000 --headers=short
 
-January 13, 2020: TE Library Construction:
+******************************************************************************************************************************
+
+STEP3:::January 13, 2020: TE Library Construction:
 #Code run: Pending:
 
+# ssh into the node server if that is where you will be working
+ssh USERNAME@192.168.0.5 #for example if you username were USER1 you would do ssh USER1@192.168.0.5
+#When it asks, type your normal weirlab password to log in, the same as for the main server.
+
+#You must set these variables each time you open a new terminal and log into the nodes
+
+#change these to match your species and user number
+GENOME=“MGWA_VELO045” #for example, "FOSP_JTW4086"
+USER="USER6" #for example, "USER1" or "USER2"
+
+#do not need to change these commands. Use them to set your home directory.
+HOME=/home/"$USER" #This defines where you will go when you type "cd ~"
+cd ~ #This shortcut moves your working directory to "$HOME"
+
+##First, we need to move a copy of out genome into a place we can easily access it.
+This is assuming that you have a .fasta.gz file in a subfolder of the BIOD98 genomes folder; if not, you will have to change the path in the code. Before you can run this step, you need to have made a FASTA file: the instructions for this are in the supernova.md page near the bottom ("Make a FASTA" section).
+
+Run this only once the first time you log into the node:
+
+#Run this only once to get set up on the node
+#change this to match your assembly so that it can be found:
+ASSEMBLY_Date="Date_used_in_name_of_assembly_folder" #for example, 22Nov2019, the date you used when you ran supernova (NOT the current date!)
+
+#do not need to change this if ASSEMBLY_Date and GENOME variables are set:
+ASSEMBLY=/hhome/0_BIOD98_GENOMES/"$GENOME"/ASSEMBLY_"$ASSEMBLY_Date"/"$GENOME"__DATE__700mill/FASTAOUTPUT/"$GENOME".fasta.gz #Path to your assembly fasta file
+
+cd ~
+mkdir "$GENOME"
+mkdir ~/"$GENOME"/genome
+cp "$ASSEMBLY" ~/"$GENOME"/genome/"$GENOME".fasta.gz #move your genome assembly into your folder.
+gunzip ~/"$GENOME"/genome/"$GENOME".fasta.gz #convert from compressed .fasta.gz to uncompressed .fasta
+
+******************************************************************************************************************************
+
+STEP 4:::January 13, 2020: Running EDTA Pipeline:
+#Code run: Pending
+
+################Creating EDTA Environment:
+conda create -n EDTA
+conda activate EDTA
+python2 -m pip install --user numpy==1.14.3 biopython==1.74 pp drmaa
+conda config --env --add channels anaconda --add channels conda-forge --add channels biocore --add channels bioconda --add channels cyclus
+conda install -n EDTA -y cd-hit repeatmodeler muscle mdust repeatmasker=4.0.9_p2 blast-legacy java-jdk perl perl-text-soundex multiprocess regex tensorflow=1.14.0 keras=2.2.4 scikit-learn=0.19.0 biopython pandas glob2 python=3.6 trf
+
+################Run EDTA:
+#setup folders
+mkdir ~/"$GENOME"/EDTA
+cd ~/"$GENOME"/EDTA
+
+#get some prerequisite data (protein libraries of reference bird species)
+cp /hhome/0_BIOD98_GENOMES/0_Genetic_resources/ref_aves_CDS.lib . #If you are working on the main server then change /hhome to /home
+cp /hhome/0_BIOD98_GENOMES/0_Genetic_resources/RefAves_proteins_no_tes.fa . #If you are working on the main server then change /hhome to /home
+
+#place a copy of your genome in this folder. 
+cp ~/"$GENOME"/genome/"$GENOME".fasta ~/"$GENOME"/EDTA/"$GENOME"_EDTA.fa #copy a copy of your genome sequence into your folder where you will run the program
+
+sed 's/\s.*//g' ~/"$GENOME"/EDTA/"$GENOME"_EDTA.fa > temp ; mv temp ~/"$GENOME"/EDTA/"$GENOME"_EDTA.fa #rename the genome and simplify the chromosome names for the following script to work
+
+#AT THIS POINT PLEASE OPEN 3 TERMINALS (connected to the same node) SO THAT YOU CAN RUN 3 THINGS AT THE SAME TIME - it will save hours of server time. We will be looking for helitrons, TIRs, and LTRs separately but in parallel.
+
+#In the first terminal
+cd ~/"$GENOME"/EDTA
+export PATH="/home/$USER/anaconda/bin:$PATH"
+conda activate EDTA #requires that you made the conda environment above
+time perl /home/0_PROGRAMS/EDTA/EDTA_raw.pl -genome "$GENOME"_EDTA.fa -species others -threads 16 -type tir #should have used 16 threads
+
+#In the second terminal at the same time while the others are running
+cd ~/"$GENOME"/EDTA
+conda activate EDTA #requires that you made the conda environment above
+time perl /home/0_PROGRAMS/EDTA/EDTA_raw.pl -genome "$GENOME"_EDTA.fa -species others -threads 6 -type helitron #should have used 6 threads
+
+#In the third terminal at the same time while the others are running
+cd ~/"$GENOME"/EDTA
+conda activate EDTA #requires that you made the conda environment above
+time perl /home/0_PROGRAMS/EDTA/EDTA_raw.pl -genome "$GENOME"_EDTA.fa -species others -threads 2 -type ltr #should have used 2 threads
+
+#Once all three are finished, record how long they took and anything else you think is important. Now you can close two of the terminals as the rest will be done in just 1 terminal.
+#Now, put all the results together with this command.
+cd ~/"$GENOME"/EDTA
+export DRMAA_LIBRARY_PATH=/usr/lib/gridengine-drmaa/lib/libdrmaa.so.1.0 #need to define for the script to run
+
+time perl /home/0_PROGRAMS/EDTA/EDTA.pl -overwrite 0 -genome "$GENOME"_EDTA.fa -species others -cds ref_aves_CDS.lib -protlib RefAves_proteins_no_tes.fa -sensitive 0 -threads 23	
+
+##I would recommend copy-pasting the entire Terminal output of EDTA to your github notebook to keep a record of it.
+
+################Output: The final library is in:
+~/"$GENOME"/EDTA/"$GENOME"_EDTA.fa.EDTA.TElib.fa
+
+################Detection of MITEs in genome:
+
+#setup folder for output
+cd ~/"$GENOME" #go into your project folder
+mkdir ~/"$GENOME"/MITE #make a directory to store your MITE analyses
+mkdir ~/"$GENOME"/MITE/MITE-Tracker #make a directory for running MITE-Tracker
+cp ~/"$GENOME"/genome/"$GENOME".fasta ~/"$GENOME"/MITE/MITE-Tracker/"$GENOME"_trackergenome.fa #copy a copy of your genome sequence into your folder where you will run the program
+
+#setup the environment for MITE-tracker
+cd /opt/tools/MITE-Tracker #need to be in the MITE-Tracker folder to run it
+export PATH=$PATH:/opt/tools/ncbi-blast-2.9.0+/bin #add blast+ to your PATH (the place linux searches for programs) so the program can be found by MITE-Tracker
+#virtualenv -p python3 venv #create a python environment to run the program in
+source venv/bin/activate #activate the python virtual environment
+
+#run MITE-tracker!
+time python3 -m MITETracker -g ~/"$GENOME"/MITE/MITE-Tracker/"$GENOME"_trackergenome.fa -w 23 -j "$GENOME"
+#This may take a while. When it is done, record how long it took in your github notebook (the last thing printed to your terminal will show the timing, we are most interested in "real time")
+
+mv ./results/"$GENOME" ~/"$GENOME"/MITE/MITE-Tracker/ #move the results of MITE-Tracker into your project folder
+#rm ~/"$GENOME"/MITE/MITE-Tracker/"$GENOME"_trackergenome.fa 
+#save space by deleting the used genome copy in ~/"$GENOME"/MITE/MITE-Tracker/"$GENOME"_trackergenome.fa (as long as you still have the original intact in your genomes folder!) I will do this if the server gets low on space.
+
+################Making Mite Library:
+#Now that we have results, create a library which will be used to later mask our genome sequence before gene annotation.
+
+Our MITE-Tracker libraries is in ~/"$GENOME"/MITE/MITE-Tracker/"$GENOME"/families_nr.fasta (nr stands for non-redundant). Make a working copy of this file in order to archive the original
+cp ~/"$GENOME"/MITE/MITE-Tracker/"$GENOME"/families_nr.fasta ~/"$GENOME"/MITE/"$GENOME"MITEs.fa
