@@ -1,2 +1,74 @@
-#Running the Genome Assembly for MacGuillivray's Warbler Species
-#Code ran for genome assembly on December 2, 2019
+TO REMEMBER:
+
+GENOME=“MGWA_VELO045”
+USER=“USER6”
+
+November 29, 2019: Running the Genome Assembly for MacGuillivray's Warbler Species
+#Code run: Done
+
+#######################################################################
+###CODE TO RUN SUPERNOVA FOR BIOD98 (29 NOV 2019)#######################
+#######################################################################
+###USER SETS THESE
+   SPECIES=MGWA_VELO045
+   DATE=29Nov2019
+###Once SPECIES and DATE are set copy and paste everything into terminal within the server
+#######################################################################
+###USER DOES NOT GENERALLY SET THESE
+   BASE_DIR=/home/0_BIOD98_GENOMES/$SPECIES/Raw_Genome_Data
+   NREADS=600000000 #don't change this
+#######################################################################
+####CODE TO RUN
+   cd /home/0_BIOD98_GENOMES/$SPECIES
+   ASSEMBLY_DIR=/home/0_BIOD98_GENOMES/$SPECIES/ASSEMBLY_$DATE
+   mkdir $ASSEMBLY_DIR
+   cd $ASSEMBLY_DIR
+   /opt/NGS_Mapping/supernova-2.1.1/supernova run --id=${SPECIES}__DATE__600mill --fastqs=$BASE_DIR --localcores=28 --localmem=185 --maxreads=$NREADS
+#######################################################################
+
+
+January 13, 2020: Downloading Conda in node instead of server:
+#Code run: DONE
+#install Miniconda
+cd ~
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+chmod 755 Miniconda3-latest-Linux-x86_64.sh
+./Miniconda3-latest-Linux-x86_64.sh #scroll through agreement with spacebar, type yes to agree, type ~/anaconda as the directory
+#once it is installed, you need to add it to your "Bash profile" like this (only do this once):
+echo ". ~/anaconda/etc/profile.d/conda.sh" >> ~/.bash_profile
+#every time you open a new terminal, you will have to run this:
+export PATH="/home/$USER/anaconda/bin:$PATH" 
+
+#close and then reopen a new terminal
+#check the conda version installed, and update to the newest
+conda --version
+conda update -y -n base conda
+
+#add the bioconda channels to your channels to access many bioinformatics tools
+conda config --add channels defaults
+conda config --add channels bioconda
+conda config --add channels conda-forge
+
+#install some basic things you might need
+conda install scipy
+conda install numpy
+conda install -c anaconda cython
+conda install -c anaconda pandas 
+conda install -c conda-forge matplotlib 
+
+
+January 13, 2020: Making FASTA Files:
+#Code run: Pending
+#Define some variables, change them for your species
+GENOME="MGWA_VELO045" #for example, "FOSP_JTW4086", the name of your folder in 0_BIOD98_GENOMES1
+ASSEMBLY_Date="29Nov2019" #for example, 22Nov2019, the date you used when you ran supernova (NOT the current date!)
+
+#make a new folder, do not need to change anything but the variables above need to be defined first
+mkdir /hhome/0_BIOD98_GENOMES1/"$GENOME"/"$GENOME"__29Nov2019__750mill/FASTAOUTPUT
+
+#run supernova mkoutput, do not need to change anything
+/home/0_PROGRAMS/supernova-2.1.1/supernova mkoutput --style=pseudohap --asmdir=/hhome/0_BIOD98_GENOMES1/"$GENOME"/"$GENOME"__29Nov2019__750mill/outs/assembly --outprefix=/hhome/0_BIOD98_GENOMES1/"$GENOME"/"$GENOME"__29Nov2019__750mill/FASTAOUTPUT/"$GENOME" --minsize=1000 --headers=short
+
+January 13, 2020: TE Library Construction:
+#Code run: Pending:
+
