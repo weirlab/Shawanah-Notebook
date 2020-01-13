@@ -1,5 +1,14 @@
 January 13, 2020: Making FASTA Files:
 #Code run: Pending
+
+#Running on the node:
+ssh USER6@192.168.0.5 #change the username to match your user number
+
+#It will ask for a password, which is the same as your main password for the lab server. This is the login for the node called "Ramphocelus", so the command should now show "USER#@Ramphocelus. There are a few other nodes with different IP addresses, make sure that you are logged into the node you were assigned to because your work will not show up on other nodes.
+
+When you are working in the node, the main server is accessible as /hhome/, so any commands you want to run on files stored on the main server you will need to change any mentions of /home/ to /hhome/, but in general we do not want to do that because it is slower to access those files from the nodes.
+
+#Creating FASTA Files:
 #Define some variables, change them for your species
 GENOME="MGWA_VELO045" #for example, "FOSP_JTW4086", the name of your folder in 0_BIOD98_GENOMES1
 ASSEMBLY_Date="29Nov2019" #for example, 22Nov2019, the date you used when you ran supernova (NOT the current date!)
