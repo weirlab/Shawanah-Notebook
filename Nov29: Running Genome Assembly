@@ -1,0 +1,23 @@
+November 29, 2019: Running the Genome Assembly for MacGuillivray's Warbler Species
+#Code run: Done
+
+#######################################################################
+###CODE TO RUN SUPERNOVA FOR BIOD98 (29 NOV 2019)#######################
+#######################################################################
+###USER SETS THESE
+   SPECIES=MGWA_VELO045
+   DATE=29Nov2019
+###Once SPECIES and DATE are set copy and paste everything into terminal within the server
+#######################################################################
+###USER DOES NOT GENERALLY SET THESE
+   BASE_DIR=/home/0_BIOD98_GENOMES/$SPECIES/Raw_Genome_Data
+   NREADS=600000000 #don't change this
+#######################################################################
+####CODE TO RUN
+   cd /home/0_BIOD98_GENOMES/$SPECIES
+   ASSEMBLY_DIR=/home/0_BIOD98_GENOMES/$SPECIES/ASSEMBLY_$DATE
+   mkdir $ASSEMBLY_DIR
+   cd $ASSEMBLY_DIR
+   /opt/NGS_Mapping/supernova-2.1.1/supernova run --id=${SPECIES}__DATE__600mill --fastqs=$BASE_DIR --localcores=28 --localmem=185 --maxreads=$NREADS
+#######################################################################
+
