@@ -14,7 +14,7 @@ GENOME="MGWA_VELO045" #for example, "FOSP_JTW4086", the name of your folder in 0
 ASSEMBLY_Date="29Nov2019" #for example, 22Nov2019, the date you used when you ran supernova (NOT the current date!)
 
 #make a new folder, do not need to change anything but the variables above need to be defined first
-mkdir /hhome/0_BIOD98_GENOMES1/"$GENOME"/"$GENOME"__29Nov2019__750mill/FASTAOUTPUT
+mkdir /hhome/0_BIOD98_GENOMES2/"$GENOME"/"$GENOME"__29Nov2019__750mill/FASTAOUTPUT
 
 #run supernova mkoutput, do not need to change anything
-/home/0_PROGRAMS/supernova-2.1.1/supernova mkoutput --style=pseudohap --asmdir=/hhome/0_BIOD98_GENOMES1/"$GENOME"/"$GENOME"__29Nov2019__750mill/outs/assembly --outprefix=/hhome/0_BIOD98_GENOMES1/"$GENOME"/"$GENOME"__29Nov2019__750mill/FASTAOUTPUT/"$GENOME" --minsize=1000 --headers=short
+/home/0_PROGRAMS/supernova-2.1.1/supernova mkoutput --style=pseudohap --asmdir=/hhome/0_BIOD98_GENOMES2/"$GENOME"/"$GENOME"__29Nov2019__750mill/outs/assembly --outprefix=/hhome/0_BIOD98_GENOMES2/"$GENOME"/"$GENOME"__29Nov2019__750mill/FASTAOUTPUT/"$GENOME" --minsize=1000 --headers=short
