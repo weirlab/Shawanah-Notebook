@@ -61,7 +61,7 @@ conda install -c conda-forge matplotlib
 
 ******************************************************************************************************************************
 
-STEP 1:::January 13, 2020: Making FASTA Files:
+STEP 1:::January 17, 2020: Making FASTA Files:
 #Code run: Pending
 #Define some variables, change them for your species
 GENOME="MGWA_VELO045" #for example, "FOSP_JTW4086", the name of your folder in 0_BIOD98_GENOMES1
