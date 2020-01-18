@@ -61,8 +61,8 @@ conda install -c conda-forge matplotlib
 
 ******************************************************************************************************************************
 
-STEP 1:::January 17, 2020: Making FASTA Files:
-#Code run: Pending
+STEP 1:::January 18, 2020: Making FASTA Files:
+#Code run: DONE
 #Define some variables, change them for your species
 GENOME="MGWA_VELO045" #for example, "FOSP_JTW4086", the name of your folder in 0_BIOD98_GENOMES1
 ASSEMBLY_Date="29Nov2019" #for example, 22Nov2019, the date you used when you ran supernova (NOT the current date!)
@@ -75,7 +75,7 @@ mkdir /home/0_BIOD98_GENOMES2/"$GENOME"/"$GENOME"__29Nov2019__750mill/FASTAOUTPU
 
 ******************************************************************************************************************************
 
-STEP3:::January 13, 2020: TE Library Construction:
+STEP3:::January 19, 2020: TE Library Construction:
 #Code run: Pending:
 
 # ssh into the node server if that is where you will be working
