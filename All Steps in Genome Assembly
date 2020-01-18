@@ -75,7 +75,7 @@ mkdir /home/0_BIOD98_GENOMES2/"$GENOME"/"$GENOME"__29Nov2019__750mill/FASTAOUTPU
 
 ******************************************************************************************************************************
 
-STEP3:::January 19, 2020: TE Library Construction:
+STEP3:::January 18, 2020: TE Library Construction:
 #Code run: Pending:
 
 # ssh into the node server if that is where you will be working
@@ -102,17 +102,20 @@ Run this only once the first time you log into the node:
 ASSEMBLY_Date="Date_used_in_name_of_assembly_folder" #for example, 22Nov2019, the date you used when you ran supernova (NOT the current date!)
 
 #do not need to change this if ASSEMBLY_Date and GENOME variables are set:
-ASSEMBLY=/hhome/0_BIOD98_GENOMES/"$GENOME"/ASSEMBLY_"$ASSEMBLY_Date"/"$GENOME"__DATE__700mill/FASTAOUTPUT/"$GENOME".fasta.gz #Path to your assembly fasta file
+ASSEMBLY=/home/0_BIOD98_GENOMES2/"$GENOME"/"$GENOME"__29Nov2019__750mill/FASTAOUTPUT /"$GENOME".fasta.gz 
+#Path to your assembly fasta file
 
 cd ~
 mkdir "$GENOME"
 mkdir ~/"$GENOME"/genome
-cp "$ASSEMBLY" ~/"$GENOME"/genome/"$GENOME".fasta.gz #move your genome assembly into your folder.
-gunzip ~/"$GENOME"/genome/"$GENOME".fasta.gz #convert from compressed .fasta.gz to uncompressed .fasta
+scp $USER@142.1.98.20:"$ASSEMBLY" ~/"$GENOME"/genome/"$GENOME".fasta.gz 
+#move your genome assembly into your folder.
+gunzip ~/"$GENOME"/genome/"$GENOME".fasta.gz 
+#convert from compressed .fasta.gz to uncompressed .fasta
 
 ******************************************************************************************************************************
 
-STEP 4:::January 13, 2020: Running EDTA Pipeline:
+STEP 4:::January 19, 2020: Running EDTA Pipeline:
 #Code run: Pending
 
 ################Creating EDTA Environment:
