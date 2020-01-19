@@ -76,7 +76,7 @@ mkdir /home/0_BIOD98_GENOMES2/"$GENOME"/"$GENOME"__29Nov2019__750mill/FASTAOUTPU
 ******************************************************************************************************************************
 
 STEP3:::January 18, 2020: TE Library Construction:
-#Code run: Pending:
+#Code run: DONE:
 
 # ssh into the node server if that is where you will be working
 ssh USERNAME@192.168.0.5 #for example if you username were USER1 you would do ssh USER1@192.168.0.5
