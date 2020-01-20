@@ -1,7 +1,7 @@
 TO REMEMBER:
 
-GENOME=“MGWA_VELO045”
-USER=“USER6”
+GENOME="MGWA_VELO045"
+USER="USER6"
 
 ******************************************************************************************************************************
 
@@ -79,13 +79,13 @@ STEP3:::January 18, 2020: TE Library Construction:
 #Code run: DONE:
 
 # ssh into the node server if that is where you will be working
-ssh USERNAME@192.168.0.5 #for example if you username were USER1 you would do ssh USER1@192.168.0.5
+ssh USERNAME@192.168.0.5 #for example if you username were USER1 you would do ssh USER6@192.168.0.5
 #When it asks, type your normal weirlab password to log in, the same as for the main server.
 
 #You must set these variables each time you open a new terminal and log into the nodes
 
 #change these to match your species and user number
-GENOME=“MGWA_VELO045” #for example, "FOSP_JTW4086"
+GENOME="MGWA_VELO045" #for example, "FOSP_JTW4086"
 USER="USER6" #for example, "USER1" or "USER2"
 
 #do not need to change these commands. Use them to set your home directory.
