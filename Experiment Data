@@ -1,7 +1,7 @@
 January 20, 2020: Ran the EDTA for candidate TE sequences:
 
  |       STEP          |  THREADS  |   REAL TIME   |  USERTIME    |
- |  Raw Helitron       |   8       |               |              |        
- |   Raw TIR           |   8       |               |              |
+ |  Raw Helitron       |   8       |   773m35.909s | 770m48.888s  |        
+ |   Raw TIR           |   8       |  540m40.255   | 3920m40.978s |
  |   Raw LTR           |   8       |   87m5.947s   |  98m55.784s  |
  |   Rest of pipeline  |   23      |               |              |
