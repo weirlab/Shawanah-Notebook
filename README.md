@@ -113,19 +113,45 @@ tar -xvf taxdb.tar
 time /home/0_PROGRAMS/ncbi-blast-2.10.0+/bin/blastx -query "$GENOME"_raw.lib -db /home/0_BIOD98/RefAves_proteins_no_tes.fa -outfmt '6 qseqid staxids bitscore std sscinames sskingdoms stitle' -max_target_seqs 25 -culling_limit 2 -num_threads 23 -evalue 1e-10 -out "$GENOME"_raw.lib.vs.RefAves_proteins_no_tes.out
 
 OUTPUT: install the taxonomy database using wget; run blastx, matching the repeat library to the non-TE protein library that we used before
+SUMMARY REPORT:
+
+real	17m56.396s
+user	360m49.629s
+sys	0m13.359s
 
 /home/0_PROGRAMS/assemblage/fastaqual_select.pl -f "$GENOME"_raw.lib -e <(awk '{print $1}' "$GENOME"_raw.lib.vs.RefAves_proteins_no_tes.out | sort | uniq) > "$GENOME"_noprot.lib
 OUTPUT: remove the significant hits with fastaqual_select
 
 time perl /home/0_PROGRAMS/EDTA/util/cleanup_tandem.pl -misschar N -nc 50000 -nr 0.8 -minlen 80 -minscore 3000 -trf 1 -trf_path /home/0_PROGRAMS/trf -cleanN 1 -cleanT 1 -f "$GENOME"_noprot.lib > "$GENOME"_noprot_clean.lib
 OUTPUT: clean up tandem repeats
+SUMMARY REPORT:
+
+real	0m21.908s
+user	0m21.808s
+sys	0m0.065s
 
 grep -c "^>" "$GENOME"_noprot_clean.lib
 OUTPUT:count how many TEs remain after filtering. Were very many filtered out compared to your starting numbers?
-# OF TE's left after filtering = 
-#### Were many TE's filtered out compared to starting numbers? 
+# OF TE's left after filtering = 5118
+#### Were many TE's filtered out compared to starting numbers? STARTING = 173967 sequences.  FILTERED = 5118
 
 #### FINAL SPECIES-SPECIFIC REPEAT LIBRARY FOUND IN: ~/"$GENOME/repeat_library/"$GENOME"_noprot_clean.lib
+
+####TO MAKE LIBRARY MORE COMPREHENSIVE, concatenate it with previously published, curated bird TE libraries.
+####WILL USE REPEAT LIBRARIES FROM: Blue-capped Cordon Bleu (Uraeginthus cyanocephalus) and Collared Flycatcher Ficedula albicollis look like they would be beneficial to add with our own library.
+
+cd /home/0_BIOD98
+wget https://dfam.org/TE_repository/141/2019/5/uraCya_rm2.45.fasta
+#Blue-capped Cordon Bleu Uraeginthus
+wget https://dfam.org/TE_repository/8/2017/11/68015-fAlb15_rm3.0.lib.gz 
+gunzip 68015-fAlb15_rm3.0.lib.gz 
+#Ficedula albicollis
+cat "$GENOME"_noprot_clean.lib /home/0_BIOD98/68015-fAlb15_rm3.0.lib /home/0_BIOD98/uraCya_rm2.45.fasta > "$GENOME"_repeat_library_withFicalbUracya.lib
+#concatenate with our own library
+
+#### final repeat library to use for RepeatMasking is found in: ~/"$GENOME/repeat_library/"$GENOME"_repeat_library_withFicalbUracya.lib
+
+
 
 
 
