@@ -55,27 +55,29 @@ mkdir ~/"$GENOME"/repeat_library (#'/home/USER6/MGWA_VELO045/repeat_library': Fi
 cd ~/"$GENOME"/repeat_library (#changed directory to repeat library)
 cp ~/"$GENOME"/repeatmodeler/RM_*/consensi.fa ./"$GENOME"_consensi.fa
 cp ~/"$GENOME"/repeatmodeler/RM_*/families.stk ./"$GENOME"_families.stk
-/opt/perl5/bin/perlbrew switch perl-5.30.0
 
 
 TE Filter Editing:
+export PERLBREW_ROOT=/opt/perl5
+/opt/perl5/bin/perlbrew switch perl-5.30.0
+####OUTPUT: perlbrew will be installed in opt AND A sub-shell is launched with perl-5.30.0 as the activated perl. Run 'exit' to finish it.
+
 time /home/0_PROGRAMS/RepeatModeler-2.0/RepeatClassifier -consensi "$GENOME"_consensi.fa -stockholm "$GENOME"_families.stk
 ####OUTPUT: "$GENOME"_consensi.fa.classified
 SUMMARY REPORT: REPEAT CLASSIFIER:
-real	27m3.599s
-user	33m56.690s
-sys	0m0.709s
+real	21m33.153s
+user	26m3.446s
+sys	0m0.510s
 
 time perl /home/0_PROGRAMS/CRL_Scripts1.0/repeatmodeler_parse.pl --fastafile "$GENOME"_consensi.fa.classified --unknowns "$GENOME"_repeatmodeler_unknowns.fasta --identities "$GENOME"_repeatmodeler_identities.fasta
 ###OUTPUT
 SUMMARY REPORT: SEPARATING KNOWN/UNKNOWN REPEATS 
-real	0m0.178s
-user	0m0.166s
-sys	0m0.012s
+real	0m0.177s
+user	0m0.081s
+sys	0m0.020s
 
 grep -c "^>" "$GENOME"_repeatmodeler_identities.fasta
 ###OUTPUT: number of identified TE's = 383 identified
-
 
 grep -c "^>" "$GENOME"_repeatmodeler_unknowns.fasta
 ###OUTPUT: number of unidentified TE's= 327 unidentified
@@ -83,16 +85,16 @@ grep -c "^>" "$GENOME"_repeatmodeler_unknowns.fasta
 time /home/0_PROGRAMS/ncbi-blast-2.10.0+/bin/blastx -query "$GENOME"_repeatmodeler_unknowns.fasta -db /home/0_BIOD98/Tpases020812DNA -evalue 1e-10 -num_descriptions 10 -out "$GENOME"_modelerunknown_blast_results.txt
 ###OUTPUT
 SUMMARY REPORT:compare your TEs to this database to try classify them
-real	0m10.747s
-user	0m10.705s
-sys	0m0.036s
+real	0m10.503s
+user	0m10.446s
+sys	0m0.052s
 
 time perl /home/0_PROGRAMS/CRL_Scripts1.0/transposon_blast_parse.pl --blastx "$GENOME"_modelerunknown_blast_results.txt --modelerunknown "$GENOME"_repeatmodeler_unknowns.fasta
 ###OUTPUT:
 SUMMARY REPORT: add the results to your TE fasta file
-real	0m0.346s
-user	0m0.306s
-sys	0m0.040s
+real	0m0.392s
+user	0m0.355s
+sys	0m0.013s
 
 mv unknown_elements.txt "$GENOME"ModelerUnknown.lib
 ###OUTPUT: rename the output file to be more memorable
@@ -103,21 +105,17 @@ OUTPUT: combine the newly identified TE file with the previously-identified TE f
 cat "$GENOME"ModelerUnknown.lib "$GENOME"ModelerID.lib ~/"$GENOME"/EDTA/"$GENOME"_EDTA.fa.EDTA.TElib.fa > "$GENOME"_raw.lib
 OUTPUT: Concatenate all of your libraries together
 
-wget ftp://ftp.ncbi.nlm.nih.gov/blast/db/taxdb.tar.gz
-gunzip taxdb.tar.gz ; tar -xvf taxdb.tar
-tar -xvf taxdb.tar
-
 cp /home/0_BIOD98/taxdb.tar .
 tar -xvf taxdb.tar
 
 time /home/0_PROGRAMS/ncbi-blast-2.10.0+/bin/blastx -query "$GENOME"_raw.lib -db /home/0_BIOD98/RefAves_proteins_no_tes.fa -outfmt '6 qseqid staxids bitscore std sscinames sskingdoms stitle' -max_target_seqs 25 -culling_limit 2 -num_threads 23 -evalue 1e-10 -out "$GENOME"_raw.lib.vs.RefAves_proteins_no_tes.out
+OUTPUT: run blastx, matching the repeat library to the non-TE protein library that we used before
 
-OUTPUT: install the taxonomy database using wget; run blastx, matching the repeat library to the non-TE protein library that we used before
 SUMMARY REPORT:
 
-real	17m56.396s
-user	360m49.629s
-sys	0m13.359s
+real	17m56.669s
+user	360m54.581s
+sys	0m14.161s
 
 /home/0_PROGRAMS/assemblage/fastaqual_select.pl -f "$GENOME"_raw.lib -e <(awk '{print $1}' "$GENOME"_raw.lib.vs.RefAves_proteins_no_tes.out | sort | uniq) > "$GENOME"_noprot.lib
 OUTPUT: remove the significant hits with fastaqual_select
@@ -126,30 +124,27 @@ time perl /home/0_PROGRAMS/EDTA/util/cleanup_tandem.pl -misschar N -nc 50000 -nr
 OUTPUT: clean up tandem repeats
 SUMMARY REPORT:
 
-real	0m21.908s
-user	0m21.808s
-sys	0m0.065s
+real	0m22.013s
+user	0m21.916s
+sys	0m0.081s
 
 grep -c "^>" "$GENOME"_noprot_clean.lib
 OUTPUT:count how many TEs remain after filtering. Were very many filtered out compared to your starting numbers?
 # OF TE's left after filtering = 5118
-#### Were many TE's filtered out compared to starting numbers? STARTING = 173967 sequences.  FILTERED = 5118
+#### Were many TE's filtered out compared to starting numbers? STARTING = 173967 (45609) sequences.  FILTERED = 5118
 
 #### FINAL SPECIES-SPECIFIC REPEAT LIBRARY FOUND IN: ~/"$GENOME/repeat_library/"$GENOME"_noprot_clean.lib
 
 ####TO MAKE LIBRARY MORE COMPREHENSIVE, concatenate it with previously published, curated bird TE libraries.
 ####WILL USE REPEAT LIBRARIES FROM: Blue-capped Cordon Bleu (Uraeginthus cyanocephalus) and Collared Flycatcher Ficedula albicollis look like they would be beneficial to add with our own library.
 
-cd /home/0_BIOD98
-wget https://dfam.org/TE_repository/141/2019/5/uraCya_rm2.45.fasta
-#Blue-capped Cordon Bleu Uraeginthus
-wget https://dfam.org/TE_repository/8/2017/11/68015-fAlb15_rm3.0.lib.gz 
-gunzip 68015-fAlb15_rm3.0.lib.gz 
-#Ficedula albicollis
 cat "$GENOME"_noprot_clean.lib /home/0_BIOD98/68015-fAlb15_rm3.0.lib /home/0_BIOD98/uraCya_rm2.45.fasta > "$GENOME"_repeat_library_withFicalbUracya.lib
-#concatenate with our own library
+#concatenate repeat library from Blue-capped Cordon Bleu Uraeginthus and Ficedula albicollis with our own library
 
-#### final repeat library to use for RepeatMasking is found in: ~/"$GENOME/repeat_library/"$GENOME"_repeat_library_withFicalbUracya.lib
+#### final repeat library to use for RepeatMasking is found in: ~/"$GENOME/repeat_library/"$GENOME"_repeat_library_withFicalbUracya.lib (DONE)
+
+MAKER STEPS:
+
 
 
 
