@@ -143,12 +143,33 @@ cat "$GENOME"_noprot_clean.lib /home/0_BIOD98/68015-fAlb15_rm3.0.lib /home/0_BIO
 
 #### final repeat library to use for RepeatMasking is found in: ~/"$GENOME/repeat_library/"$GENOME"_repeat_library_withFicalbUracya.lib (DONE)
 
-MAKER STEPS:
+MAKER STEPS 1:
+
+mkdir ~/"$GENOME"/maker 
+###OUTPUT: you need a folder to be working in on the Ramphocelus node
+
+cp ~/"$GENOME"/genome/"$GENOME".fasta ~/"$GENOME"/maker/"$GENOME"_input.fasta
+####OUTPUT: copy the genome into your new folder
+
+less ~/"$GENOME"/maker/"$GENOME"_input.fasta #press 'q' to go back
+####OUTPUT: View the start of the file and see that the first contig is probably named "0"
+
+sed -i 's/^>0 />0start /g' ~/"$GENOME"/maker/"$GENOME"_input.fasta
+####OUTPUT: this line will replace the name "0" to "0start", which maker allows
+
+less ~/"$GENOME"/maker/"$GENOME"_input.fasta #press 'q' to go back
+####OUTPUT: make sure that this change worked! It should be named "0start" - if it is not, make a post in Issues on Github.
 
 
+scp "$USER"@142.1.98.20:/home/0_BIOD98_GENOMES1/proteomes/"EmberizoideaSuperPlus_proteomes.no_tes.fa" ./"$GENOME"prot_input.fasta
 
+####CONSIDERATION: If you are a Setophaga, Geothlypis, or Passerella then you need 'EmberizoideaSuperPlus_proteomes.no_tes.fa'
+####change the proteome name to be the correct proteome for your species eg "PipridaeSuperPlus_proteomes.no_tes.fa"
 
+scp "$USER"@142.1.98.20:/home/0_BIOD98_GENOMES1/transcriptomes/"Setcae_transcriptome.fa" ./"$GENOME"RNA_input.fa
 
+###CONSIDERATION: If you are a Setophaga or Geothlypis, then you need Setcae_transcriptome.fa. I made it from Setophaga caeruleus.
+####change the proteome name to be the correct proteome for your species
 
-
-
+scp "$USER"@142.1.98.20:/home/0_BIOD98_GENOMES1/Maker_ctl_templates/maker_*.ctl .
+###OUTPUT: To run maker you need three input files (maker_exe.ctl: - paths to required programs, maker_bopts.ctl: BLAST and Exonerate settings, maker_opt.ctl: other MAKER settings as location of genome, and training parameters for gene prediction programs)
