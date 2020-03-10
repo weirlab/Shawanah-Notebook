@@ -309,3 +309,14 @@ sbatch 0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_16.sh
 
 ###OUTPUT: To check the status of the submission, you can do
 squeue --user niki03 #where USERNAME is your Compute Canada Username
+
+
+MAKER1 OUTPUT:
+#FAILED CONTIGS=0
+#SKIPPED CONTIGS (too small)= 42372
+#STARTED CONTIGS= 3205
+#FINISHED CONTIGS= 3226
+#TOTAL CONTIGS=48805
+#total number of scaffolds in original fasta file= 45609
+#Count scaffolds of the many input chunks - should add to the same number as the original above = 45609
+#count number of unique contigs in the log (contigs that actually ran in the maker pipeline) = 45601
