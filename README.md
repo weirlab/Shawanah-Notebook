@@ -429,3 +429,12 @@ scp -r $USER@192.168.0.5:~/MGWA_VELO045/MGWA_VELO045_maker_R1/Maker1/MGWA_VELO04
 scp -r USER6@142.1.98.20:/home/0_BIOD98_GENOMES2/MGWA_VELO045/snap/snap .
 scp -r USER6@142.1.98.20:/home/0_BIOD98_GENOMES2/MGWA_VELO045/MGWA_VELO045_rnd1* .
 scp -r USER6@142.1.98.20:/home/0_BIOD98_GENOMES2/MGWA_VELO045/MGWA_VELO045_input.all* .
+
+find *SUBMISSION*_run_*.sh > tempfile
+cat tempfile | while read line ; do sed 's/OUTPUT/OUTPUT_R2/g' "$line" | sed 's/23:59:00/18:00:00/g' > R2_"$line" ; done
+chmod +x R2_*
+
+###identified 16 submission_run_.sh files
+
+#rename old output folder so that it cannot interfere
+mv MGWA_VELO045_input.maker.output MGWA_VELO045_input.maker.output_round1
