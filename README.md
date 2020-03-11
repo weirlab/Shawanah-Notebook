@@ -438,3 +438,26 @@ chmod +x R2_*
 
 #rename old output folder so that it cannot interfere
 mv MGWA_VELO045_input.maker.output MGWA_VELO045_input.maker.output_round1
+
+###When that is all ready, run Maker round 2! Run the Submission Scripts
+sbatch R2_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_1.sh
+sbatch R2_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_2.sh
+sbatch R2_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_3.sh
+sbatch R2_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_4.sh
+sbatch R2_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_5.sh
+sbatch R2_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_6.sh
+sbatch R2_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_7.sh
+sbatch R2_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_8.sh
+sbatch R2_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_9.sh
+sbatch R2_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_10.sh
+sbatch R2_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_11.sh
+sbatch R2_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_12.sh
+sbatch R2_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_13.sh
+sbatch R2_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_14.sh
+sbatch R2_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_15.sh
+sbatch R2_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_16.sh
+
+REDOING MAKER 2 RUNS: 1,3,5,6,8,12
+COMPLETE MAKER 2 RUNS: 10, 11, 13, 14, 15, 16, 2, 4, 7, 9
+
+
