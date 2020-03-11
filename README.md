@@ -419,4 +419,7 @@ protein= #protein sequence file in fasta format (i.e. from mutiple oransisms)
 
 ###CHANGES OBTAINED 
 
-###Get the snap files.
+###Get the snap files. Copy SNAP files from ramphoceles to Main server to Niagara
+##FROM RAMPHOCELES TO MAIN SERVER:
+scp -r $USER@192.168.0.5:~/MGWA_VELO045/MGWA_VELO045_maker_R1/Maker1/snap .
+
