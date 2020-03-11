@@ -320,3 +320,34 @@ MAKER1 OUTPUT:
 #total number of scaffolds in original fasta file= 45609
 #Count scaffolds of the many input chunks - should add to the same number as the original above = 45609
 #count number of unique contigs in the log (contigs that actually ran in the maker pipeline) = 45601
+
+time /opt/tools/maker/bin/gff3_merge -s -d ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log> MGWA_VELO045_rnd1.all.maker.gff
+OUTPUT: 
+real	1m38.418s
+user	0m46.685s
+sys	0m15.172s
+
+time /opt/tools/maker/bin/fasta_merge -d ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log
+OUTPUT:
+real	0m45.127s
+user	0m5.990s
+sys	0m4.218s
+
+time /opt/tools/maker/bin/gff3_merge -n -s -d ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log > MGWA_VELO045_rnd1.all.maker.noseq.gff
+OUTPUT:
+real	0m30.462s
+user	0m24.337s
+sys	0m7.032s
+
+cd ~/MGWA_VELO045/MGWA_VELO045_maker_R1/Maker1/snap/round1
+/opt/tools/maker/bin/maker2zff -x 0.25 -l 50 -c 0 -e 0 -o 0.5 -d ../../MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log
+
+rename "s/genome/MGWA_VELO045_rnd1.zff.length50_aed0.25/g" *
+
+#create statistics
+/opt/tools/snap/fathom MGWA_VELO045_rnd1.zff.length50_aed0.25.ann MGWA_VELO045_rnd1.zff.length50_aed0.25.dna -gene-stats > gene-stats.log 2>&1
+
+ /opt/tools/snap/fathom MGWA_VELO045_rnd1.zff.length50_aed0.25.ann MGWA_VELO045_rnd1.zff.length50_aed0.25.dna -validate > validate.log 2>&1
+ 
+ #read the log files
+cat *.log #make sure that it does not say any errors, such as not being able to find a file
