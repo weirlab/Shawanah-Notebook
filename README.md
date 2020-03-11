@@ -351,3 +351,72 @@ rename "s/genome/MGWA_VELO045_rnd1.zff.length50_aed0.25/g" *
  
  #read the log files
 cat *.log #make sure that it does not say any errors, such as not being able to find a file
+
+#create the HMM file that SNAP requires for training, with the sequences and annotations with 1kb surrounding sequences
+/opt/tools/snap/fathom -categorize 1000 MGWA_VELO045_rnd1.zff.length50_aed0.25.ann MGWA_VELO045_rnd1.zff.length50_aed0.25.dna > categorize.log 2>&1
+/opt/tools/snap/fathom -export 1000 -plus uni.ann uni.dna > uni-plus.log 2>&1
+
+#training parameters
+mkdir params
+cd params
+/opt/tools/snap/forge ../export.ann ../export.dna > ../forge.log 2>&1
+cd ..
+
+#make the HMM file
+time /opt/tools/snap/hmm-assembler.pl MGWA_VELO045_rnd1.zff.length50_aed0.25 params > MGWA_VELO045_rnd1.zff.length50_aed0.25.hmm
+
+#read the logs. Any errors?
+cat *.log
+##NO ERRORS
+
+###RUN MAKER 2
+
+#cd into your "$GENOME"_maker_R1/"$GENOME" folder if you are not there already
+
+#RNA 
+awk '{ if ($2 == "est2genome") print $0 }' MGWA_VELO045_rnd1.all.maker.noseq.gff > MGWA_VELO045_rnd1.all.maker.est2genome.gff
+#protein
+awk '{ if ($2 == "protein2genome") print $0 }' MGWA_VELO045_rnd1.all.maker.noseq.gff > MGWA_VELO045_rnd1.all.maker.protein2genome.gff
+#repeats
+awk '{ if ($2 ~ "repeat") print $0 }' MGWA_VELO045_rnd1.all.maker.noseq.gff > MGWA_VELO045_rnd1.all.maker.repeats.gff
+
+##Now go back to maker and change these lines in the options file:
+cd /gpfs/fs0/scratch/j/jweir/niki03/Maker1
+
+#ssh into your account on Niagara and cd into your maker folder like last time
+sed -i 's/snaphmm=/snaphmm=snap\/round1\/'MGWA_VELO045'_rnd1.zff.length50_aed0.25.hmm/g' maker_opts.ctl
+sed -i 's/est2genome=1/est2genome=0/g' maker_opts.ctl
+sed -i 's/protein2genome=1/protein2genome=0/g' maker_opts.ctl
+sed -i 's/altest_gff=/altest_gff='MGWA_VELO045'_rnd1.all.maker.est2genome.gff/g' maker_opts.ctl
+sed -i 's/protein_gff=/protein_gff='MGWA_VELO045'_rnd1.all.maker.protein2genome.gff/g' maker_opts.ctl
+sed -i 's/altest='MGWA_VELO045'RNA_input.fa/altest=/g' maker_opts.ctl
+sed -i 's/protein='MGWA_VELO045'prot_input.fasta/protein=/g' maker_opts.ctl
+sed -i 's/model_org=all/model_org=/g' maker_opts.ctl
+sed -i 's/rmlib='MGWA_VELO045'reps_input.fasta/rmlib=/g' maker_opts.ctl
+#the line of code below was what the instructions original stated which is incorrect.
+#sed -i 's/repeat_protein=all/repeat_protein=/g' maker_opts.ctl
+#the next line is the correct line of code:
+sed -i 's;repeat_protein=/gpfs/fs0/project/j/jweir/tools/maker/data/te_proteins.fasta;repeat_protein=;g' maker_opts.ctl 
+sed -i 's/rm_gff=/rm_gff='MGWA_VELO045'_rnd1.all.maker.repeats.gff/g' maker_opts.ctl
+
+###Take a look at the file
+less maker_opts.ctl #press q to go back
+
+###These are the changes that should appear:
+model_org= #select a model organism for RepBase masking in RepeatMasker
+rmlib= #provide an organism specific repeat library in fasta format for RepeatMasker
+repeat_protein= #provide a fasta file of transposable element proteins for RepeatRunner
+rm_gff=$GENOME_rnd1.all.maker.repeats.gff
+
+snaphmm=snap/round1/"$GENOME"_rnd1.zff.length50_aed0.25.hmm  
+est2genome=0  
+protein2genome=0  
+altest_gff="$GENOME"_rnd1.all.maker.est2genome.gff  
+protein_gff="$GENOME"_rnd1.all.maker.protein2genome.gff  
+
+altest= #EST/cDNA sequence file in fasta format from an alternate organism
+protein= #protein sequence file in fasta format (i.e. from mutiple oransisms)
+
+###CHANGES OBTAINED 
+
+###Get the snap files.
