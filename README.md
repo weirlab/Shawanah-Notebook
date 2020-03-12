@@ -422,11 +422,13 @@ protein= #protein sequence file in fasta format (i.e. from mutiple oransisms)
 ###Get the snap files. Copy SNAP files from ramphoceles to Main server to Niagara
 ##FROM RAMPHOCELES TO MAIN SERVER:
 scp -r $USER@192.168.0.5:~/MGWA_VELO045/MGWA_VELO045_maker_R1/Maker1/snap .
-scp -r $USER@192.168.0.5:~/MGWA_VELO045/MGWA_VELO045_maker_R1/Maker1/MGWA_VELO045_rnd1* .
+##scp -r USER6@192.168.0.5:/MGWA_VELO045/MGWA_VELO045_maker_R1/Maker1/snap/round1 .
+scp -r USER6@192.168.0.5:~/MGWA_VELO045/MGWA_VELO045_maker_R1/Maker1/MGWA_VELO045_rnd1* .
 scp -r $USER@192.168.0.5:~/MGWA_VELO045/MGWA_VELO045_maker_R1/Maker1/MGWA_VELO045_input.all* .
 
 ##FROM MAIN SERVER TO NIAGARA:
 scp -r USER6@142.1.98.20:/home/0_BIOD98_GENOMES2/MGWA_VELO045/snap/snap .
+scp -r USER6@142.1.98.20:/home/0_BIOD98_GENOMES2/MGWA_VELO045/round1 .
 scp -r USER6@142.1.98.20:/home/0_BIOD98_GENOMES2/MGWA_VELO045/MGWA_VELO045_rnd1* .
 scp -r USER6@142.1.98.20:/home/0_BIOD98_GENOMES2/MGWA_VELO045/MGWA_VELO045_input.all* .
 
