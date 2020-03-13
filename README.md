@@ -645,4 +645,169 @@ sbatch R3_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_14.sh
 sbatch R3_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_15.sh
 sbatch R3_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_16.sh
 
+STEP 3: FUNCTIONAL ANNOTATION:
+
+cd /gpfs/fs0/scratch/j/jweir/niki03/Maker1
+
+#First, check if all of your rounds finished
+tail -n 50 OUTPUT_R3*
+
+###MAKER ROUND 3 HAS COMPLETED WITHOUT ANY ERRORS. 
+
+#GET YOUR DATA OFF OF NIAGARA TO RAMPHOCELES NODE:
+ cd ~/MGWA_VELO045
+ 
+ #get all contents for round 2 off of Niagara
+mkdir ./MGWA_VELO045_maker_R3
+cd ./MGWA_VELO045_maker_R3
+
+#Get your control files, output logs, and maker output folder into your new folder.
+scp niki03@niagara.scinet.utoronto.ca:/gpfs/fs0/scratch/j/jweir/niki03/Maker1/maker_*.ctl . #or use Filezilla if you prefer
+scp niki03@niagara.scinet.utoronto.ca:/gpfs/fs0/scratch/j/jweir/niki03/Maker1/OUTPUT_R3* . #or use Filezilla if you prefer
+scp -r niki03@niagara.scinet.utoronto.ca:/gpfs/fs0/scratch/j/jweir/niki03/Maker1/MGWA_VELO045_input.maker.output . #or use Filezilla if you prefer
+#It will take a long time to download everything, the files are huge
+
+#Enter the folder with your maker output if you are not already there
+cd ~/MGWA_VELO045/MGWA_VELO045_maker_R3
+
+#Activate the correct perl environment: only works on Ramphocelus:
+export PERLBREW_ROOT=/opt/perl5 
+/opt/perl5/bin/perlbrew switch perl-5.30.0 #A sub-shell is launched with perl-5.30.0 as the activated perl. Run 'exit' to finish it.
+export PATH=/opt/tools/maker/bin:$PATH
+
+#check that all contigs finished
+less -S ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log
+#scroll through to take a look at what the output looks like, then press q to go back to Terminal
+
+#check if there are any that failed and count how many were skipped vs finished
+grep -c "SKIPPED_SMALL" ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log #number of scaffolds that were skipped becasue they were less than 10,000 bp long
+grep -c "STARTED" ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log #number of scaffolds that started being analyzed
+grep -c "FINISHED" ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log #number of scaffolds that finished being analyzed
+grep -c "DIED_SKIPPED_PERMANENT" ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log #number that failed - should be none!
+wc -l ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log #just counting lines to make sure that all the preceeding numbers add up.
+
+#SKIPPED_SMALL=42380
+#STARTED_SMALL=3229
+#FINSHED=3229
+#DIED_SKIPPED_PERMANENT=0
+#TOTAL NUMBER OF LINES=48840
+
+#make sure that all of the contigs were run
+#refer back to your results of the last run to remember how many scaffold total should be in your original data
+#count number of unique contigs in the log (contigs that actually ran in the maker pipeline)
+
+cut -f 1 ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log | sort | uniq | wc -l 
+
+#UNIQUE CONTIGS=45609
+
+#Create files merging all data into a fasta and GFF3 file
+
+time /opt/tools/maker/bin/gff3_merge -s -d ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log> MGWA_VELO045_rnd3.all.maker.gff
+
+OUTPUT:
+real	0m49.759s
+user	0m31.878s
+sys	0m9.473s
+
+time /opt/tools/maker/bin/fasta_merge -d ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log
+
+OUTPUT:
+real	0m23.079s
+user	0m12.237s
+sys	0m9.191s
+
+#Create a gff3 file without sequences
+
+time /opt/tools/maker/bin/gff3_merge -n -s -d ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log > MGWA_VELO045_rnd3.all.maker.noseq.gff
+
+OUTPUT:
+real	0m15.352s
+user	0m12.158s
+sys	0m3.798s
+#done
+
+### CHECKPOINT:
+
+Before continuing:
+
+1. did you verify that all of the contigs ran? The number of run contigs should be exactly the same as the number of input contigs. If it is even off by one, then there is a problem - email Else/Jason.
+2. is the number of contigs that said "DIED_SKIPPED_PERMANENT" ZERO? There should be no contigs that died. If there were any, email Else/Jason.
+
+Let's verify the maker run with this script:
+
+#Enter the folder with your maker output if you are not already there
+cd MGWA_VELO045_maker_R3
+
+#only works on Ramphocelus:
+export PERLBREW_ROOT=/opt/perl5 #
+
+/opt/perl5/bin/perlbrew switch perl-5.30.0 #A sub-shell is launched with perl-5.30.0 as the activated perl. Run 'exit' to finish it.
+
+export PATH=/opt/tools/maker/bin:$PATH
+
+time /home/0_PROGRAMS/GAAS/annotation/Tools/Maker/maker_check_progress.sh ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log
+
+## OUTPUT:
+
+42380 contigs are too small to be analyzed
+
+3229 contigs has begin to be studied only one time
+0 contigs have been started several times
+3229 contigs has begin to be studied in total
+3229 STARTED signal in total
+
+3229 contigs have been finished
+0 contigs have been finished several times
+
+0 DIED_SKIPPED_PERMANENT signal found. The number of retry attempts has been reached
+0 contigs (doublon removed) have the signal DIED_SKIPPED_PERMANENT. The number of retry attempts has been reached
+
+0 contig whithout FINISHED signal.
+
+0 contig whithout STARTED signal.
+
+
+###Finally, 0 errors has been found in the log file:(See below)###
+
+### Now, verification of errors found in the directory of these ananlysis ###
+
+
+This job does not contains bug ! Congratulation.
+
+OUTPUT:
+real	0m0.532s
+user	0m0.522s
+sys	0m0.060s
+
+##EVALUATE COMPLETENESS USING BUSCO:
+##GOAL: BUSCO gives an estimate of how "complete" an annotation is by looking for specific highly-conserved proteins that are expected to be found as a single copy in almost every bird genome. Here we will collect some stats on our annotation an dthen run BUSCO.
+
+##NOTE: Note: more proteins is not necessarily better. In general, I am expecting round 1 to have the fewest, round 2 should find slightly more by using SNAP, and round 3 should find way more because we used the keep preds option that tells maker to keep all possible proteins no matter how bad they are. These keeps a LOT of false positives. We will have to get rid of these.
+
+cd MGWA_VELO045
+
+#Count number of proteins found in Maker Round1
+
+cat MGWA_VELO045_maker_R1/Maker1/MGWA_VELO045_rnd1.all.maker.gff | awk '{ if ($3 == "gene") print $0 }' | awk '{ sum += ($5 - $4) } END { print NR, sum / NR }'
+
+OUTPUT:
+15445 10032.3
+
+#IF THE ABOVE COMMAND DID NOT WORK: your path may be different, try this next line instead (remove the "#" at the beginning to run it if the above didnt work):
+#cat MGWA_VELO045_maker_R1/MGWA_VELO045/MGWA_VELO045_rnd1.all.maker.gff | awk '{ if ($3 == "gene") print $0 }' | awk '{ sum += ($5 - $4) } END { print NR, sum / NR }'
+
+#Count number of proteins found in Maker Round2
+
+cat MGWA_VELO045_maker_R2/MGWA_VELO045_rnd2.all.maker.gff | awk '{ if ($3 == "gene") print $0 }' | awk '{ sum += ($5 - $4) } END { print NR, sum / NR }'
+
+OUTPUT:
+21778 15814.6
+
+#Count number of proteins found in Maker Round3
+
+cat MGWA_VELO045_maker_R3/MGWA_VELO045_rnd3.all.maker.gff | awk '{ if ($3 == "gene") print $0 }' | awk '{ sum += ($5 - $4) } END { print NR, sum / NR }'
+
+OUTPUT:
+18625 16191.9
+
 
