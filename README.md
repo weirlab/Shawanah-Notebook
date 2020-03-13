@@ -526,7 +526,123 @@ cut -f 1 ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_i
 
 time /opt/tools/maker/bin/gff3_merge -s -d ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log> MGWA_VELO045_rnd2.all.maker.gff
 
+OUTPUT:
+real	0m41.049s
+user	0m32.746s
+sys	0m9.002s
+
 time /opt/tools/maker/bin/fasta_merge -d ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log
+
+OUTPUT:
+real	0m38.000s
+user	0m17.088s
+sys	0m12.888s
+
 #Create a gff3 file without sequences
 time /opt/tools/maker/bin/gff3_merge -n -s -d ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log > MGWA_VELO045_rnd2.all.maker.noseq.gff
-#done
+
+OUTPUT:
+real	0m15.387s
+user	0m12.204s
+sys	0m3.718s
+
+TRAIN SNAP: MAKER 3
+
+#cd into your MGWA_VELO045_maker_R2 if you are not there already
+#prepare to train SNAP
+mkdir snap
+mkdir snap/round2
+cd snap/round2
+
+#convert the gff file to zff, while only including the most confident gene models
+
+/opt/tools/maker/bin/maker2zff -x 0.25 -l 50 -c 0 -e 0 -o 0.5 -d ../../MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log
+
+rename "s/genome/'MGWA_VELO045'_rnd2.zff.length50_aed0.25/g" *
+
+#create statistics
+/opt/tools/snap/fathom MGWA_VELO045_rnd2.zff.length50_aed0.25.ann MGWA_VELO045_rnd2.zff.length50_aed0.25.dna -gene-stats > gene-stats.log 2>&1
+
+/opt/tools/snap/fathom MGWA_VELO045_rnd2.zff.length50_aed0.25.ann MGWA_VELO045_rnd2.zff.length50_aed0.25.dna -validate > validate.log 2>&1
+
+#create the HMM file that SNAP requires for training, with the sequences and annotations with 1kb surrounding sequences
+
+/opt/tools/snap/fathom -categorize 1000 MGWA_VELO045_rnd2.zff.length50_aed0.25.ann MGWA_VELO045_rnd2.zff.length50_aed0.25.dna > categorize.log 2>&1
+
+/opt/tools/snap/fathom -export 1000 -plus uni.ann uni.dna > uni-plus.log 2>&1
+
+#training parameters
+mkdir params
+cd params
+/opt/tools/snap/forge ../export.ann ../export.dna > ../forge.log 2>&1
+cd ..
+
+#make the HMM file
+
+time /opt/tools/snap/hmm-assembler.pl MGWA_VELO045_rnd2.zff.length50_aed0.25 params > MGWA_VELO045_rnd2.zff.length50_aed0.25.hmm
+
+OUTPUT:
+real	0m0.038s
+user	0m0.032s
+sys	0m0.005s
+
+RUN MAKER ROUND 3:
+#Now go back to your maker folder on Niagara and change these lines in the options file:
+
+cd /gpfs/fs0/scratch/j/jweir/niki03/Maker1
+
+sed -i "s/snaphmm=snap\/round1\/MGWA_VELO045_rnd1.zff.length50_aed0.25.hmm/snaphmm=snap\/round2\/MGWA_VELO045_rnd2.zff.length50_aed0.25.hmm/g" maker_opts.ctl #updates SNAP to use the new training file
+
+sed -i 's/augustus_species=/augustus_species=chicken/g' maker_opts.ctl #activates augustus
+sed -i 's/keep_preds=0/keep_preds=1/g' maker_opts.ctl 
+
+#Take a look at the file: These are the changes that should appear:
+
+#new settings (on top of the round 2 settings)
+snaphmm=snap/round2/MGWA_VELO045_rnd2.zff.length50_aed0.25.hmm  
+augustus_species=chicken
+keep_preds=1
+
+##CHANGES OBTAINED 
+
+##Get the snap files.
+##copy the files somewhere in the main server
+copy the files from the main server to Niagara (change the path and the IP address to reflect this: the main server is 142.1.98.20)
+
+#move the onld snap and maker folder out of the way
+mv snap snap_R1
+
+mv MGWA_VELO045_input.maker.output MGWA_VELO045_input.maker.output_round2
+
+#You will need to specify the path to your folder if it is different, and your username.
+#MOVE SNAP FILES FROM RAMPHOCELES TO MAIN SERVER
+scp -r USER6@142.1.98.20:~/MGWA_VELO045/MGWA_VELO045_maker_R2/snap .
+
+#MOVE SNAP FILES FROM MAIN SERVER TO NIAGARA
+scp -r USER6@142.1.98.20:/home/0_BIOD98_GENOMES2/MGWA_VELO045/snap . 
+
+find *SUBMISSION*_run_*.sh > tempfile
+cat tempfile | while read line ; do sed 's/OUTPUT/OUTPUT_R3/g' "$line" | sed 's/23:59:00/18:00:00/g' > R3_"$line" ; done
+chmod +x R3_*
+
+###RUNNING MAKER ROUND 3 SUBMISSION SCRIPTS:
+
+
+sbatch R3_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_1.sh
+sbatch R3_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_2.sh
+sbatch R3_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_3.sh
+sbatch R3_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_4.sh
+sbatch R3_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_5.sh
+sbatch R3_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_6.sh
+sbatch R3_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_7.sh
+sbatch R3_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_8.sh
+sbatch R3_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_9.sh
+sbatch R3_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_10.sh
+sbatch R3_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_11.sh
+sbatch R3_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_12.sh
+sbatch R3_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_13.sh
+sbatch R3_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_14.sh
+sbatch R3_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_15.sh
+sbatch R3_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_16.sh
+
+
