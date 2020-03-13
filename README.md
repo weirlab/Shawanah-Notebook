@@ -478,6 +478,55 @@ sbatch R2_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_14.sh
 sbatch R2_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_15.sh
 sbatch R2_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_16.sh
 
+###MAKER 2 COMPLETE!!
+MAKER 3 STARTS NOW!!
 
+###Please do these steps on Ramphocelus as maker is not accessible on the main server.
+cd USER6@ramphocelus:~/MGWA_VELO045
+mkdir ./MGWA_VELO045_maker_R2
+cd MGWA_VELO045_maker_R2
+scp niki03@niagara.scinet.utoronto.ca:/gpfs/fs0/scratch/j/jweir/niki03/Maker1/maker_*.ctl .
+scp niki03@niagara.scinet.utoronto.ca:/gpfs/fs0/scratch/j/jweir/niki03/Maker1/OUTPUT* .
+scp -r niki03@niagara.scinet.utoronto.ca:/gpfs/fs0/scratch/j/jweir/niki03/Maker1/MGWA_VELO045_input.maker.output .
 
+#Activate the correct perl environment:
 
+#only works on Ramphocelus:
+export PERLBREW_ROOT=/opt/perl5 #
+/opt/perl5/bin/perlbrew switch perl-5.30.0 #A sub-shell is launched with perl-5.30.0 as the activated perl. Run 'exit' to finish it.
+export PATH=/opt/tools/maker/bin:$PATH
+
+#you will have to redefine GENOME at this point as the new perl environment forgets.
+
+#cd into your MGWA_VELO045_maker_R2 if you are not there already
+#check that all contigs finished
+less -S ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log
+#scroll through to take a look at what the output looks like, then press q to go back to Terminal
+
+#check if there are any that failed and count how many were skipped vs finished
+grep -c "SKIPPED_SMALL" ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log #number of scaffolds that were skipped becasue they were less than 10,000 bp long
+grep -c "STARTED" ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log #number of scaffolds that started being analyzed
+grep -c "FINISHED" ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log #number of scaffolds that finished being analyzed
+grep -c "DIED_SKIPPED_PERMANENT" ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log #number that failed - should be none!
+wc -l ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log #just counting lines to make sure the preceeding numbers add up
+
+#SKIPPED_SMALL = 42380
+#STARTED=3229
+#FINISHED=3229
+#DIED_SKIPPED=0
+#TOTAL_LINES= 48838
+
+#make sure that all of the contigs were run
+#refer back to your results of the last run to remember how many scaffold total should be in your original data
+cut -f 1 ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log | sort | uniq | wc -l #count number of unique contigs in the log (contigs that actually ran in the maker pipeline)
+
+#UNIQUE CONTIGS= 45609
+
+#Create files merging all data into a fasta and GFF3 file
+
+time /opt/tools/maker/bin/gff3_merge -s -d ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log> MGWA_VELO045_rnd2.all.maker.gff
+
+time /opt/tools/maker/bin/fasta_merge -d ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log
+#Create a gff3 file without sequences
+time /opt/tools/maker/bin/gff3_merge -n -s -d ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log > MGWA_VELO045_rnd2.all.maker.noseq.gff
+#done
