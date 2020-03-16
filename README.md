@@ -342,7 +342,21 @@ sys	0m7.032s
 cd ~/MGWA_VELO045/MGWA_VELO045_maker_R1/Maker1/snap/round1
 /opt/tools/maker/bin/maker2zff -x 0.25 -l 50 -c 0 -e 0 -o 0.5 -d ../../MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log
 
-rename "s/genome/MGWA_VELO045_rnd1.zff.length50_aed0.25/g" *
+TRAIN SNAP ROUND 1:
+#cd into your MGWA_VELO045_maker_R1/MGWA_VELO045 folder if you are not there already
+#prepare to train SNAP
+
+mkdir snap
+mkdir snap/round1
+cd ~/MGWA_VELO045/MGWA_VELO045_maker_R1/Maker1/snap/round1
+
+#convert the gff file to zff, while only including the most confident gene models
+
+/opt/tools/maker/bin/maker2zff -x 0.25 -l 50 -c 0 -e 0 -o 0.5 -d ../../MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log
+
+rename 's/genome/MGWA_VELO045_rnd1.zff.length50_aed0.25/g' *
+
+###### rename 's/genome/'MGWA_VELO045'_rnd1.zff.length50_aed0.25/g' *
 
 #create statistics
 /opt/tools/snap/fathom MGWA_VELO045_rnd1.zff.length50_aed0.25.ann MGWA_VELO045_rnd1.zff.length50_aed0.25.dna -gene-stats > gene-stats.log 2>&1
@@ -558,7 +572,7 @@ cd snap/round2
 
 /opt/tools/maker/bin/maker2zff -x 0.25 -l 50 -c 0 -e 0 -o 0.5 -d ../../MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log
 
-rename "s/genome/'MGWA_VELO045'_rnd2.zff.length50_aed0.25/g" *
+rename 's/genome/'MGWA_VELO045'_rnd1.zff.length50_aed0.25/g' *
 
 #create statistics
 /opt/tools/snap/fathom MGWA_VELO045_rnd2.zff.length50_aed0.25.ann MGWA_VELO045_rnd2.zff.length50_aed0.25.dna -gene-stats > gene-stats.log 2>&1
@@ -582,9 +596,9 @@ cd ..
 time /opt/tools/snap/hmm-assembler.pl MGWA_VELO045_rnd2.zff.length50_aed0.25 params > MGWA_VELO045_rnd2.zff.length50_aed0.25.hmm
 
 OUTPUT:
-real	0m0.038s
-user	0m0.032s
-sys	0m0.005s
+real	0m0.037s
+user	0m0.029s
+sys	0m0.007s
 
 RUN MAKER ROUND 3:
 #Now go back to your maker folder on Niagara and change these lines in the options file:
@@ -597,6 +611,7 @@ sed -i 's/augustus_species=/augustus_species=chicken/g' maker_opts.ctl #activate
 sed -i 's/keep_preds=0/keep_preds=1/g' maker_opts.ctl 
 
 #Take a look at the file: These are the changes that should appear:
+less maker_opts.ctl #press q to go back
 
 #new settings (on top of the round 2 settings)
 snaphmm=snap/round2/MGWA_VELO045_rnd2.zff.length50_aed0.25.hmm  
@@ -616,7 +631,7 @@ mv MGWA_VELO045_input.maker.output MGWA_VELO045_input.maker.output_round2
 
 #You will need to specify the path to your folder if it is different, and your username.
 #MOVE SNAP FILES FROM RAMPHOCELES TO MAIN SERVER
-scp -r USER6@142.1.98.20:~/MGWA_VELO045/MGWA_VELO045_maker_R2/snap .
+scp -r USER6@192.168.0.5:~/MGWA_VELO045/MGWA_VELO045_maker_R2/snap .
 
 #MOVE SNAP FILES FROM MAIN SERVER TO NIAGARA
 scp -r USER6@142.1.98.20:/home/0_BIOD98_GENOMES2/MGWA_VELO045/snap . 
