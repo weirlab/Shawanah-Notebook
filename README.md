@@ -570,9 +570,9 @@ cd snap/round2
 
 #convert the gff file to zff, while only including the most confident gene models
 
-/opt/tools/maker/bin/maker2zff -x 0.25 -l 50 -c 0 -e 0 -o 0.5 -d ../../MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log
+/opt/toorename 's/genome/'"$GENOME"'_rnd2.zff.length50_aed0.25/g' *ls/maker/bin/maker2zff -x 0.25 -l 50 -c 0 -e 0 -o 0.5 -d ../../MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log
 
-rename 's/genome/'MGWA_VELO045'_rnd1.zff.length50_aed0.25/g' *
+rename 's/genome/'MGWA_VELO045'_rnd2.zff.length50_aed0.25/g' *
 
 #create statistics
 /opt/tools/snap/fathom MGWA_VELO045_rnd2.zff.length50_aed0.25.ann MGWA_VELO045_rnd2.zff.length50_aed0.25.dna -gene-stats > gene-stats.log 2>&1
