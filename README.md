@@ -541,16 +541,16 @@ cut -f 1 ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_i
 time /opt/tools/maker/bin/gff3_merge -s -d ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log> MGWA_VELO045_rnd2.all.maker.gff
 
 OUTPUT:
-real	0m41.049s
-user	0m32.746s
-sys	0m9.002s
+real	2m8.509s
+user	0m54.586s
+sys	0m15.502s
 
 time /opt/tools/maker/bin/fasta_merge -d ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log
 
 OUTPUT:
-real	0m38.000s
-user	0m17.088s
-sys	0m12.888s
+real	7m2.501s
+user	0m22.314s
+sys	0m11.171s
 
 #Create a gff3 file without sequences
 time /opt/tools/maker/bin/gff3_merge -n -s -d ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log > MGWA_VELO045_rnd2.all.maker.noseq.gff
@@ -569,8 +569,7 @@ mkdir snap/round2
 cd snap/round2
 
 #convert the gff file to zff, while only including the most confident gene models
-
-/opt/toorename 's/genome/'"$GENOME"'_rnd2.zff.length50_aed0.25/g' *ls/maker/bin/maker2zff -x 0.25 -l 50 -c 0 -e 0 -o 0.5 -d ../../MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log
+/opt/tools/maker/bin/maker2zff -x 0.25 -l 50 -c 0 -e 0 -o 0.5 -d ../../MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log
 
 rename 's/genome/'MGWA_VELO045'_rnd2.zff.length50_aed0.25/g' *
 
@@ -605,9 +604,10 @@ RUN MAKER ROUND 3:
 
 cd /gpfs/fs0/scratch/j/jweir/niki03/Maker1
 
-sed -i "s/snaphmm=snap\/round1\/MGWA_VELO045_rnd1.zff.length50_aed0.25.hmm/snaphmm=snap\/round2\/MGWA_VELO045_rnd2.zff.length50_aed0.25.hmm/g" maker_opts.ctl #updates SNAP to use the new training file
+sed -i 's/snaphmm=snap\/round1\/'MGWA_VELO045'_rnd1.zff.length50_aed0.25.hmm/snaphmm=snap\/round2\/'MGWA_VELO045'_rnd2.zff.length50_aed0.25.hmm/g' maker_opts.ctl #updates SNAP to use the new training file
 
 sed -i 's/augustus_species=/augustus_species=chicken/g' maker_opts.ctl #activates augustus
+
 sed -i 's/keep_preds=0/keep_preds=1/g' maker_opts.ctl 
 
 #Take a look at the file: These are the changes that should appear:
