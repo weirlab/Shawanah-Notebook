@@ -1022,3 +1022,18 @@ map_fasta_ids MGWA_VELO045.standardplus.name.map MGWA_VELO045_input.all.maker.tr
 /home/0_PROGRAMS/seqtk/seqtk subseq MGWA_VELO045_input.all.maker.transcripts.fasta MGWA_VELO045.standardplus_genelist > MGWA_VELO045.standardplus.transcripts.fasta
 
 maker_functional_fasta /home/0_BIOD98/Uniprot_cat_Tremblbirds.temp nr_blastp_for_naming MGWA_VELO045.standardplus.transcripts.fasta > MGWA_VELO045.standardplus.namedtranscripts.fasta
+
+#MORE RESULTS:
+
+wc -l onlytrembl_matched #number of proteins that trembl hit that were missed by Swissprot
+
+#to see number that swissprot hit that trembl missed, do (#swissprot hit total) - (#trembl hit total) + (number trembl hit that swissprot missed)
+
+#to see number that had ANY hit:
+wc -l nr_blastp_for_naming #can you see an alternate way to calculate this?
+
+#What proportion of your input gene list had a hit in one of these databases?
+
+##ELSE' SAMPLE RESULTS:
+Results: Example: With Swiss-prot, I got 16,981 hits. With Trembl, I got 17,341 hits (367 that Swissprot did not hit). 17,348 had a hit in a least one of those. I had 17,475 total genes so almost all had hits!!! 99.3%!!!!
+
