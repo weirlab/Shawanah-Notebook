@@ -1105,12 +1105,12 @@ cp ~/MGWA_VELO045/functional_ann/MGWA_VELO045.standardplus.namedproteins.fasta .
 #If you are comparing your species to another person in this class, you will need to bring their proteome into your folder too!
 #Otherwise, skip to run orthofinder.
 
-PARTNERGENOME=MOWA_IF09D02
+PARTNERGENOME="MOWA_IF09D02"
 
-cp /home/USER5/MOWA_IF09D02/functional_ann/MOWA_IF09D02.standardplus.namedproteins.fasta .
+##cp /home/USER5/MOWA_IF09D02/functional_ann/MOWA_IF09D02.standardplus.namedproteins.fasta . ##SEEMED TO HAVE SKIPPED 
 
 #or, if they skipped the homology part: (remove the hashtag if you need to run it)
-#cp /home/USERNAME_OF_YOUR_PARTNER/"PARTNERGENOME"/functional_ann/"$PARTNERGENOME".standardplus.proteins.fasta .
+cp /home/USER5/MOWA_IF09D02/functional_ann/MOWA_IF09D02.standardplus.proteins.fasta .
 
 #run OrthoFinder!!!
 time /home/0_PROGRAMS/OrthoFinder/orthofinder -n MGWA_VELO045 -b /home/0_BIOD98/OrthoFinder_passerines/WorkingDirectory -f . -t 24 > Orthofinder.MGWA_VELO045.log
@@ -1171,3 +1171,328 @@ ls
 #These are phylogenetic trees. If you found a gene family of interest, you could plot them to make a pretty phylogeny figure.
 #If you transfer one of them to your computer (with Filezilla) you can view them and make figures with a program, I use FigTree.
 
+
+### CAFE 
+GOAL: After running OrthoFinder, you can run Cafe!
+#Cafe itself is quite quick to run, but it requires some steps preparing the required input files. 
+#It needs a tab separated file listing how many proteins are within each orthogroup for each speceis. Luckily, this information is given by OrthoFinder.
+
+#make a directory to work in
+
+mkdir ~/MGWA_VELO045/cafe
+cd ~/MGWA_VELO045/cafe
+
+#Now we need to prepare the results for CAFE
+#For this we need the file Orthogroups.GeneCount.tsv
+#You can find this in your OrthoFinder reults folder, which should be named Results_"$GENOME" probably
+
+cp ~/MGWA_VELO045/orthofinder/Results_MGWA_VELO045/Orthogroups.GeneCount.tsv
+
+less Orthogroups.GeneCount.tsv #The last column is named Total. We do not want it. press q to go back
+
+#remove the last column which is named Total
+awk 'NF{NF-=1};1' Orthogroups.GeneCount.tsv | awk '{print "(null)\t"$0}' > Cafe_input.tsv
+
+less Cafe_input.tsv #The last column should be gone, but the species names are annoying. press q to go back
+
+#simplify and standardize species codes
+
+sed -i 's/longest\.simpleheader\.//g' Cafe_input.tsv
+sed -i 's/\.AA//g' Cafe_input.tsv
+sed -i 's/Willisornis/Wilpoe/g' Cafe_input.tsv
+
+less Cafe_input.tsv #Better but we should make it be tab separated not space separated. press q to go back
+
+#make tab delimited
+
+sed -i 's/ /\t/g' Cafe_input.tsv 
+sed -i 's/\tOrthogroup/ID\tOrthogroup/' Cafe_input.tsv
+
+less Cafe_input.tsv #Better. Should be tab-separated, with simple names for the columns.
+
+#Gene families with more than 100 copies in a species will completely throw off the cafe results. We must separate these
+#filter to separate gene families with more than 100 copies in any species
+
+#First, make a python2 environment 
+# DO NOT REDO THIS IF YOU HAVE ALREADY DONE THIS (for example in tutorial)
+conda create --name python2 python=2.7.12
+conda activate python2
+conda install matplotlib=2.2.4
+
+#Great, now activate the new environment
+conda activate python2
+
+#temporarily remove the headers for the following code to work
+tail -n +2 Cafe_input.tsv > temp_filterinput
+
+python /home/0_PROGRAMS/CAFE-4.2.1/cafe_tutorial/python_scripts/cafetutorial_clade_and_size_filter.py -i temp_filterinput -o filtered_Cafe_input.tsv -s 
+
+#put the headers back and deal with the fact it thought the first orthogroup was the header
+
+grep OG0000000 filtered_Cafe_input.tsv > temp_OG0
+
+grep -v OG0000000 filtered_Cafe_input.tsv > temp_smallfams
+
+grep -v OG0000000 large_filtered_Cafe_input.tsv > temp_largefams
+
+head -n 1 Cafe_input.tsv > temp_header
+
+cat temp_header temp_smallfams > filtered_Cafe_input.tsv
+
+cat temp_header temp_OG0 temp_largefams > large_filtered_Cafe_input.tsv
+
+rm temp_OG0 temp_smallfams temp_largefams temp_header temp_filterinput
+
+#look at the results
+
+less large_filtered_Cafe_input.tsv #press q to go back
+
+less filtered_Cafe_input.tsv #press q to go back
+
+##Ok, do the results look good? Tab separated columns of numbers? The first column should just say "null" (that is good).
+
+##Now you need a phylogeny of birds.
+
+#Here is a Newick format phylogeny for all species in this dataset. THIS ONE WILL NOT WORK! IT IS MISSING YOUR SPECIES! 
+#Newick trees are super annoying to edit by hand (it took me a long time to put this one together), so email Else to request your tree, letting me know exactly which species from BIOD98 you included (only your own, or also some other ones?).(Or if you feel like diving in to Newick notation, you could make your own).
+
+#To make it a file, use cat to open a blank file, then paste your newick format tree (such as the one below, but don't use that one, use a custom one)
+
+cat > Psittacopasserae.tree
+
+##This tree only has the base species from Ensembl/Refseq, it is missing your species!
+
+((Falper:2.63,Falche:2.63):54.41,(((Strhab:25.70,Nesnot:25.70):5.73,(Amacol:21.28,Melund:21.28):10.15):23.84,(Acachl:46.72,((Wilpoe:35.20,(((((Lepcor:6.1,Manvit:6.1):0.7,Pipfil:6.8):3.3,Coralt:10.1):3.83,Neochr:13.93):10.46,Emptra:24.39):10.81):8.73,((Corcor:2.54,Corbra:2.54):27.94,((Psehum:13.8,(Parmaj:11.27,Cyacae:11.27):2.53):13.25,((Ficalb:19.80,Stuvul:19.80):6.93,(((Taegut:11.9,Lonstr:11.9):0.9,Erygou:12.8):8.49,(Sercan:17.11,((Campar:3.04,Geofor:3.04):11.58,(Zonalb:4.95,Junhie:4.95):9.67):2.49):4.18):5.44):0.32):3.43):13.45):2.79):8.55):1.78);
+
+##This is the tree for FOSP (just replace the word FOSP with the name of your sample as it appears in your cafe input file, for example: HETH_JTWB1.standardplus.namedproteins)
+
+((Falper:2.63,Falche:2.63):54.41,(((Strhab:25.70,Nesnot:25.70):5.73,(Amacol:21.28,Melund:21.28):10.15):23.84,(Acachl:46.72,((Wilpoe:35.20,(((((Lepcor:6.1,Manvit:6.1):0.7,Pipfil:6.8):3.3,Coralt:10.1):3.83,Neochr:13.93):10.46,Emptra:24.39):10.81):8.73,((Corcor:2.54,Corbra:2.54):27.94,((Psehum:13.8,(Parmaj:11.27,Cyacae:11.27):2.53):13.25,(((Ficalb:16.56,HETH_JTWB1.standardplus.namedproteins:16.56):3.24,Stuvul:19.80):6.93,(((Taegut:11.9,Lonstr:11.9):0.9,Erygou:12.8):8.49,(Sercan:17.11,((Campar:3.04,Geofor:3.04):11.58,(Zonalb:4.95,Junhie:4.95):9.67):2.49):4.18):5.44):0.32):3.43):13.45):2.79):8.55):1.78);
+
+##Reading the trees
+
+#The numbers are divergence dates, measured in millions of years. The names are the names of bird species abbreviated to the first three letters of the genus name and first three of the species name.
+
+## RUNNING CAFE:
+
+#Now you will have the input files:
+
+#1. Your filtered_Cafe_input.tsv file from OrthoFinder results
+#2. A Newick-format phylogenetic tree with dates
+
+#Café is measuring two variables
+
+#1. lambda, the birth-death parameter, a rate of gene duplication and gene loss, per millions of years
+#2. empsilon, an estimate of the proportion of error in the gene count estimates
+
+#GOAL: Errors in genome assembly, annotation, and ortholog assignment mean that the data probably contains hidden errors in the number of genes in each gene family in each species. 
+#Fragmented annotations or uncollapsed haplotypes in the assembly can lead to duplicate counting of the same gene, and assembly gaps or unannotated proteins can lead to undercounting a gene family. 
+#We can deal with this by estimating assembly error that will be taken into account by cafe.
+
+#Note some scripts only work with python version 2 (not 3) so you will need to activate your python2 environment 
+
+conda activate python2
+
+#This does a single run, estimating both lambda and epsilon
+time /home/0_PROGRAMS/CAFExp-5.0b2/bin/cafexp -i filtered_Cafe_input.tsv -t Psittacopasserae.tree -e -o error_model_cafe > error_model.log
+
+less error_model/Base_error_model.txt #view results of the error model
+
+#We can run cafe multiple times
+#run cafe again, but reuse the estimate of epsilon that you calculated before
+
+time /home/0_PROGRAMS/CAFExp-5.0b2/bin/cafexp -i filtered_Cafe_input.tsv -t Psittacopasserae.tree -o single_lambda -eerror_model/Base_error_model.txt > single_lambda.log
+
+#This would run cafe with NO epsilon (ignores possibility of errors in data)
+
+time /home/0_PROGRAMS/CAFExp-5.0b2/bin/cafexp -i filtered_Cafe_input.tsv -t Psittacopasserae.tree -o single_lambda_noe > single_lambda_noe.log
+
+#This would allow among-family rate variation in lambda, estimates lambda and alpha and three discrete gamma rate categories (essentially allow three different rates of gene gain/loss, for fast-evolving families, medium-evolving families, and slow-evolving families
+#This takes longer and may crash
+
+time /home/0_PROGRAMS/CAFExp-5.0b2/bin/cafexp -i filtered_Cafe_input.tsv -t Psittacopasserae.tree -k 3 -o three_lambda > three_lambda.log
+
+#It is a good idea to do many replicates. Here is an example of a loop that will do 10 runs in parallel. If you want to do more you can change the part that says {1...10} and change 10 to whatever number you want 
+
+printf '%s\n' {1..10} | parallel /home/0_PROGRAMS/CAFExp-5.0b2/bin/cafexp -i filtered_Cafe_input.tsv -t Psittacopasserae.tree -e -o replicate_run_{1} >> 100runs.log 2>> 100runs.errorlog
+
+#The above will not print anything to the terminal! (Because that would be too much to look at). Instead it will be printed to a log file which you could view like this:
+
+cat 100runs*log
+
+#Now analyze the large families using the previous values of lambda, since you cannot estimate lambda for these families. 
+#Choose the lambda from your best run, whichever you think is best (with or without epsilon?). 
+#You may want to read the part about interpreting results first, to find your lambda. 
+#YOU MUST CHANGE THIS YOURSELF IN THE CODE! Lambda is the number in the command right after -l. I have set it to a unreasonably high value, 0.99999, so that it will fail if you do not change it to your own, more reasonable estimate found in previous runs.
+
+time /home/0_PROGRAMS/CAFExp-5.0b2/bin/cafexp -i large_filtered_Cafe_input.tsv -t Psittacopasserae.tree -l 0.99999 -o large_results > large_results.log
+
+##INTERPRETING YOUR RESULTS:
+
+#The estimates of lambda/epsilon are found in "$run"_results.txt.
+
+#Here are how to view some of the results files. They will likely look very terrible to look at with your eyes, a mess of numbers.
+
+less error_model/Base_asr.tre #gives reconstructed numbers of each gene family at each node
+
+less error_model/Base_branch_probabilities.tab #gives calculated likelihood of the gene family size at each node for each gene family
+
+less error_model/Base_clade_results.txt #how many families are expanded or contracted at each node
+
+#Here you can list all the values of lambda that you estimating in any runs
+
+grep "Lambda" ./*/*_results.txt #rate of gene birth/death
+
+#Here you can list all the values of epsilon that you estimating in any runs
+
+grep "Epsilon" ./*/*_results.txt #error term
+
+##To interpret your results:
+
+##What gene families were expanded/contracted in a particular species?
+
+#get a list of the significantly expanded/contracted/rapid genes in your species
+#replace the path of error_model/ with the name of whatever Cafe run you want to view
+
+grep "$GENOME" error_model/Base_asr.tre | sed 's/^.*OG/OG/g' | sed 's/ = .*$//g'
+
+#Get list of families that have expanded in your species, not necessarily significant
+
+#First you will have to find out what column your species is in. 
+
+less error_model/Base_change.tab #What column has your species? For example, mine, Wilpoe, was in column 41
+
+#Now change "41" in this command to whatever number column your species is in
+
+cut -f 1,41 error_model/Base_change.tab | grep -v "+0" | grep -v "-" #This is the list of gene families that have expanded in your species relative to the sister lineage
+
+#count the number of expansions #again change "41" in this command to whatever number column your species is in
+
+cut -f 1,41 error_model/Base_change.tab | grep -v "+0" | grep -v "-" | wc -l
+
+#If you did many runs with the loop, here is how to summarise all of them and get an average for all runs
+
+#Create two files, summarising all the values of epsilon and lambda from your replicate runs if you did that part
+
+grep "Lambda" ./replicate_run_*/Base_results.txt | sed 's/^.* //g' > lambdas.txt
+grep "Epsilon" ./replicate_run_*/Base_results.txt | sed 's/^.* //g' > epsilons.txt
+
+R #opens R, so you are now coding in R language, not bash (Terminal).
+
+epsilons <- read.table("epsilons.txt") #read files
+lambdas <- read.table("lambdas.txt")
+
+mean(epsilons[,1]) #reports the mean value of epsilon
+sd(epsilons[,1]) #reports the standard deviation value of epsilon
+
+mean(lambdas[,1]) #reports the mean value of lambda
+sd(lambdas[,1]) #reports the standard deviation value of lambda
+q() #quit R
+n #no to saving
+
+## GETTING RESULTS:
+
+#The following code assumes that you ran the loop that did many replicates of cafe. 
+#If you did not do this, you will need to change the code. 
+#They all also assume that you did 10 runs because that is what I did. 
+#If not, change that number in all of the parts where it says {1...10}. 
+#You will also have to change Wilpoe<39> to the name of your species and the number in <> that is says in your cafe files. Only change Wilpoe<39> and keep the \* that appears in the code!
+
+#make folder
+
+mkdir analysis
+cd analysis
+
+#get a list of the significantly expanded/contracted/rapid genes in your species
+
+printf '%s\n' {1..10} | while read number ; do grep "Wilpoe<39>\*" ../replicate_run_$number/Base_asr.tre | sed 's/^.*OG/OG/g' | sed 's/ = .*$//g' > sig_changes_error_model_"$number" ; done 
+
+#count how many were found at each run
+
+wc -l sig_changes_error_model_* #most found 50 in my species, except number 6 found 51. Ideally, they should all be the same.
+
+#Since my run 6 was weird, this is how to see what is uniquely found in run 6 (could change to whatever number was weird for you, or skip)
+
+printf '%s\n' {1..10} | while read number ; do grep -v -f sig_changes_error_model_"$number" sig_changes_error_model_6 ; done
+
+#OG0013931 in my run 6 is not found in the other runs
+#make sure all the others are identical
+
+printf '%s\n' {1..10} | while read number ; do grep -v -f sig_changes_error_model_"$number" sig_changes_error_model_1 ; done
+
+#yep, all 50 were the same in all other runs (no output returned by the above command, means that nothing was different in them compared to run 1)
+
+#Get list of families that have expanded in the species, whether or not significant
+#CHANGE the number 41 to the column number for your species!!!
+
+printf '%s\n' {1..10} | while read number ; do cut -f 1,41 ../error_model_$number/Base_change.tab | grep -v "+0" | grep -v "-" > expandedfams_"$number" ; done #1212 in all ten replicates for mine
+
+#compare expanded list to significant list to keep only significantly expanded ones
+
+printf '%s\n' {1..10} | while read number ; do grep -f sig_changes_error_model_"$number" expandedfams_"$number" > expandedfams_error_model_"$number".sig ; done 
+
+#count how many there are
+
+wc -l antexpandedfams_error_model_*.sig #21 for all replicates except 22 for number 6 with OG0013931 uniquely
+
+#make sure all the others are identical
+
+printf '%s\n' {1..10} | while read number ; do grep -v -f expandedfams_error_model_"$number".sig expandedfams_error_model_1.sig ; done
+
+#yep, all 21 were found in all my other runs (no output returned by the above command)
+
+#repeat for contracted families
+#CHANGE 41 to your column number
+
+printf '%s\n' {1..10} | while read number ; do cut -f 1,41 ../error_model_$number/Base_change.tab | grep -v "+" > contractedfams_error_model_"$number" ; done #1733 contracted families in all ten replicates
+
+printf '%s\n' {1..10} | while read number ; do grep -f sig_changes_error_model_"$number" contractedfams_error_model_"$number" > contractedfams_error_model_"$number".sig ; done #keep only significantly contracted families
+
+wc -l antcontractedfams_error_model_*.sig #count: 29 significantly contracted families for all replicates
+
+#make sure all the others are identical to round 1
+
+printf '%s\n' {1..10} | while read number ; do grep -v -f contractedfams_error_model_"$number".sig contractedfams_error_model_1.sig ; done
+
+#yep, all 29 were found in all other runs (no output returned by the above command).
+
+#At the end, I got files listing significantly expanded or contracted orthogroups.
+#First things first. What genes are in these orthogroups?
+
+mkdir ~/"$GENOME"/cafe/expanded
+cd ~/"$GENOME"/cafe/expanded
+
+#get a fasta of the expanded families from the OrthoFinder output. This is using run 1 of the replicate runs, if you want to use a different one, change expandedfams_error_model_1 to the number you want here and also in the next command.
+
+cat ../analysis/expandedfams_error_model_1.sig | cut -f 1 | while read Orthogroup ; do cp /home/0_BIOD98/OrthoFinderpasserines/Orthogroup_Sequences/"$Orthogroup".fa . ; done
+
+#Get a list of the genes in these orthogroups for your species
+
+cat ../analysis/antexpandedfams_error_model_1.sig | cut -f 1 | while read Orthogroup ; do grep "$GENOME" "$Orthogroup".fa >> expanded_geneIDs.txt ; done
+
+sed -i 's/>//g' expanded_geneIDs.txt
+
+#Now, you will possible need to edit this. 
+#Take a look at your files and look at whether there is a suffix at the end of your gene names (for example, mine all end in -RA). If there is any extra stuff letters different that -RA, change this command (I think it should always be just -RA though)
+
+sed -i 's/-RA//g' expanded_geneIDs.txt #get rid of the -RA
+
+#repeat for contracted gene if you are interested in those too
+
+mkdir ~/"$GENOME"/cafe/contracted
+cd ~/"$GENOME"/cafe/contracted
+
+#get a fasta of the contracted families from the OrthoFinder output
+
+cat ../analysis/contractedfams_error_model_1.sig | cut -f 1 | while read Orthogroup ; do cp /home/0_BIOD98/OrthoFinderpasserines/Orthogroup_Sequences/"$Orthogroup".fa . ; done
+
+#Get a list of the genes in these orthogroups
+
+cat ../analysis/contractedfams_error_model_1.sig | cut -f 1 | while read Orthogroup ; do grep "$GENOME" "$Orthogroup".fa >> contracted_geneIDs.txt ; done
+
+sed -i 's/>//g' contracted_geneIDs.txt
+
+sed -i 's/-RA//g' contracted_geneIDs.txt
+
+##If you want to find out what these genes do, go to the next page: GO analysis
+
+## GO ANALYSIS:
