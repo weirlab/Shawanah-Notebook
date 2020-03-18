@@ -701,11 +701,11 @@ grep -c "FINISHED" ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_d
 grep -c "DIED_SKIPPED_PERMANENT" ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log #number that failed - should be none!
 wc -l ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log #just counting lines to make sure that all the preceeding numbers add up.
 
-#SKIPPED_SMALL=42380
-#STARTED_SMALL=3229
+#SKIPPED_SMALL=42377
+#STARTED_SMALL=3227
 #FINSHED=3229
 #DIED_SKIPPED_PERMANENT=0
-#TOTAL NUMBER OF LINES=48840
+#TOTAL NUMBER OF LINES=48833
 
 #make sure that all of the contigs were run
 #refer back to your results of the last run to remember how many scaffold total should be in your original data
@@ -713,16 +713,16 @@ wc -l ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_inde
 
 cut -f 1 ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log | sort | uniq | wc -l 
 
-#UNIQUE CONTIGS=45609
+#UNIQUE CONTIGS=45606
 
 #Create files merging all data into a fasta and GFF3 file
 
 time /opt/tools/maker/bin/gff3_merge -s -d ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log> MGWA_VELO045_rnd3.all.maker.gff
 
 OUTPUT:
-real	0m49.759s
-user	0m31.878s
-sys	0m9.473s
+real	1m15.304s
+user	0m57.705s
+sys	0m16.462s
 
 time /opt/tools/maker/bin/fasta_merge -d ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log
 
