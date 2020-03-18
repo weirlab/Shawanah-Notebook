@@ -143,7 +143,7 @@ cat "$GENOME"_noprot_clean.lib /home/0_BIOD98/68015-fAlb15_rm3.0.lib /home/0_BIO
 
 #### final repeat library to use for RepeatMasking is found in: ~/"$GENOME/repeat_library/"$GENOME"_repeat_library_withFicalbUracya.lib (DONE)
 
-MAKER STEPS 1:
+### MAKER STEPS 1:
 
 mkdir ~/"$GENOME"/maker 
 ###OUTPUT: you need a folder to be working in on the Ramphocelus node
@@ -310,6 +310,7 @@ sbatch 0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_16.sh
 ###OUTPUT: To check the status of the submission, you can do
 squeue --user niki03 #where USERNAME is your Compute Canada Username
 
+## MAKER 2
 
 MAKER1 OUTPUT:
 #FAILED CONTIGS=0
@@ -342,7 +343,7 @@ sys	0m7.032s
 cd ~/MGWA_VELO045/MGWA_VELO045_maker_R1/Maker1/snap/round1
 /opt/tools/maker/bin/maker2zff -x 0.25 -l 50 -c 0 -e 0 -o 0.5 -d ../../MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log
 
-TRAIN SNAP ROUND 1:
+## TRAIN SNAP ROUND 1:
 #cd into your MGWA_VELO045_maker_R1/MGWA_VELO045 folder if you are not there already
 #prepare to train SNAP
 
@@ -356,7 +357,7 @@ cd ~/MGWA_VELO045/MGWA_VELO045_maker_R1/Maker1/snap/round1
 
 rename 's/genome/MGWA_VELO045_rnd1.zff.length50_aed0.25/g' *
 
-###### rename 's/genome/'MGWA_VELO045'_rnd1.zff.length50_aed0.25/g' *
+######rename 's/genome/'MGWA_VELO045'_rnd1.zff.length50_aed0.25/g' *
 
 #create statistics
 /opt/tools/snap/fathom MGWA_VELO045_rnd1.zff.length50_aed0.25.ann MGWA_VELO045_rnd1.zff.length50_aed0.25.dna -gene-stats > gene-stats.log 2>&1
@@ -383,7 +384,7 @@ time /opt/tools/snap/hmm-assembler.pl MGWA_VELO045_rnd1.zff.length50_aed0.25 par
 cat *.log
 ##NO ERRORS
 
-###RUN MAKER 2
+### RUN MAKER 2
 
 #cd into your "$GENOME"_maker_R1/"$GENOME" folder if you are not there already
 
@@ -492,8 +493,8 @@ sbatch R2_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_14.sh
 sbatch R2_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_15.sh
 sbatch R2_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_16.sh
 
-###MAKER 2 COMPLETE!!
-MAKER 3 STARTS NOW!!
+### MAKER 2 COMPLETE!!
+### MAKER 3 STARTS NOW!!
 
 ###Please do these steps on Ramphocelus as maker is not accessible on the main server.
 cd USER6@ramphocelus:~/MGWA_VELO045
@@ -560,7 +561,7 @@ real	0m15.387s
 user	0m12.204s
 sys	0m3.718s
 
-TRAIN SNAP: MAKER 3
+### TRAIN SNAP: MAKER 3
 
 #cd into your MGWA_VELO045_maker_R2 if you are not there already
 #prepare to train SNAP
@@ -599,7 +600,7 @@ real	0m0.037s
 user	0m0.029s
 sys	0m0.007s
 
-RUN MAKER ROUND 3:
+### RUN MAKER ROUND 3:
 #Now go back to your maker folder on Niagara and change these lines in the options file:
 
 cd /gpfs/fs0/scratch/j/jweir/niki03/Maker1
@@ -660,14 +661,14 @@ sbatch R3_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_14.sh
 sbatch R3_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_15.sh
 sbatch R3_0_MAKER_SUBMISSION_SCRIPT_NIAGARA_40threads__run_16.sh
 
-STEP 3: FUNCTIONAL ANNOTATION:
+### STEP 3: FUNCTIONAL ANNOTATION:
 
 cd /gpfs/fs0/scratch/j/jweir/niki03/Maker1
 
 #First, check if all of your rounds finished
 tail -n 50 OUTPUT_R3*
 
-###MAKER ROUND 3 HAS COMPLETED WITHOUT ANY ERRORS. 
+### MAKER ROUND 3 HAS COMPLETED WITHOUT ANY ERRORS. 
 
 #GET YOUR DATA OFF OF NIAGARA TO RAMPHOCELES NODE:
  cd ~/MGWA_VELO045
@@ -854,7 +855,7 @@ cd busco
 conda activate Augustus #has augustus installed
 export BUSCO_CONFIG_FILE="/home/0_BIOD98/anteater_busco_config.ini"
 
-#Run BUSCO!
+# Run BUSCO!
 #assess transcripts
 time python3 /home/0_PROGRAMS/busco_v3/scripts/run_BUSCO.py -i ../MGWA_VELO045_maker_R3/MGWA_VELO045_input.all.maker.transcripts.fasta  -o transcript_annotation_eval -l /home/0_PROGRAMS/busco_v3/aves_odb9 -m transcriptome -c 24 -sp chicken -z --augustus_parameters='--progress=true'
 
