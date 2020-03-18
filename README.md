@@ -727,18 +727,18 @@ sys	0m16.462s
 time /opt/tools/maker/bin/fasta_merge -d ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log
 
 OUTPUT:
-real	0m23.079s
-user	0m12.237s
-sys	0m9.191s
+real	0m24.791s
+user	0m14.903s
+sys	0m9.090s
 
 #Create a gff3 file without sequences
 
 time /opt/tools/maker/bin/gff3_merge -n -s -d ./MGWA_VELO045_input.maker.output/MGWA_VELO045_input_master_datastore_index.log > MGWA_VELO045_rnd3.all.maker.noseq.gff
 
 OUTPUT:
-real	0m15.352s
-user	0m12.158s
-sys	0m3.798s
+real	0m28.602s
+user	0m23.000s
+sys	0m5.844s
 #done
 
 ### CHECKPOINT:
@@ -764,12 +764,12 @@ time /home/0_PROGRAMS/GAAS/annotation/Tools/Maker/maker_check_progress.sh ./MGWA
 
 ## OUTPUT:
 
-42380 contigs are too small to be analyzed
+42377 contigs are too small to be analyzed
 
-3229 contigs has begin to be studied only one time
+3227 contigs has begin to be studied only one time
 0 contigs have been started several times
-3229 contigs has begin to be studied in total
-3229 STARTED signal in total
+3227 contigs has begin to be studied in total
+3227 STARTED signal in total
 
 3229 contigs have been finished
 0 contigs have been finished several times
@@ -779,20 +779,22 @@ time /home/0_PROGRAMS/GAAS/annotation/Tools/Maker/maker_check_progress.sh ./MGWA
 
 0 contig whithout FINISHED signal.
 
-0 contig whithout STARTED signal.
+2 contig whithout STARTED signal.
 
 
 ###Finally, 0 errors has been found in the log file:(See below)###
+
 
 ### Now, verification of errors found in the directory of these ananlysis ###
 
 
 This job does not contains bug ! Congratulation.
 
-OUTPUT:
-real	0m0.532s
-user	0m0.522s
-sys	0m0.060s
+Bye
+
+real	0m0.674s
+user	0m0.660s
+sys	0m0.029s
 
 ##EVALUATE COMPLETENESS USING BUSCO:
 ##GOAL: BUSCO gives an estimate of how "complete" an annotation is by looking for specific highly-conserved proteins that are expected to be found as a single copy in almost every bird genome. Here we will collect some stats on our annotation an dthen run BUSCO.
@@ -823,6 +825,200 @@ OUTPUT:
 cat MGWA_VELO045_maker_R3/MGWA_VELO045_rnd3.all.maker.gff | awk '{ if ($3 == "gene") print $0 }' | awk '{ sum += ($5 - $4) } END { print NR, sum / NR }'
 
 OUTPUT:
-18625 16191.9
+61957 21706.8
 
+### You should have around 40,000-50,000 genes in your round 3, and around 15,000-19,000 in round 2 probably and probably 10,000-17,000 in round 1. If you have way way more or way way fewer there could be a problem.
 
+### The average lengths should also be around 10,000-35,000 bp
+
+### Note: these statistics would be good to discuss in your report. Did training SNAP allow you to find more proteins in round 2 than in round 1? Did the average length of genes change?
+
+### Now for Busco completeness scores!
+
+### To run BUSCO, you need a conda environment that contains Augustus.
+
+#do this only once
+
+conda deactivate
+conda create -n Augustus
+conda activate Augustus
+conda install -c bioconda augustus
+cd /home/0_PROGRAMS/busco_v3
+python setup.py install --user
+
+cd ~/MGWA_VELO045
+mkdir busco
+cd busco
+
+#set up environment
+conda activate Augustus #has augustus installed
+export BUSCO_CONFIG_FILE="/home/0_BIOD98/anteater_busco_config.ini"
+
+#Run BUSCO!
+#assess transcripts
+time python3 /home/0_PROGRAMS/busco_v3/scripts/run_BUSCO.py -i ../MGWA_VELO045_maker_R3/MGWA_VELO045_input.all.maker.transcripts.fasta  -o transcript_annotation_eval -l /home/0_PROGRAMS/busco_v3/aves_odb9 -m transcriptome -c 24 -sp chicken -z --augustus_parameters='--progress=true'
+
+OUTPUT:
+real	67m24.990s
+user	450m40.210s
+sys	5m57.825s
+
+#assess proteins
+time python3 /home/0_PROGRAMS/busco_v3/scripts/run_BUSCO.py -i ../MGWA_VELO045_maker_R3/MGWA_VELO045_input.all.maker.proteins.fasta  -o protein_annotation_eval -l /home/0_PROGRAMS/busco_v3/aves_odb9 -m proteins -c 24 -sp chicken -z --augustus_parameters='--progress=true'
+
+OUTPUT:
+real	11m28.152s
+user	102m32.956s
+sys	1m36.915s
+
+##RUNNING INTERPROSCAN:
+##GOAL:what are these genes? What do they do? One of the main ways we can talk about gene functions in biology is by using GO terms. GO terms (Gene Ontology) are standardized traits that have to do with a biological process (eg cell division), location (eg mitochondrion), or function (eg transport).
+
+##Each GO term is unique, and assigned a number.
+
+##The first thing we will do is look for conserved protein domains using InterPro Scan, which can search several different databases to each of our protein sequences and give a list of matches. These will be used to assign possible functions to the genes, including GO terms. The assumption is that if our mystery protein has functional domains that are shared with a group of known proteins, it probably has the same function as those known proteins. 
+
+##We will compare out genes to the following database:
+
+#set up environment
+export PATH=$PATH:/home/0_PROGRAMS/interproscan/interproscan-5.39-77.0 #for all of interproscan
+export PATH=$PATH:/opt/tools/maker/bin
+export PERLBREW_ROOT=/opt/perl5
+/opt/perl5/bin/perlbrew switch perl-5.30.0 #A sub-shell is launched with perl-5.30.0 as the activated perl. Run 'exit' to finish it.
+
+export PATH=/opt/tools/maker/bin:$PATH
+
+#Now you will have to redefine GENOME as it will have forgotten
+
+#make a directory to work in
+mkdir ~/MGWA_VELO045/functional_ann
+cd ~/MGWA_VELO045/functional_ann
+
+#search for hits in the two databases with Interproscan
+
+#Pfam
+interproscan.sh -iprlookup -goterms -appl Pfam-32.0 -i ~/MGWA_VELO045/MGWA_VELO045_maker_R3/MGWA_VELO045_input.all.maker.proteins.fasta -b MGWA_VELO045_prots -f tsv
+
+OUTPUT: 
+
+#concatenate results
+cat MGWA_VELO045_prots*.tsv > MGWA_VELO045_prots_2interpro.tsv
+
+#add the interpro results to the maker gff
+ipr_update_gff ~/MGWA_VELO045/MGWA_VELO045_maker_R3/MGWA_VELO045_rnd3.all.maker.gff MGWA_VELO045_prots_2interpro.tsv > MGWA_VELO045.max.functional_2interpro.gff
+
+#filter to retain only best genes, compare two filtering options:
+perl /home/0_PROGRAMS/Genome_annotation/quality_filter.pl -d MGWA_VELO045.max.functional_2interpro.gff > MGWA_VELO045.default.functional_2interpro.gff 
+
+#default build: only proteins with RNA/protein evidence (AED<1)
+
+perl /home/0_PROGRAMS/Genome_annotation/quality_filter_PfamPANTHER.pl -s MGWA_VELO045.max.functional_2interpro.gff > MGWA_VELO045.standardplus.functional_2interpro.gff 
+
+#standard build: all proteins with evidence (AED<1) and/or a functional annotation (Pfam or PANTHER)
+
+#count number of genes:
+
+grep -cP '\tgene\t'  ~/MGWA_VELO045/MGWA_VELO045_maker_R3/MGWA_VELO045.all.maker.gff #number of genes originally
+
+grep -cP '\tgene\t' MGWA_VELO045.default.functional_2interpro.gff #number genes with evidence (protein/RNA alignment)
+grep -cP '\tgene\t' MGWA_VELO045.standardplus.functional_2interpro.gff #number genes with evidence OR Pfam
+less MGWA_VELO045_prots.tsv | cut -f 1 | sort | uniq | wc -l #number of genes with Pfam annotations
+
+##Pause game! Let's fix the gene names before we get too far - right now they are named very long codenames.
+
+##Quickly simplify the names of our genes to be more meaningful and easier to use.
+
+# create naming table translating old names into new names
+
+maker_map_ids --prefix MGWA_VELO045 --justify 5 MGWA_VELO045.standardplus.functional_2interpro.gff > MGWA_VELO045.standardplus.name.map
+
+# replace names in GFF files
+
+map_gff_ids MGWA_VELO045.standardplus.name.map MGWA_VELO045.standardplus.functional_2interpro.gff
+
+# replace names in FASTA headers
+
+cp ~/MGWA_VELO045/MGWA_VELO045_maker_R3/MGWA_VELO045_input.all.maker.proteins.fasta .
+
+map_fasta_ids MGWA_VELO045.standardplus.name.map MGWA_VELO045_input.all.maker.proteins.fasta  #overwrites input, careful!
+
+# extract the protein sequences from the fasta file that passed our filters
+
+# Use seqtk to filter a fasta based on a list
+
+cat MGWA_VELO045.standardplus.name.map | cut -f 2 | sort | uniq > MGWA_VELO045.standardplus_genelist #extract list of genes to keep
+
+/home/0_PROGRAMS/seqtk/seqtk subseq MGWA_VELO045_input.all.maker.proteins.fasta MGWA_VELO045.standardplus_genelist > MGWA_VELO045.standardplus.proteins.fasta
+
+#transcripts too
+cp ~/MGWA_VELO045/MGWA_VELO045_maker_R3/MGWA_VELO045_input.all.maker.transcripts.fasta .
+map_fasta_ids MGWA_VELO045.standardplus.name.map MGWA_VELO045_input.all.maker.transcripts.fasta
+/home/0_PROGRAMS/seqtk/seqtk subseq MGWA_VELO045_input.all.maker.transcripts.fasta MGWA_VELO045.standardplus_genelist > MGWA_VELO045.standardplus.transcripts.fasta
+
+## Now, evaluate the proteins and transcripts of our final, filtered dataset with BUSCO. How does it compare? Did removing low-quality protein predictions affect your BUSCO score? It will likely go down slightly, but hopefully not too much.
+
+#check BUSCO
+
+conda activate Augustus #has augustus installed
+
+export BUSCO_CONFIG_FILE="/home/0_BIOD98/anteater_busco_config.ini"
+
+python3 /home/0_PROGRAMS/busco_v3/scripts/run_BUSCO.py -i MGWA_VELO045.standardplus.proteins.fasta  -o MGWA_VELO045.standardplus.proteins -l /home/0_PROGRAMS/busco_v3/aves_odb9 -m proteins -c 22 -sp chicken -z --augustus_parameters='--progress=true'
+
+## How much is missing, is it the same as before filtering?
+
+## Now you have a final set of protein sequences annotated on your genome, with predicted functions. Nice job!
+
+## OPTIONAL: RENAME GENES:
+
+##GOALS: rename genes so that instead of a protein being called something difficult to interpret like "CHSK_MKP1592-5563726" they will be named something like "CHSK_MKP1592-5563726: similar to mouse NADH dehydrogenase protein". Much more human readable.
+
+#homology-based annotation, and it relies on having a well curated database of known proteins to compare to.
+
+#Now we will rename our proteins based on homology with other named proteins, especially the curated Swiss-Prot database.
+
+#We will use two databases: Swissprot/Uniprot is highly curated, but has less coverage of birds. Trembl is not maually curated, but has more birds. We will match our proteins to both, and give priority to the Swiss-prot, high quality results.
+
+#BLAST our proteome against this BLAST database to see what our proteins match.
+
+#setup environment
+
+cd ~/MGWA_VELO045/functional_ann
+export PATH=$PATH:/home/0_PROGRAMS/ncbi-blast-2.9.0+/bin/
+
+#Swiss-prot
+
+blastp -db /home/0_BIOD98/uniprot_sprot.fasta -query MGWA_VELO045.standardplus.proteins.fasta -out maker2uni.blastp -evalue .000001 -outfmt 6 -num_alignments 1 -seg yes -soft_masking true -lcase_masking -max_hsps 1 -num_threads 23
+
+#TREMBL
+
+blastp -db /home/0_BIOD98/Trembl_birds_Dec2019.fasta -query MGWA_VELO045.standardplus.proteins.fasta -out maker2trem.blastp -evalue .000001 -outfmt 6 -num_alignments 1 -seg yes -soft_masking true -lcase_masking -max_hsps 1 -num_threads 23
+
+#Check results:
+
+grep -c "^>" MGWA_VELO045.standardplus.proteins.fasta #number of input proteins you are starting with
+wc -l maker2uni.blastp #counts the number of proteins with a hit in Swissprot/Uniprot
+wc -l maker2trem.blastp #counts the number of proteins with a hit in Trembl
+
+##name the proteins first with the Swiss-prot names, and then with the Trembl names for the few that had hits with Trembl but not Swissprot. 
+#That is because many of the Trembl proteins are named uninformative names like "Uncharacterized protein" while the Swissprot proteins are manually curated and higher quality.
+
+cat maker2uni.blastp | cut -f 1 > swissprot_matched #get a list of all the proteins that had a swissprot hit
+
+grep -v -f swissprot_matched maker2trem.blastp  > onlytrembl_matched #get a list of the blast hits for proteins that matched trembl but NOT swissprot
+
+cat maker2uni.blastp onlytrembl_matched > nr_blastp_for_naming #combine the swissprot hits with the trembl hits that swissprot missed
+
+#add the homology results to the FASTA file, replacing the old names
+
+maker_functional_fasta /home/0_BIOD98/Uniprot_cat_Tremblbirds.temp nr_blastp_for_naming MGWA_VELO045.standardplus.proteins.fasta > MGWA_VELO045.standardplus.namedproteins.fasta
+
+#finally, get the transcript data as well and name the same way
+
+cp ~/MGWA_VELO045/MGWA_VELO045_maker_R3/MGWA_VELO045_input.all.maker.transcripts.fasta .
+
+map_fasta_ids MGWA_VELO045.standardplus.name.map MGWA_VELO045_input.all.maker.transcripts.fasta
+
+/home/0_PROGRAMS/seqtk/seqtk subseq MGWA_VELO045_input.all.maker.transcripts.fasta MGWA_VELO045.standardplus_genelist > MGWA_VELO045.standardplus.transcripts.fasta
+
+maker_functional_fasta /home/0_BIOD98/Uniprot_cat_Tremblbirds.temp nr_blastp_for_naming MGWA_VELO045.standardplus.transcripts.fasta > MGWA_VELO045.standardplus.namedtranscripts.fasta
