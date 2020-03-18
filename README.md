@@ -871,7 +871,8 @@ real	11m28.152s
 user	102m32.956s
 sys	1m36.915s
 
-##RUNNING INTERPROSCAN:
+## RUNNING INTERPROSCAN:
+
 ##GOAL:what are these genes? What do they do? One of the main ways we can talk about gene functions in biology is by using GO terms. GO terms (Gene Ontology) are standardized traits that have to do with a biological process (eg cell division), location (eg mitochondrion), or function (eg transport).
 
 ##Each GO term is unique, and assigned a number.
@@ -899,7 +900,20 @@ cd ~/MGWA_VELO045/functional_ann
 #Pfam
 interproscan.sh -iprlookup -goterms -appl Pfam-32.0 -i ~/MGWA_VELO045/MGWA_VELO045_maker_R3/MGWA_VELO045_input.all.maker.proteins.fasta -b MGWA_VELO045_prots -f tsv
 
-OUTPUT: 
+# OUTPUT: 
+18/03/2020 02:56:30:003 Welcome to InterProScan-5.39-77.0
+18/03/2020 02:56:30:005 Running InterProScan v5 in STANDALONE mode... on Linux
+18/03/2020 02:57:26:202 Loading file /home/USER6/MGWA_VELO045/MGWA_VELO045_maker_R3/MGWA_VELO045_input.all.maker.proteins.fasta
+18/03/2020 02:57:26:211 Running the following analyses:
+[Pfam-32.0]
+Available matches will be retrieved from the pre-calculated match lookup service.
+
+Matches for any sequences that are not represented in the lookup service will be calculated locally.
+18/03/2020 03:00:55:011 37% completed
+18/03/2020 03:01:00:496 62% completed
+18/03/2020 03:01:02:606 87% completed
+18/03/2020 03:47:36:850 90% completed
+18/03/2020 03:49:30:931 100% done:  InterProScan analyses completed
 
 #concatenate results
 cat MGWA_VELO045_prots*.tsv > MGWA_VELO045_prots_2interpro.tsv
@@ -918,11 +932,18 @@ perl /home/0_PROGRAMS/Genome_annotation/quality_filter_PfamPANTHER.pl -s MGWA_VE
 
 #count number of genes:
 
-grep -cP '\tgene\t'  ~/MGWA_VELO045/MGWA_VELO045_maker_R3/MGWA_VELO045.all.maker.gff #number of genes originally
+grep -cP '\tgene\t' ~/MGWA_VELO045/MGWA_VELO045_maker_R3/MGWA_VELO045_rnd3.all.maker.gff #number of genes originally
 
 grep -cP '\tgene\t' MGWA_VELO045.default.functional_2interpro.gff #number genes with evidence (protein/RNA alignment)
+
 grep -cP '\tgene\t' MGWA_VELO045.standardplus.functional_2interpro.gff #number genes with evidence OR Pfam
+
 less MGWA_VELO045_prots.tsv | cut -f 1 | sort | uniq | wc -l #number of genes with Pfam annotations
+
+#NUMBER OF GENES ORIGINALLY= 61957
+#NUMBER OF GENES WTH EVIDENCE (PROTEIN/RNA ALIGNMENT) = 17939
+#NUMBER OF GENES WITH EVIDENCE OR PFAM= 20095
+#NUMBER OF GENES WITH PFAM ANNOTATION = 15855
 
 ##Pause game! Let's fix the gene names before we get too far - right now they are named very long codenames.
 
@@ -937,7 +958,7 @@ maker_map_ids --prefix MGWA_VELO045 --justify 5 MGWA_VELO045.standardplus.functi
 map_gff_ids MGWA_VELO045.standardplus.name.map MGWA_VELO045.standardplus.functional_2interpro.gff
 
 # replace names in FASTA headers
-
+scp -r USER6@192.168.0.5:~/MGWA_VELO045/MGWA_VELO045_maker_R3/MGWA_VELO045_input.all.maker.proteins.fasta .
 cp ~/MGWA_VELO045/MGWA_VELO045_maker_R3/MGWA_VELO045_input.all.maker.proteins.fasta .
 
 map_fasta_ids MGWA_VELO045.standardplus.name.map MGWA_VELO045_input.all.maker.proteins.fasta  #overwrites input, careful!
@@ -952,7 +973,9 @@ cat MGWA_VELO045.standardplus.name.map | cut -f 2 | sort | uniq > MGWA_VELO045.s
 
 #transcripts too
 cp ~/MGWA_VELO045/MGWA_VELO045_maker_R3/MGWA_VELO045_input.all.maker.transcripts.fasta .
+
 map_fasta_ids MGWA_VELO045.standardplus.name.map MGWA_VELO045_input.all.maker.transcripts.fasta
+
 /home/0_PROGRAMS/seqtk/seqtk subseq MGWA_VELO045_input.all.maker.transcripts.fasta MGWA_VELO045.standardplus_genelist > MGWA_VELO045.standardplus.transcripts.fasta
 
 ## Now, evaluate the proteins and transcripts of our final, filtered dataset with BUSCO. How does it compare? Did removing low-quality protein predictions affect your BUSCO score? It will likely go down slightly, but hopefully not too much.
@@ -968,6 +991,17 @@ python3 /home/0_PROGRAMS/busco_v3/scripts/run_BUSCO.py -i MGWA_VELO045.standardp
 ## How much is missing, is it the same as before filtering?
 
 ## Now you have a final set of protein sequences annotated on your genome, with predicted functions. Nice job!
+
+Results:
+INFO	C:76.4%[S:75.2%,D:1.2%],F:14.4%,M:9.2%,n:4915
+INFO	3758 Complete BUSCOs (C)
+INFO	3698 Complete and single-copy BUSCOs (S)
+INFO	60 Complete and duplicated BUSCOs (D)
+INFO	708 Fragmented BUSCOs (F)
+INFO	449 Missing BUSCOs (M)
+INFO	4915 Total BUSCO groups searched
+INFO	BUSCO analysis done with WARNING(s). Total running time: 198.6177785396576 seconds
+INFO	Results written in /home/USER6/MGWA_VELO045/functional_ann/run_MGWA_VELO045.standardplus.proteins/
 
 ## OPTIONAL: RENAME GENES:
 
@@ -1000,6 +1034,10 @@ grep -c "^>" MGWA_VELO045.standardplus.proteins.fasta #number of input proteins 
 wc -l maker2uni.blastp #counts the number of proteins with a hit in Swissprot/Uniprot
 wc -l maker2trem.blastp #counts the number of proteins with a hit in Trembl
 
+#NUMBER OF INPUT PROTEINS YOU ARE STARTING WITH= 20095
+#NUMBER OF PROTEINS WITH HIT IN SWISSPROT/UNIPROT= 18185
+#NUMBER OF PROTEINS WITH HIT IN TREMBL = 19057
+
 ##name the proteins first with the Swiss-prot names, and then with the Trembl names for the few that had hits with Trembl but not Swissprot. 
 #That is because many of the Trembl proteins are named uninformative names like "Uncharacterized protein" while the Swissprot proteins are manually curated and higher quality.
 
@@ -1027,13 +1065,109 @@ maker_functional_fasta /home/0_BIOD98/Uniprot_cat_Tremblbirds.temp nr_blastp_for
 
 wc -l onlytrembl_matched #number of proteins that trembl hit that were missed by Swissprot
 
+#NUMBER OF PROTEINS THAT TREMBL HIT THAT WERE MISSED BY SWISSPROT= 877 onlytrembl_matched
+
 #to see number that swissprot hit that trembl missed, do (#swissprot hit total) - (#trembl hit total) + (number trembl hit that swissprot missed)
+
+#NUMBER OF PROTEINS THAT SWISSPROT HIT THAT TREMBL MISSED= 5
 
 #to see number that had ANY hit:
 wc -l nr_blastp_for_naming #can you see an alternate way to calculate this?
 
 #What proportion of your input gene list had a hit in one of these databases?
+#NUMBER OF PROTEINS WITH HITS IN AT LEAST 1 OF THEM = 19062 nr_blastp_for_naming = 94.86% HIT
 
 ##ELSE' SAMPLE RESULTS:
 Results: Example: With Swiss-prot, I got 16,981 hits. With Trembl, I got 17,341 hits (367 that Swissprot did not hit). 17,348 had a hit in a least one of those. I had 17,475 total genes so almost all had hits!!! 99.3%!!!!
+
+  ## ORTHO FINDER 
+  
+##GOAL: OrthoFinder works by blasting every proteome against every other proteome. For 20 species, that means like 180 combinations. 
+##Since OrthoFinder can take a while to run with that many, I (Else) have premade all the BLAST results for these species. 
+##All you have to do is add your species (so, like 20 combinations instead of ~200).
+
+#load environment
+export PATH=$PATH:/home/0_PROGRAMS/fastme-2.1.5/binaries
+export PATH=$PATH:/home/0_PROGRAMS/ #for Diamond
+export PATH=$PATH:/home/0_PROGRAMS/OrthoFinder
+
+#First, make a directory to work in
+mkdir ~/MGWA_VELO045/orthofinder 
+cd ~/MGWA_VELO045/orthofinder 
+
+#get your proteome file here
+cp ~/MGWA_VELO045/functional_ann/MGWA_VELO045.standardplus.namedproteins.fasta .
+
+#or, if you skipped the homology part: (remove the hashtag if you need to run it)
+#cp ~/"GENOME"/functional_ann/"$GENOME".standardplus.proteins.fasta .
+
+####Important!!!
+#If you are comparing your species to another person in this class, you will need to bring their proteome into your folder too!
+#Otherwise, skip to run orthofinder.
+
+PARTNERGENOME=MOWA_IF09D02
+
+cp /home/USER5/MOWA_IF09D02/functional_ann/MOWA_IF09D02.standardplus.namedproteins.fasta .
+
+#or, if they skipped the homology part: (remove the hashtag if you need to run it)
+#cp /home/USERNAME_OF_YOUR_PARTNER/"PARTNERGENOME"/functional_ann/"$PARTNERGENOME".standardplus.proteins.fasta .
+
+#run OrthoFinder!!!
+time /home/0_PROGRAMS/OrthoFinder/orthofinder -n MGWA_VELO045 -b /home/0_BIOD98/OrthoFinder_passerines/WorkingDirectory -f . -t 24 > Orthofinder.MGWA_VELO045.log
+
+#when it is done, check the log. Any errors?
+
+less Orthofinder.MGWA_VELO045.log
+
+#Then get your OrthoFinder results into your own folder
+mv /home/0_BIOD98/OrthoFinder_passerines/WorkingDirectory/Results_MGWA_VELO045 .
+
+## Orthofinder between only two genomes
+##GOAL: If you only want to assign orthologs between your TWO sister species without bothering with any others (for example, for synteny analysis), you can assign orthologs like this:
+
+#load environment
+export PATH=$PATH:/home/0_PROGRAMS/fastme-2.1.5/binaries
+export PATH=$PATH:/home/0_PROGRAMS/ #for Diamond
+export PATH=$PATH:/home/0_PROGRAMS/OrthoFinder
+
+#run OrthoFinder!!! It will analyze all the fasta files in your current directory (should be yours and your partner's)
+time /home/0_PROGRAMS/OrthoFinder/orthofinder -o ./MGWA_VELO045_sisters -f . -t 24 > Orthofinder.MGWA_VELO045.log
+
+#when it is done, check the log
+less Orthofinder.MGWA_VELO045.log
+
+## EXPLORING THE ORTHOFINDER RESULTS:
+
+cd Results_MGWA_VELO045
+#or 
+cd ./MGWA_VELO045_sisters
+
+ls #what is here?
+
+#check the log to make sure it worked properly
+less Log.txt #press q to go back
+
+cd WorkingDirectory
+ls #This is where it stores BLAST results and raw data, which it could reuse if you had to run the same thing again 
+
+cd ..
+cd Orthogroups
+
+less Orthogroups.GeneCount.tsv #press q to go back
+#Which OrthoGroup has the most genes?
+#Which species has more of that gene family?
+
+less Orthogroups_SingleCopyOrthologues.txt #press q to go back
+cd ../Single_Copy_Orthologue_Sequences
+ls
+#pick one copy
+#use less to see the contents
+
+
+cd ../Resolved_Gene_Trees
+ls
+#pick one copy
+#use less to see the contents
+#These are phylogenetic trees. If you found a gene family of interest, you could plot them to make a pretty phylogeny figure.
+#If you transfer one of them to your computer (with Filezilla) you can view them and make figures with a program, I use FigTree.
 
