@@ -1120,8 +1120,109 @@ time /home/0_PROGRAMS/OrthoFinder/orthofinder -n MGWA_VELO045 -b /home/0_BIOD98/
 
 less Orthofinder.MGWA_VELO045.log
 
-#Then get your OrthoFinder results into your own folder
-mv /home/0_BIOD98/OrthoFinder_passerines/WorkingDirectory/Results_MGWA_VELO045 .
+### OUTPUT OF ORTHOFINDER:
+Writing orthogroups to file
+---------------------------
+OrthoFinder assigned 481864 genes (98.0% of total) to 18975 orthogroups. Fifty percent of all genes were in orthogroups with 31 or more genes (G50 was 31) and were contained in the largest 5993 orthogroups (O50 was 5993). There were 7781 orthogroups with all species present and 3966 of these consisted entirely of single-copy genes.
+
+2020-03-18 20:30:56 : Done orthogroups
+
+Analysing Orthogroups
+=====================
+
+Calculating gene distances
+--------------------------
+2020-03-18 22:01:45 : Done 11000 of 15505
+2020-03-18 22:01:39 : Done 2000 of 15505
+2020-03-18 22:01:43 : Done 8000 of 15505
+2020-03-18 22:01:42 : Done 7000 of 15505
+2020-03-18 22:01:38 : Done 1000 of 15505
+2020-03-18 22:01:47 : Done 14000 of 15505
+2020-03-18 22:01:41 : Done 4000 of 15505
+2020-03-18 22:01:47 : Done 15000 of 15505
+2020-03-18 22:01:34 : Done 0 of 15505
+2020-03-18 22:01:46 : Done 12000 of 15505
+2020-03-18 22:01:40 : Done 3000 of 15505
+2020-03-18 22:01:41 : Done 5000 of 15505
+2020-03-18 22:01:44 : Done 9000 of 15505
+2020-03-18 22:01:44 : Done 10000 of 15505
+2020-03-18 22:01:46 : Done 13000 of 15505
+2020-03-18 22:01:42 : Done 6000 of 15505
+2020-03-18 22:01:33 : Done
+Inferring gene and species trees
+--------------------------------
+
+7781 trees had all species present and will be used by STAG to infer the species tree
+
+Best outgroup(s) for species tree
+---------------------------------
+2020-03-18 22:17:16 : Starting STRIDE
+2020-03-18 22:17:24 : Done STRIDE
+Observed 70 well-supported, non-terminal duplications. 70 support the best roots and 0 contradict them.
+
+Best outgroup(s) for species tree
+---------------------------------
+2020-03-18 22:17:16 : Starting STRIDE
+2020-03-18 22:17:24 : Done STRIDE
+Observed 70 well-supported, non-terminal duplications. 70 support the best roots and 0 contradict them.
+Best outgroups for species tree:
+  longest.simpleheader.Falper.AA, longest.simpleheader.Strhab.AA, longest.simpleheader.Nesnot.AA, longest.simpleheader.Falche.AA, longest.simpleheader.Melund.AA, longest.simpleheader.Acachl.AA, longest.simpleheader.Amacol.AA
+  longest.simpleheader.Lepcor.AA, longest.simpleheader.Pipfil.AA, longest.simpleheader.Manvit.AA, longest.simpleheader.Neochr.AA, Willisornis, longest.simpleheader.Coralt.AA, longest.simpleheader.Emptra.AA
+  longest.simpleheader.Falper.AA, longest.simpleheader.Strhab.AA, longest.simpleheader.Nesnot.AA, longest.simpleheader.Manvit.AA, longest.simpleheader.Pipfil.AA, longest.simpleheader.Falche.AA, longest.simpleheader.Neochr.AA, longest.simpleheader.Melund.AA, longest.simpleheader.Lepcor.AA, longest.simpleheader.Acachl.AA, Willisornis, longest.simpleheader.Amacol.AA, longest.simpleheader.Coralt.AA, longest.simpleheader.Emptra.AA
+  longest.simpleheader.Sercan.AA, longest.simpleheader.Stuvul.AA, longest.simpleheader.Ficalb.AA, longest.simpleheader.Parmaj.AA, longest.simpleheader.Psehum.AA, MOWA_IF09D02.standardplus.proteins, longest.simpleheader.Zonalb.AA, longest.simpleheader.Geofor.AA, MGWA_VELO045.standardplus.namedproteins, longest.simpleheader.Campar.AA, longest.simpleheader.Taegut.AA, longest.simpleheader.Cyacae.AA, longest.simpleheader.Erygou.AA, longest.simpleheader.Lonstr.AA, longest.simpleheader.Junhie.AA
+  Willisornis
+  longest.simpleheader.Nesnot.AA
+  longest.simpleheader.Strhab.AA, longest.simpleheader.Amacol.AA, longest.simpleheader.Melund.AA
+  longest.simpleheader.Lepcor.AA, longest.simpleheader.Pipfil.AA, longest.simpleheader.Manvit.AA, longest.simpleheader.Neochr.AA, longest.simpleheader.Coralt.AA, longest.simpleheader.Emptra.AA
+  longest.simpleheader.Corbra.AA, longest.simpleheader.Corcor.AA
+  longest.simpleheader.Acachl.AA
+  longest.simpleheader.Falper.AA, longest.simpleheader.Strhab.AA, longest.simpleheader.Nesnot.AA, longest.simpleheader.Falche.AA, longest.simpleheader.Melund.AA, longest.simpleheader.Amacol.AA
+  longest.simpleheader.Strhab.AA, longest.simpleheader.Amacol.AA, longest.simpleheader.Nesnot.AA, longest.simpleheader.Melund.AA
+  longest.simpleheader.Falper.AA, longest.simpleheader.Falche.AA
+
+WARNING: Multiple potential species tree roots were identified, only one will be analyed.
+
+Reconciling gene trees and species tree
+---------------------------------------
+Outgroup: longest.simpleheader.Falper.AA, longest.simpleheader.Strhab.AA, longest.simpleheader.Nesnot.AA, longest.simpleheader.Falche.AA, longest.simpleheader.Melund.AA, longest.simpleheader.Acachl.AA, longest.simpleheader.Amacol.AA
+2020-03-18 22:17:24 : Starting Recon and orthologues
+2020-03-18 22:17:24 : Starting OF Orthologues
+2020-03-18 22:17:53 : Done 0 of 15505
+2020-03-18 22:20:06 : Done 1000 of 15505
+2020-03-18 22:20:57 : Done 2000 of 15505
+2020-03-18 22:21:38 : Done 3000 of 15505
+2020-03-18 22:22:18 : Done 4000 of 15505
+2020-03-18 22:22:57 : Done 5000 of 15505
+2020-03-18 22:23:32 : Done 6000 of 15505
+2020-03-18 22:24:08 : Done 7000 of 15505
+2020-03-18 22:24:44 : Done 8000 of 15505
+2020-03-18 22:25:20 : Done 9000 of 15505
+2020-03-18 22:25:54 : Done 10000 of 15505
+2020-03-18 22:26:28 : Done 11000 of 15505
+2020-03-18 22:26:59 : Done 12000 of 15505
+2020-03-18 22:27:24 : Done 13000 of 15505
+2020-03-18 22:27:38 : Done 14000 of 15505
+2020-03-18 22:27:44 : Done 15000 of 15505
+2020-03-18 22:27:46 : Done OF Orthologues
+2020-03-18 22:27:49 : Done Recon
+
+Writing results files
+=====================
+2020-03-18 22:27:50 : Done orthologues
+
+Results:
+    /home/0_BIOD98/OrthoFinder_passerines/WorkingDirectory/OrthoFinder/Results_MGWA_VELO045/
+
+CITATION:
+ When publishing work that uses OrthoFinder please cite:
+ Emms D.M. & Kelly S. (2019), Genome Biology 20:238
+
+ If you use the species tree in your work then please also cite:
+ Emms D.M. & Kelly S. (2017), MBE 34(12): 3267-3278
+ Emms D.M. & Kelly S. (2018), bioRxiv https://doi.org/10.1101/267914
+
+# Then get your OrthoFinder results into your own folder
+mv /home/0_BIOD98/OrthoFinder_passerines/WorkingDirectory/OrthoFinder/Results_MGWA_VELO045 .
 
 ## Orthofinder between only two genomes
 ##GOAL: If you only want to assign orthologs between your TWO sister species without bothering with any others (for example, for synteny analysis), you can assign orthologs like this:
@@ -1134,16 +1235,87 @@ export PATH=$PATH:/home/0_PROGRAMS/OrthoFinder
 #run OrthoFinder!!! It will analyze all the fasta files in your current directory (should be yours and your partner's)
 time /home/0_PROGRAMS/OrthoFinder/orthofinder -o ./MGWA_VELO045_sisters -f . -t 24 > Orthofinder.MGWA_VELO045.log
 
+#OUTPUT:
+real	327m51.801s
+user	761m44.389s
+sys	18m31.530s
+
 #when it is done, check the log
 less Orthofinder.MGWA_VELO045.log
+
+## OUTPUTS:
+Writing orthogroups to file
+---------------------------
+OrthoFinder assigned 36429 genes (89.3% of total) to 14994 orthogroups. Fifty percent of all genes were in orthogroups with 2 or more genes (G50 was 2) and were contained in the largest 6978 orthogroups (O50 was 6978). There were 14754 orthogroups with all species present and 12684 of these consisted entirely of single-copy genes.
+
+2020-03-19 00:09:10 : Done orthogroups
+
+Analysing Orthogroups
+=====================
+
+Calculating gene distances
+--------------------------
+2020-03-19 00:10:59 : Done 0 of 1274
+2020-03-19 00:10:59 : Done 400 of 1274
+2020-03-19 00:10:59 : Done 300 of 1274
+2020-03-19 00:11:00 : Done 800 of 1274
+2020-03-19 00:11:00 : Done 500 of 1274
+2020-03-19 00:10:59 : Done 200 of 1274
+2020-03-19 00:11:01 : Done 1100 of 1274
+2020-03-19 00:11:01 : Done 900 of 1274
+2020-03-19 00:11:00 : Done 700 of 1274
+2020-03-19 00:10:59 : Done 100 of 1274
+2020-03-19 00:11:00 : Done 600 of 1274
+2020-03-19 00:11:01 : Done 1200 of 1274
+2020-03-19 00:11:01 : Done 1000 of 1274
+2020-03-19 00:10:58 : Done
+Inferring gene and species trees
+--------------------------------
+
+Reconciling gene trees and species tree
+---------------------------------------
+2020-03-19 00:12:12 : Starting Recon and orthologues
+2020-03-19 00:12:12 : Starting OF Orthologues
+2020-03-19 00:12:21 : Done 0 of 1274
+2020-03-19 00:12:27 : Done 100 of 1274
+2020-03-19 00:12:28 : Done 200 of 1274
+2020-03-19 00:12:29 : Done 300 of 1274
+2020-03-19 00:12:30 : Done 400 of 1274
+2020-03-19 00:12:31 : Done 500 of 1274
+2020-03-19 00:12:31 : Done 600 of 1274
+2020-03-19 00:12:32 : Done 700 of 1274
+2020-03-19 00:12:32 : Done 800 of 1274
+2020-03-19 00:12:33 : Done 900 of 1274
+2020-03-19 00:12:33 : Done 1000 of 1274
+2020-03-19 00:12:33 : Done 1100 of 1274
+2020-03-19 00:12:34 : Done 1200 of 1274
+2020-03-19 00:12:34 : Done OF Orthologues
+2020-03-19 00:12:35 : Done Recon
+
+Writing results files
+=====================
+2020-03-19 00:12:35 : Done orthologues
+
+Results:
+    ./MGWA_VELO045_sisters/Results_Mar18/
+
+CITATION:
+ When publishing work that uses OrthoFinder please cite:
+ Emms D.M. & Kelly S. (2019), Genome Biology 20:238
+
+ If you use the species tree in your work then please also cite:
+ Emms D.M. & Kelly S. (2017), MBE 34(12): 3267-3278
+ Emms D.M. & Kelly S. (2018), bioRxiv https://doi.org/10.1101/267914
+
 
 ## EXPLORING THE ORTHOFINDER RESULTS:
 
 cd Results_MGWA_VELO045
-#or 
-cd ./MGWA_VELO045_sisters
 
 ls #what is here?
+Citation.txt			 Gene_Trees   Orthogroup_Sequences		Putative_Xenologs		  Species_Tree
+Comparative_Genomics_Statistics  Log.txt      Orthologues			Resolved_Gene_Trees		  WorkingDirectory
+Gene_Duplication_Events		 Orthogroups  Phylogenetically_Misplaced_Genes	Single_Copy_Orthologue_Sequences
 
 #check the log to make sure it worked properly
 less Log.txt #press q to go back
@@ -1172,7 +1344,6 @@ ls
 #These are phylogenetic trees. If you found a gene family of interest, you could plot them to make a pretty phylogeny figure.
 #If you transfer one of them to your computer (with Filezilla) you can view them and make figures with a program, I use FigTree.
 
-
 ### CAFE 
 GOAL: After running OrthoFinder, you can run Cafe!
 #Cafe itself is quite quick to run, but it requires some steps preparing the required input files. 
@@ -1187,7 +1358,10 @@ cd ~/MGWA_VELO045/cafe
 #For this we need the file Orthogroups.GeneCount.tsv
 #You can find this in your OrthoFinder reults folder, which should be named Results_"$GENOME" probably
 
-cp ~/MGWA_VELO045/orthofinder/Results_MGWA_VELO045/Orthogroups.GeneCount.tsv
+cp MGWA_VELO045/orthofinder/Results_MGWA_VELO045/Orthogroups/Orthogroups.GeneCount.tsv MGWA_VELO045/cafe
+
+### NOTE TO COPY FILES TO PATH:
+cp /path/to/source/foo.txt path/to/target/folder/bar.txt
 
 less Orthogroups.GeneCount.tsv #The last column is named Total. We do not want it. press q to go back
 
@@ -1251,7 +1425,7 @@ less large_filtered_Cafe_input.tsv #press q to go back
 less filtered_Cafe_input.tsv #press q to go back
 
 ##Ok, do the results look good? Tab separated columns of numbers? The first column should just say "null" (that is good).
-
+## YES 
 ##Now you need a phylogeny of birds.
 
 #Here is a Newick format phylogeny for all species in this dataset. THIS ONE WILL NOT WORK! IT IS MISSING YOUR SPECIES! 
@@ -1259,7 +1433,9 @@ less filtered_Cafe_input.tsv #press q to go back
 
 #To make it a file, use cat to open a blank file, then paste your newick format tree (such as the one below, but don't use that one, use a custom one)
 
-cat > Psittacopasserae.tree
+#### STOPPED HERE 
+
+cat > ((Falper:2.63,Falche:2.63):54.41,(((Strhab:25.70,Nesnot:25.70):5.73,(Amacol:21.28,Melund:21.28):10.15):23.84,(Acachl:46.72,((Wilpoe:35.20,(((((Lepcor:6.1,Manvit:6.1):0.7,Pipfil:6.8):3.3,Coralt:10.1):3.83,Neochr:13.93):10.46,Emptra:24.39):10.81):8.73,((Corcor:2.54,Corbra:2.54):27.94,((Psehum:13.8,(Parmaj:11.27,Cyacae:11.27):2.53):13.25,(((Ficalb:16.56,MGWA_VELO045.standardplus.namedproteins:16.56):3.24,Stuvul:19.80):6.93,(((Taegut:11.9,Lonstr:11.9):0.9,Erygou:12.8):8.49,(Sercan:17.11,((Campar:3.04,Geofor:3.04):11.58,(Zonalb:4.95,Junhie:4.95):9.67):2.49):4.18):5.44):0.32):3.43):13.45):2.79):8.55):1.78);
 
 ##This tree only has the base species from Ensembl/Refseq, it is missing your species!
 
@@ -1267,7 +1443,11 @@ cat > Psittacopasserae.tree
 
 ##This is the tree for FOSP (just replace the word FOSP with the name of your sample as it appears in your cafe input file, for example: HETH_JTWB1.standardplus.namedproteins)
 
-((Falper:2.63,Falche:2.63):54.41,(((Strhab:25.70,Nesnot:25.70):5.73,(Amacol:21.28,Melund:21.28):10.15):23.84,(Acachl:46.72,((Wilpoe:35.20,(((((Lepcor:6.1,Manvit:6.1):0.7,Pipfil:6.8):3.3,Coralt:10.1):3.83,Neochr:13.93):10.46,Emptra:24.39):10.81):8.73,((Corcor:2.54,Corbra:2.54):27.94,((Psehum:13.8,(Parmaj:11.27,Cyacae:11.27):2.53):13.25,(((Ficalb:16.56,HETH_JTWB1.standardplus.namedproteins:16.56):3.24,Stuvul:19.80):6.93,(((Taegut:11.9,Lonstr:11.9):0.9,Erygou:12.8):8.49,(Sercan:17.11,((Campar:3.04,Geofor:3.04):11.58,(Zonalb:4.95,Junhie:4.95):9.67):2.49):4.18):5.44):0.32):3.43):13.45):2.79):8.55):1.78);
+((Falper:2.63,Falche:2.63):54.41,(((Strhab:25.70,Nesnot:25.70):5.73,(Amacol:21.28,Melund:21.28):10.15):23.84,(Acachl:46.72,((Wilpoe:35.20,(((((Lepcor:6.1,Manvit:6.1):0.7,Pipfil:6.8):3.3,Coralt:10.1):3.83,Neochr:13.93):10.46,Emptra:24.39):10.81):8.73,((Corcor:2.54,Corbra:2.54):27.94,((Psehum:13.8,(Parmaj:11.27,Cyacae:11.27):2.53):13.25,(((Ficalb:16.56,MGWA_VELO045.standardplus.namedproteins:16.56):3.24,Stuvul:19.80):6.93,(((Taegut:11.9,Lonstr:11.9):0.9,Erygou:12.8):8.49,(Sercan:17.11,((Campar:3.04,Geofor:3.04):11.58,(Zonalb:4.95,Junhie:4.95):9.67):2.49):4.18):5.44):0.32):3.43):13.45):2.79):8.55):1.78);
+
+##Here is the tree for HETH: (just replace the word HETH with the name of your sample as it appears in your cafe input file, for example: HETH_JTWB1.standardplus.namedproteins)
+
+((Falper:2.63,Falche:2.63):54.41,(((Strhab:25.70,Nesnot:25.70):5.73,(Amacol:21.28,Melund:21.28):10.15):23.84,(Acachl:46.72,((Wilpoe:35.20,(((((Lepcor:6.1,Manvit:6.1):0.7,Pipfil:6.8):3.3,Coralt:10.1):3.83,Neochr:13.93):10.46,Emptra:24.39):10.81):8.73,((Corcor:2.54,Corbra:2.54):27.94,((Psehum:13.8,(Parmaj:11.27,Cyacae:11.27):2.53):13.25,(((Ficalb:16.56,HETH:16.56):3.24,Stuvul:19.80):6.93,(((Taegut:11.9,Lonstr:11.9):0.9,Erygou:12.8):8.49,(Sercan:17.11,((Campar:3.04,Geofor:3.04):11.58,(Zonalb:4.95,Junhie:4.95):9.67):2.49):4.18):5.44):0.32):3.43):13.45):2.79):8.55):1.78);
 
 ##Reading the trees
 
@@ -1295,6 +1475,11 @@ conda activate python2
 
 #This does a single run, estimating both lambda and epsilon
 time /home/0_PROGRAMS/CAFExp-5.0b2/bin/cafexp -i filtered_Cafe_input.tsv -t Psittacopasserae.tree -e -o error_model_cafe > error_model.log
+
+OUTPUT:
+real	0m0.022s
+user	0m0.005s
+sys	0m0.000s
 
 less error_model/Base_error_model.txt #view results of the error model
 
