@@ -1682,3 +1682,7 @@ sed -i 's/-RA//g' contracted_geneIDs.txt
 ##If you want to find out what these genes do, go to the next page: GO analysis
 
 ## GO ANALYSIS:
+
+
+
+scp USER6@192.168.0.5:~/MGWA_VELO045/busco/run_protein_annotation_eval/short_summary_protein_annotation_eval.txt .
