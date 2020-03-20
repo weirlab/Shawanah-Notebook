@@ -1431,29 +1431,23 @@ less filtered_Cafe_input.tsv #press q to go back
 #Here is a Newick format phylogeny for all species in this dataset. THIS ONE WILL NOT WORK! IT IS MISSING YOUR SPECIES! 
 #Newick trees are super annoying to edit by hand (it took me a long time to put this one together), so email Else to request your tree, letting me know exactly which species from BIOD98 you included (only your own, or also some other ones?).(Or if you feel like diving in to Newick notation, you could make your own).
 
-#To make it a file, use cat to open a blank file, then paste your newick format tree (such as the one below, but don't use that one, use a custom one)
+##To make it a file, use cat to open a blank file, then paste your newick format tree (such as the one below, but don't use that one, use a custom one)
 
-#### STOPPED HERE 
+##TREE WITH BOTH SPECIES ON IT: MGWA_VELO045 AND SISTER (MOWA_IF09D02)
 
-cat > ((Falper:2.63,Falche:2.63):54.41,(((Strhab:25.70,Nesnot:25.70):5.73,(Amacol:21.28,Melund:21.28):10.15):23.84,(Acachl:46.72,((Wilpoe:35.20,(((((Lepcor:6.1,Manvit:6.1):0.7,Pipfil:6.8):3.3,Coralt:10.1):3.83,Neochr:13.93):10.46,Emptra:24.39):10.81):8.73,((Corcor:2.54,Corbra:2.54):27.94,((Psehum:13.8,(Parmaj:11.27,Cyacae:11.27):2.53):13.25,(((Ficalb:16.56,MGWA_VELO045.standardplus.namedproteins:16.56):3.24,Stuvul:19.80):6.93,(((Taegut:11.9,Lonstr:11.9):0.9,Erygou:12.8):8.49,(Sercan:17.11,((Campar:3.04,Geofor:3.04):11.58,(Zonalb:4.95,Junhie:4.95):9.67):2.49):4.18):5.44):0.32):3.43):13.45):2.79):8.55):1.78);
+((Falper:2.63,Falche:2.63):54.41,(((Strhab:25.70,Nesnot:25.70):5.73,(Amacol:21.28,Melund:21.28):10.15):23.84,(Acachl:46.72,((Wilpoe:35.20,(((((Lepcor:6.1,Manvit:6.1):0.7,Pipfil:6.8):3.3,Coralt:10.1):3.83,Neochr:13.93):10.46,Emptra:24.39):10.81):8.73,((Corcor:2.54,Corbra:2.54):27.94,((Psehum:13.8,(Parmaj:11.27,Cyacae:11.27):2.53):13.25,((Ficalb:19.80,Stuvul:19.80):6.93,(((Taegut:11.9,Lonstr:11.9):0.9,Erygou:12.8):8.49,(Sercan:17.11,((Campar:3.04,Geofor:3.04):11.58,((Zonalb:4.95,Junhie:4.95):7.97,(MOWA_IF09D02.standardplus.namedproteins:1.3,MGWA_VELO045.standardplus.namedproteins:1.3):11.62):1.7):2.49):4.18):5.44):0.32):3.43):13.45):2.79):8.55):1.78);
 
-##This tree only has the base species from Ensembl/Refseq, it is missing your species!
+##TREE WITH WARBLER: REPLACE WITH SPECIES GENOME NAME 
+((Falper:2.63,Falche:2.63):54.41,(((Strhab:25.70,Nesnot:25.70):5.73,(Amacol:21.28,Melund:21.28):10.15):23.84,(Acachl:46.72,((Wilpoe:35.20,(((((Lepcor:6.1,Manvit:6.1):0.7,Pipfil:6.8):3.3,Coralt:10.1):3.83,Neochr:13.93):10.46,Emptra:24.39):10.81):8.73,((Corcor:2.54,Corbra:2.54):27.94,((Psehum:13.8,(Parmaj:11.27,Cyacae:11.27):2.53):13.25,((Ficalb:19.80,Stuvul:19.80):6.93,(((Taegut:11.9,Lonstr:11.9):0.9,Erygou:12.8):8.49,(Sercan:17.11,((Campar:3.04,Geofor:3.04):11.58,((Zonalb:4.95,Junhie:4.95):7.97,MGWA_VELO045:12.92):1.7):2.49):4.18):5.44):0.32):3.43):13.45):2.79):8.55):1.78);
 
-((Falper:2.63,Falche:2.63):54.41,(((Strhab:25.70,Nesnot:25.70):5.73,(Amacol:21.28,Melund:21.28):10.15):23.84,(Acachl:46.72,((Wilpoe:35.20,(((((Lepcor:6.1,Manvit:6.1):0.7,Pipfil:6.8):3.3,Coralt:10.1):3.83,Neochr:13.93):10.46,Emptra:24.39):10.81):8.73,((Corcor:2.54,Corbra:2.54):27.94,((Psehum:13.8,(Parmaj:11.27,Cyacae:11.27):2.53):13.25,((Ficalb:19.80,Stuvul:19.80):6.93,(((Taegut:11.9,Lonstr:11.9):0.9,Erygou:12.8):8.49,(Sercan:17.11,((Campar:3.04,Geofor:3.04):11.58,(Zonalb:4.95,Junhie:4.95):9.67):2.49):4.18):5.44):0.32):3.43):13.45):2.79):8.55):1.78);
-
-##This is the tree for FOSP (just replace the word FOSP with the name of your sample as it appears in your cafe input file, for example: HETH_JTWB1.standardplus.namedproteins)
-
-((Falper:2.63,Falche:2.63):54.41,(((Strhab:25.70,Nesnot:25.70):5.73,(Amacol:21.28,Melund:21.28):10.15):23.84,(Acachl:46.72,((Wilpoe:35.20,(((((Lepcor:6.1,Manvit:6.1):0.7,Pipfil:6.8):3.3,Coralt:10.1):3.83,Neochr:13.93):10.46,Emptra:24.39):10.81):8.73,((Corcor:2.54,Corbra:2.54):27.94,((Psehum:13.8,(Parmaj:11.27,Cyacae:11.27):2.53):13.25,(((Ficalb:16.56,MGWA_VELO045.standardplus.namedproteins:16.56):3.24,Stuvul:19.80):6.93,(((Taegut:11.9,Lonstr:11.9):0.9,Erygou:12.8):8.49,(Sercan:17.11,((Campar:3.04,Geofor:3.04):11.58,(Zonalb:4.95,Junhie:4.95):9.67):2.49):4.18):5.44):0.32):3.43):13.45):2.79):8.55):1.78);
-
-##Here is the tree for HETH: (just replace the word HETH with the name of your sample as it appears in your cafe input file, for example: HETH_JTWB1.standardplus.namedproteins)
-
-((Falper:2.63,Falche:2.63):54.41,(((Strhab:25.70,Nesnot:25.70):5.73,(Amacol:21.28,Melund:21.28):10.15):23.84,(Acachl:46.72,((Wilpoe:35.20,(((((Lepcor:6.1,Manvit:6.1):0.7,Pipfil:6.8):3.3,Coralt:10.1):3.83,Neochr:13.93):10.46,Emptra:24.39):10.81):8.73,((Corcor:2.54,Corbra:2.54):27.94,((Psehum:13.8,(Parmaj:11.27,Cyacae:11.27):2.53):13.25,(((Ficalb:16.56,HETH:16.56):3.24,Stuvul:19.80):6.93,(((Taegut:11.9,Lonstr:11.9):0.9,Erygou:12.8):8.49,(Sercan:17.11,((Campar:3.04,Geofor:3.04):11.58,(Zonalb:4.95,Junhie:4.95):9.67):2.49):4.18):5.44):0.32):3.43):13.45):2.79):8.55):1.78);
+##CREATING A FILE:
+cat > file_name. #press enter; and enter contents of file; press control D to save
 
 ##Reading the trees
 
 #The numbers are divergence dates, measured in millions of years. The names are the names of bird species abbreviated to the first three letters of the genus name and first three of the species name.
 
-## RUNNING CAFE:
+## RUNNING CAFE: INCOMLETE
 
 #Now you will have the input files:
 
@@ -1474,19 +1468,19 @@ cat > ((Falper:2.63,Falche:2.63):54.41,(((Strhab:25.70,Nesnot:25.70):5.73,(Amaco
 conda activate python2
 
 #This does a single run, estimating both lambda and epsilon
-time /home/0_PROGRAMS/CAFExp-5.0b2/bin/cafexp -i filtered_Cafe_input.tsv -t Psittacopasserae.tree -e -o error_model_cafe > error_model.log
+time /home/0_PROGRAMS/CAFExp-5.0b2/bin/cafexp -i filtered_Cafe_input.tsv -t phylogeny_1_WARBLER.tree -e -o error_model_cafe > error_model.log
 
 OUTPUT:
 real	0m0.022s
 user	0m0.005s
 sys	0m0.000s
 
-less error_model/Base_error_model.txt #view results of the error model
+less error_model.log #view results of the error model
 
 #We can run cafe multiple times
 #run cafe again, but reuse the estimate of epsilon that you calculated before
 
-time /home/0_PROGRAMS/CAFExp-5.0b2/bin/cafexp -i filtered_Cafe_input.tsv -t Psittacopasserae.tree -o single_lambda -eerror_model/Base_error_model.txt > single_lambda.log
+time /home/0_PROGRAMS/CAFExp-5.0b2/bin/cafexp -i filtered_Cafe_input.tsv -t phylogeny_SISTER_WARBLER_SPECIES.tree -o single_lambda -eerror_model/Base_error_model.txt > single_lambda.log
 
 #This would run cafe with NO epsilon (ignores possibility of errors in data)
 
@@ -1681,7 +1675,7 @@ sed -i 's/-RA//g' contracted_geneIDs.txt
 
 ##If you want to find out what these genes do, go to the next page: GO analysis
 
-## TRANSFERRING ALL THE FILES ONTO MAIN SERVER:
+## TRANSFERRING ALL THE FILES ONTO MAIN SERVER FROM RAMPHOCELES:
 
 ##Transfers the short_summary_protein_annotation_eval_SHAWANAH_RAHMAN.txt to the main server path (/home/0_BIOD98_GENOMES1/BUSCO_REPORTS/)
 
@@ -1716,6 +1710,66 @@ scp -r USER6@192.168.0.5:~/MGWA_VELO045/functional_ann .
 ##Transfers the files from busco to the main server path (/home/0_BIOD98_GENOMES2/MGWA_VELO045/3__FUNCTIONAL_ANNOTATION/)
 scp -r USER6@192.168.0.5:~/MGWA_VELO045/busco .
 
+##Transfers the files from maker to the main server path (/home/0_BIOD98_GENOMES2/MGWA_VELO045/2_1__MAKER_ROUND1/)
+scp -r USER6@192.168.0.5:~/MGWA_VELO045/maker .
+
+##Transfers the files from orthofinder to the main server path (home/0_BIOD98_GENOMES2/MGWA_VELO045/4__ORTHOFINDER/)
+scp -r USER6@192.168.0.5:~/MGWA_VELO045/orthofinder .
+
+## CAFE FILE TRANSFER
 
 ## GO ANALYSIS:
 
+
+## REPEAT LANDSCAPE:
+GOAL: So now we have a set of consensus TE sequences. We will use this to see how much of the genome is taken up by TE sequences.
+
+#What proportion of the Genome is made up of different types of TEs?
+#This is done most easily and conventionally using RepeatMasker.
+
+#set up environment, obtaining TE library and genome sequence
+mkdir ~/MGWA_VELO045/RepeatMasker
+cd  ~/MGWA_VELO045/RepeatMasker
+
+#Now get a copy of your repeat library and genome into this folder.
+
+cp  ~/MGWA_VELO045/repeat_library/MGWA_VELO045_repeat_library_withFicalbUracya.lib .
+cp ~/MGWA_VELO045/genome/MGWA_VELO045.fasta .
+
+#Now make a conda environment
+
+conda create --name RepeatMasker
+conda activate RepeatMasker
+conda install -c bioconda repeatmasker
+
+#Run repeatmasker
+
+conda activate RepeatMasker
+#RepeatMasker
+time RepeatMasker -no_is -lib MGWA_VELO045_repeat_library_withFicalbUracya.lib -dir . MGWA_VELO045.fasta -pa 23 -s -a -inv -gccalc -xsmall > MGWA_VELO045_rmask.log #slow search, more sensitive
+#done
+
+less MGWA_VELO045_rmask.log
+
+#Now, we can parse the results of RepeatMasker.
+
+#In these commands, you should change "1089534386" to be the length of your genome without Ns (which is reported by the RepeatMasker .tbl output file at the top)
+
+#requires perl with bio::SeqIO
+export PERLBREW_ROOT=/opt/perl5 #perlbrew will be installed in opt
+/opt/perl5/bin/perlbrew switch perl-5.30.0 #A sub-shell is launched with perl-5.30.0 as the activated perl. Run 'exit' to finish it.
+
+#redefine GENOME now
+
+#parse the out file to find amount of DNA masked
+time perl /home/0_PROGRAMS/Parsing-RepeatMasker-Outputs/parseRM.pl -i MGWA_VELO045.fasta.out -p -g 1089534386 -r MGWA_VELO045_repeat_library_withFicalbUracya.lib -v
+
+#parse the align file to make landscape graph
+time perl /home/0_PROGRAMS/Parsing-RepeatMasker-Outputs/parseRM.pl -i MGWA_VELO045.fasta.align -g 1089534386 -r MGWA_VELO045_repeat_library_withFicalbUracya.lib -m 0.0033 -l 100,1 -v
+#done
+
+#To make a figure, you can plot histograms in Excel or the program of your choice.
+
+## REPORTABLE DATA FROM REPEAT LANDSCAPE:
+In the paper, I am reporting the fraction of the genome masked by each repeat class/family.
+To turn bp in fraction, I am using the length of the genome with runs of N's removed (since these do not represent real sequence that could be masked). This is conveniently reported in "$GENOME".fasta.tbl produced by repeatmasker: total length: 1112597196 bp (1089534386 bp excl N/X-runs). Then, I am using the parsed file from Parsing-RepeatMasker-Outputs/parseRM.pl to get number of basepairs masked by each family and class of repeat. All the unknowns are lumped into one number so to get the unknowns for LTR vs LINE I just subtract the identified LTR/LINE families from their respective totals to get the unknowns for each class. The other libraries use a different classification system using the name ERV3 instead of ERVL and ERV2 instead of ERVK so a I am adding those two values together for those two families.
