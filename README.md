@@ -1681,8 +1681,41 @@ sed -i 's/-RA//g' contracted_geneIDs.txt
 
 ##If you want to find out what these genes do, go to the next page: GO analysis
 
+## TRANSFERRING ALL THE FILES ONTO MAIN SERVER:
+
+##Transfers the short_summary_protein_annotation_eval_SHAWANAH_RAHMAN.txt to the main server path (/home/0_BIOD98_GENOMES1/BUSCO_REPORTS/)
+
+scp USER6@192.168.0.5:~/MGWA_VELO045/busco/run_protein_annotation_eval/short_summary_protein_annotation_eval.txt . 
+
+##Transfers the MGWA_VELO045.fasta and MGWA_VELO045.fasta.gz to the main server path (/home/0_BIOD98_GENOMES2/MGWA_VELO045/1_1__SUPERNOVA/)
+
+scp USER6@192.168.0.5:~/MGWA_VELO045/genome/MGWA_VELO045.fasta .
+scp USER6@192.168.0.5:~/MGWA_VELO045/genome/MGWA_VELO045.fasta.gz .
+
+##Transfers the files from repeatmodeler to the main server path (/home/0_BIOD98_GENOMES2/MGWA_VELO045/1_2__REPEATMODELLER/)
+scp -r USER6@192.168.0.5:~/MGWA_VELO045/repeatmodeler .
+
+##Transfers the files from EDTA to the main server path (/home/0_BIOD98_GENOMES2/MGWA_VELO045/1_3__TE_LIBRARY/EDTA)
+scp -r USER6@192.168.0.5:~/MGWA_VELO045/EDTA .
+
+##Transfers the files from repeat_library to the main server path (/home/0_BIOD98_GENOMES2/MGWA_VELO045/1_3__TE_LIBRARY)
+scp -r USER6@192.168.0.5:~/MGWA_VELO045/repeat_library .
+
+##Transfers the files from Maker1 to the main server path (home/0_BIOD98_GENOMES2/MGWA_VELO045/2_1__MAKER_ROUND1/)
+scp -r USER6@192.168.0.5:~/MGWA_VELO045/MGWA_VELO045_maker_R1/Maker1 .
+
+##Transfers the files from MGWA_VELO045_maker_R2 to the main server path (/home/0_BIOD98_GENOMES2/MGWA_VELO045/2_2__MAKER_ROUND2/)
+scp -r USER6@192.168.0.5:~/MGWA_VELO045/MGWA_VELO045_maker_R2 .
+
+##Transfers the files from MGWA_VELO045_maker_R3 to the main server path (/home/0_BIOD98_GENOMES2/MGWA_VELO045/2_3__MAKER_ROUND3/)
+scp -r USER6@192.168.0.5:~/MGWA_VELO045/MGWA_VELO045_maker_R3 .
+
+##Transfers the files from functional_ann to the main server path (/home/0_BIOD98_GENOMES2/MGWA_VELO045/3__FUNCTIONAL_ANNOTATION/)
+scp -r USER6@192.168.0.5:~/MGWA_VELO045/functional_ann .
+
+##Transfers the files from busco to the main server path (/home/0_BIOD98_GENOMES2/MGWA_VELO045/3__FUNCTIONAL_ANNOTATION/)
+scp -r USER6@192.168.0.5:~/MGWA_VELO045/busco .
+
+
 ## GO ANALYSIS:
 
-
-
-scp USER6@192.168.0.5:~/MGWA_VELO045/busco/run_protein_annotation_eval/short_summary_protein_annotation_eval.txt .
