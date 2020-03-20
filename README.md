@@ -1447,7 +1447,7 @@ cat > file_name. #press enter; and enter contents of file; press control D to sa
 
 #The numbers are divergence dates, measured in millions of years. The names are the names of bird species abbreviated to the first three letters of the genus name and first three of the species name.
 
-## RUNNING CAFE: INCOMLETE
+## RUNNING CAFE: INCOMPLETE
 
 #Now you will have the input files:
 
@@ -1721,7 +1721,7 @@ scp -r USER6@192.168.0.5:~/MGWA_VELO045/orthofinder .
 ## GO ANALYSIS:
 
 
-## REPEAT LANDSCAPE:
+## REPEAT LANDSCAPE FOR MGWA_VELO045:
 GOAL: So now we have a set of consensus TE sequences. We will use this to see how much of the genome is taken up by TE sequences.
 
 #What proportion of the Genome is made up of different types of TEs?
@@ -1769,6 +1769,48 @@ time perl /home/0_PROGRAMS/Parsing-RepeatMasker-Outputs/parseRM.pl -i MGWA_VELO0
 #done
 
 #To make a figure, you can plot histograms in Excel or the program of your choice.
+
+## REPEAT LANDSCAPE FOR MOWA_IF09D02
+#set up environment, obtaining TE library and genome sequence
+mkdir ~/MOWA_IF09D02/RepeatMasker
+cd  ~/MOWA_IF09D02/RepeatMasker
+
+#Now get a copy of your repeat library and genome into this folder.
+
+cp  ~/MOWA_IF09D02/repeat_library/MOWA_IF09D02_repeat_library_withFicalbUracya.lib .
+cp ~/MOWA_IF09D02/genome/MOWA_IF09D02.fasta .
+
+#Now make a conda environment
+
+conda create --name RepeatMasker
+conda activate RepeatMasker
+conda install -c bioconda repeatmasker
+
+#Run repeatmasker
+
+conda activate RepeatMasker
+#RepeatMasker
+time RepeatMasker -no_is -lib MOWA_IF09D02_repeat_library_withFicalbUracya.lib -dir . MOWA_IF09D02.fasta -pa 23 -s -a -inv -gccalc -xsmall > MOWA_IF09D02_rmask.log #slow search, more sensitive
+#done
+
+less MOWA_IF09D02_rmask.log
+
+#Now, we can parse the results of RepeatMasker.
+
+#In these commands, you should change "1089534386" to be the length of your genome without Ns (which is reported by the RepeatMasker .tbl output file at the top)
+
+#requires perl with bio::SeqIO
+export PERLBREW_ROOT=/opt/perl5 #perlbrew will be installed in opt
+/opt/perl5/bin/perlbrew switch perl-5.30.0 #A sub-shell is launched with perl-5.30.0 as the activated perl. Run 'exit' to finish it.
+
+#redefine GENOME now
+
+#parse the out file to find amount of DNA masked
+time perl /home/0_PROGRAMS/Parsing-RepeatMasker-Outputs/parseRM.pl -i MOWA_IF09D02.fasta.out -p -g 1089534386 -r MOWA_IF09D02_repeat_library_withFicalbUracya.lib -v
+
+#parse the align file to make landscape graph
+time perl /home/0_PROGRAMS/Parsing-RepeatMasker-Outputs/parseRM.pl -i MOWA_IF09D02.fasta.align -g 1089534386 -r MOWA_IF09D02_repeat_library_withFicalbUracya.lib -m 0.0033 -l 100,1 -v
+#done
 
 ## REPORTABLE DATA FROM REPEAT LANDSCAPE:
 In the paper, I am reporting the fraction of the genome masked by each repeat class/family.
