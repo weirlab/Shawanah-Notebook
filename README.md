@@ -1433,12 +1433,12 @@ less filtered_Cafe_input.tsv #press q to go back
 
 ##To make it a file, use cat to open a blank file, then paste your newick format tree (such as the one below, but don't use that one, use a custom one)
 
-##TREE WITH BOTH SPECIES ON IT: MGWA_VELO045 AND SISTER (MOWA_IF09D02)
+##TREE WITH BOTH SPECIES ON IT: MGWA_VELO045 AND SISTER (MOWA_IF09D02)-FILE NAME: phylogeny_SISTER_WARBLER_SPECIES.tree
 
-((Falper:2.63,Falche:2.63):54.41,(((Strhab:25.70,Nesnot:25.70):5.73,(Amacol:21.28,Melund:21.28):10.15):23.84,(Acachl:46.72,((Wilpoe:35.20,(((((Lepcor:6.1,Manvit:6.1):0.7,Pipfil:6.8):3.3,Coralt:10.1):3.83,Neochr:13.93):10.46,Emptra:24.39):10.81):8.73,((Corcor:2.54,Corbra:2.54):27.94,((Psehum:13.8,(Parmaj:11.27,Cyacae:11.27):2.53):13.25,((Ficalb:19.80,Stuvul:19.80):6.93,(((Taegut:11.9,Lonstr:11.9):0.9,Erygou:12.8):8.49,(Sercan:17.11,((Campar:3.04,Geofor:3.04):11.58,((Zonalb:4.95,Junhie:4.95):7.97,(MOWA_IF09D02.standardplus.namedproteins:1.3,MGWA_VELO045.standardplus.namedproteins:1.3):11.62):1.7):2.49):4.18):5.44):0.32):3.43):13.45):2.79):8.55):1.78);
+((Falper:2.63,Falche:2.63):54.41,(((Strhab:25.70,Nesnot:25.70):5.73,(Amacol:21.28,Melund:21.28):10.15):23.84,(Acachl:46.72,((Wilpoe:35.20,(((((Lepcor:6.1,Manvit:6.1):0.7,Pipfil:6.8):3.3,Coralt:10.1):3.83,Neochr:13.93):10.46,Emptra:24.39):10.81):8.73,((Corcor:2.54,Corbra:2.54):27.94,((Psehum:13.8,(Parmaj:11.27,Cyacae:11.27):2.53):13.25,((Ficalb:19.80,Stuvul:19.80):6.93,(((Taegut:11.9,Lonstr:11.9):0.9,Erygou:12.8):8.49,(Sercan:17.11,((Campar:3.04,Geofor:3.04):11.58,((Zonalb:4.95,Junhie:4.95):7.97,(MOWA_IF09D02.standardplus.proteins:1.3,MGWA_VELO045.standardplus.namedproteins:1.3):11.62):1.7):2.49):4.18):5.44):0.32):3.43):13.45):2.79):8.55):1.78);
 
 ##TREE WITH WARBLER: REPLACE WITH SPECIES GENOME NAME 
-((Falper:2.63,Falche:2.63):54.41,(((Strhab:25.70,Nesnot:25.70):5.73,(Amacol:21.28,Melund:21.28):10.15):23.84,(Acachl:46.72,((Wilpoe:35.20,(((((Lepcor:6.1,Manvit:6.1):0.7,Pipfil:6.8):3.3,Coralt:10.1):3.83,Neochr:13.93):10.46,Emptra:24.39):10.81):8.73,((Corcor:2.54,Corbra:2.54):27.94,((Psehum:13.8,(Parmaj:11.27,Cyacae:11.27):2.53):13.25,((Ficalb:19.80,Stuvul:19.80):6.93,(((Taegut:11.9,Lonstr:11.9):0.9,Erygou:12.8):8.49,(Sercan:17.11,((Campar:3.04,Geofor:3.04):11.58,((Zonalb:4.95,Junhie:4.95):7.97,MGWA_VELO045:12.92):1.7):2.49):4.18):5.44):0.32):3.43):13.45):2.79):8.55):1.78);
+((Falper:2.63,Falche:2.63):54.41,(((Strhab:25.70,Nesnot:25.70):5.73,(Amacol:21.28,Melund:21.28):10.15):23.84,(Acachl:46.72,((Wilpoe:35.20,(((((Lepcor:6.1,Manvit:6.1):0.7,Pipfil:6.8):3.3,Coralt:10.1):3.83,Neochr:13.93):10.46,Emptra:24.39):10.81):8.73,((Corcor:2.54,Corbra:2.54):27.94,((Psehum:13.8,(Parmaj:11.27,Cyacae:11.27):2.53):13.25,((Ficalb:19.80,Stuvul:19.80):6.93,(((Taegut:11.9,Lonstr:11.9):0.9,Erygou:12.8):8.49,(Sercan:17.11,((Campar:3.04,Geofor:3.04):11.58,((Zonalb:4.95,Junhie:4.95):7.97,MGWA_VELO045.standardplus.namedproteins:12.92):1.7):2.49):4.18):5.44):0.32):3.43):13.45):2.79):8.55):1.78);
 
 ##CREATING A FILE:
 cat > file_name. #press enter; and enter contents of file; press control D to save
@@ -1470,30 +1470,36 @@ conda activate python2
 #This does a single run, estimating both lambda and epsilon
 time /home/0_PROGRAMS/CAFExp-5.0b2/bin/cafexp -i filtered_Cafe_input.tsv -t phylogeny_1_WARBLER.tree -e -o error_model_cafe > error_model.log
 
-OUTPUT:
-real	0m0.022s
-user	0m0.005s
-sys	0m0.000s
+less Base_error_model.txt #view results of the error model
 
-less error_model.log #view results of the error model
+OUTPUT:
+
 
 #We can run cafe multiple times
 #run cafe again, but reuse the estimate of epsilon that you calculated before
 
-time /home/0_PROGRAMS/CAFExp-5.0b2/bin/cafexp -i filtered_Cafe_input.tsv -t phylogeny_SISTER_WARBLER_SPECIES.tree -o single_lambda -eerror_model/Base_error_model.txt > single_lambda.log
+time /home/0_PROGRAMS/CAFExp-5.0b2/bin/cafexp -i filtered_Cafe_input.tsv -t phylogeny_1_WARBLER.tree -o single_lambda -eerror_model_cafe/Base_error_model.txt > single_lambda.log
+
+OUTPUT:
 
 #This would run cafe with NO epsilon (ignores possibility of errors in data)
 
-time /home/0_PROGRAMS/CAFExp-5.0b2/bin/cafexp -i filtered_Cafe_input.tsv -t Psittacopasserae.tree -o single_lambda_noe > single_lambda_noe.log
+time /home/0_PROGRAMS/CAFExp-5.0b2/bin/cafexp -i filtered_Cafe_input.tsv -t phylogeny_1_WARBLER.tree -o single_lambda_noe > single_lambda_noe.log
+
+OUTPUT:
+
 
 #This would allow among-family rate variation in lambda, estimates lambda and alpha and three discrete gamma rate categories (essentially allow three different rates of gene gain/loss, for fast-evolving families, medium-evolving families, and slow-evolving families
 #This takes longer and may crash
 
-time /home/0_PROGRAMS/CAFExp-5.0b2/bin/cafexp -i filtered_Cafe_input.tsv -t Psittacopasserae.tree -k 3 -o three_lambda > three_lambda.log
+time /home/0_PROGRAMS/CAFExp-5.0b2/bin/cafexp -i filtered_Cafe_input.tsv -t pphylogeny_1_WARBLER.tree -k 3 -o three_lambda > three_lambda.log
+
+OUTPUT:
+
 
 #It is a good idea to do many replicates. Here is an example of a loop that will do 10 runs in parallel. If you want to do more you can change the part that says {1...10} and change 10 to whatever number you want 
 
-printf '%s\n' {1..10} | parallel /home/0_PROGRAMS/CAFExp-5.0b2/bin/cafexp -i filtered_Cafe_input.tsv -t Psittacopasserae.tree -e -o replicate_run_{1} >> 100runs.log 2>> 100runs.errorlog
+printf '%s\n' {1..10} | parallel /home/0_PROGRAMS/CAFExp-5.0b2/bin/cafexp -i filtered_Cafe_input.tsv -t phylogeny_1_WARBLER.tree -e -o replicate_run_{1} >> 100runs.log 2>> 100runs.errorlog
 
 #The above will not print anything to the terminal! (Because that would be too much to look at). Instead it will be printed to a log file which you could view like this:
 
@@ -1504,7 +1510,7 @@ cat 100runs*log
 #You may want to read the part about interpreting results first, to find your lambda. 
 #YOU MUST CHANGE THIS YOURSELF IN THE CODE! Lambda is the number in the command right after -l. I have set it to a unreasonably high value, 0.99999, so that it will fail if you do not change it to your own, more reasonable estimate found in previous runs.
 
-time /home/0_PROGRAMS/CAFExp-5.0b2/bin/cafexp -i large_filtered_Cafe_input.tsv -t Psittacopasserae.tree -l 0.99999 -o large_results > large_results.log
+time /home/0_PROGRAMS/CAFExp-5.0b2/bin/cafexp -i large_filtered_Cafe_input.tsv -t phylogeny_1_WARBLER.tree -l 0.99999 -o large_results > large_results.log
 
 ##INTERPRETING YOUR RESULTS:
 
@@ -1533,7 +1539,7 @@ grep "Epsilon" ./*/*_results.txt #error term
 #get a list of the significantly expanded/contracted/rapid genes in your species
 #replace the path of error_model/ with the name of whatever Cafe run you want to view
 
-grep "$GENOME" error_model/Base_asr.tre | sed 's/^.*OG/OG/g' | sed 's/ = .*$//g'
+grep MGWA_VELO045 error_model/Base_asr.tre | sed 's/^.*OG/OG/g' | sed 's/ = .*$//g'
 
 #Get list of families that have expanded in your species, not necessarily significant
 
@@ -1716,6 +1722,13 @@ scp -r USER6@192.168.0.5:~/MGWA_VELO045/maker .
 ##Transfers the files from orthofinder to the main server path (home/0_BIOD98_GENOMES2/MGWA_VELO045/4__ORTHOFINDER/)
 scp -r USER6@192.168.0.5:~/MGWA_VELO045/orthofinder .
 
+##Transfers the files from RepeatMasker_MGWA_VELO045 to the main server path (home/0_BIOD98_GENOMES2/MGWA_VELO045/5__POST_PIPELINE_ANALYSES)
+scp -r USER6@192.168.0.5:~/MGWA_VELO045/RepeatMasker_MGWA_VELO045 .
+
+##Transfers the files from FastQC to the ramphoceles (home/0_BIOD98_GENOMES2/MGWA_VELO045/5__POST_PIPELINE_ANALYSES)
+scp -r USER6@192.168.0.5:~/MGWA_VELO045/RepeatMasker_MGWA_VELO045 .
+
+
 ## CAFE FILE TRANSFER
 
 ## GO ANALYSIS:
@@ -1749,11 +1762,72 @@ conda activate RepeatMasker
 time RepeatMasker -no_is -lib MGWA_VELO045_repeat_library_withFicalbUracya.lib -dir . MGWA_VELO045.fasta -pa 23 -s -a -inv -gccalc -xsmall > MGWA_VELO045_rmask.log #slow search, more sensitive
 #done
 
+OUTPUT:
+real	551m7.783s
+user	10888m53.095s
+sys	584m34.026s
+
 less MGWA_VELO045_rmask.log
 
 #Now, we can parse the results of RepeatMasker.
 
-#In these commands, you should change "1089534386" to be the length of your genome without Ns (which is reported by the RepeatMasker .tbl output file at the top)
+#In these commands, you should change "1089534386" to be the length of your genome without Ns (which is reported by the RepeatMasker MGWA_VELO045.fasta.tbl output file at the top)
+
+less MGWA_VELO045.fasta.tbl
+ 
+ OUTPUT:
+ 
+==================================================
+file name: MGWA_VELO045.fasta       
+sequences:         45609
+total length: 1167167328 bp  (1148413818 bp excl N/X-runs)
+GC level:         42.81 %
+bases masked:  199075012 bp ( 17.06 %)
+==================================================
+               number of      length   percentage
+               elements*    occupied  of sequence
+--------------------------------------------------
+SINEs:             3092       363925 bp    0.03 %
+      ALUs            0            0 bp    0.00 %
+      MIRs         1592       189456 bp    0.02 %
+
+LINEs:           123062     30610292 bp    2.62 %
+      LINE1           0            0 bp    0.00 %
+      LINE2           0            0 bp    0.00 %
+      L3/CR1     123062     30610292 bp    2.62 %
+
+LTR elements:    116170     73457534 bp    6.29 %
+      ERVL        15505     10746946 bp    0.92 %
+      ERVL-MaLRs      0            0 bp    0.00 %
+      ERV_classI  F142
+      65      6849528 bp    0.59 %
+      ERV_classII 26012     17772279 bp    1.52 %
+
+DNA elements:    304340     46777764 bp    4.01 %
+     hAT-Charlie      0            0 bp    0.00 %
+     TcMar-Tigger     0            0 bp    0.00 %
+
+Unclassified:     85529     30006942 bp    2.57 %
+
+Total interspersed repeats:181216457 bp   15.53 %
+Small RNA:          996       709821 bp    0.06 %
+
+Satellites:       12930      7848229 bp    0.67 %
+Simple repeats:  232397     11659538 bp    1.00 %
+Low complexity:   47152      2589342 bp    0.22 %
+==================================================
+
+* most repeats fragmented by insertions or deletions
+  have been counted as one element
+                                                      
+
+The query species was assumed to be homo          
+RepeatMasker Combined Database: Dfam-Dfam_3.0
+                                    
+run with rmblastn version 2.9.0+
+The query was compared to classified sequences in "MGWA_VELO045_repeat_library_withFicalbUracya.lib"
+
+### END: 
 
 #requires perl with bio::SeqIO
 export PERLBREW_ROOT=/opt/perl5 #perlbrew will be installed in opt
@@ -1762,10 +1836,10 @@ export PERLBREW_ROOT=/opt/perl5 #perlbrew will be installed in opt
 #redefine GENOME now
 
 #parse the out file to find amount of DNA masked
-time perl /home/0_PROGRAMS/Parsing-RepeatMasker-Outputs/parseRM.pl -i MGWA_VELO045.fasta.out -p -g 1089534386 -r MGWA_VELO045_repeat_library_withFicalbUracya.lib -v
+time perl /home/0_PROGRAMS/Parsing-RepeatMasker-Outputs/parseRM.pl -i MGWA_VELO045.fasta.out -p -g 1167167328 -r MGWA_VELO045_repeat_library_withFicalbUracya.lib -v
 
 #parse the align file to make landscape graph
-time perl /home/0_PROGRAMS/Parsing-RepeatMasker-Outputs/parseRM.pl -i MGWA_VELO045.fasta.align -g 1089534386 -r MGWA_VELO045_repeat_library_withFicalbUracya.lib -m 0.0033 -l 100,1 -v
+time perl /home/0_PROGRAMS/Parsing-RepeatMasker-Outputs/parseRM.pl -i MGWA_VELO045.fasta.align -g 1167167328 -r MGWA_VELO045_repeat_library_withFicalbUracya.lib -m 0.0033 -l 100,1 -v
 #done
 
 #To make a figure, you can plot histograms in Excel or the program of your choice.
@@ -1774,22 +1848,62 @@ time perl /home/0_PROGRAMS/Parsing-RepeatMasker-Outputs/parseRM.pl -i MGWA_VELO0
 In the paper, I am reporting the fraction of the genome masked by each repeat class/family.
 To turn bp in fraction, I am using the length of the genome with runs of N's removed (since these do not represent real sequence that could be masked). This is conveniently reported in "$GENOME".fasta.tbl produced by repeatmasker: total length: 1112597196 bp (1089534386 bp excl N/X-runs). Then, I am using the parsed file from Parsing-RepeatMasker-Outputs/parseRM.pl to get number of basepairs masked by each family and class of repeat. All the unknowns are lumped into one number so to get the unknowns for LTR vs LINE I just subtract the identified LTR/LINE families from their respective totals to get the unknowns for each class. The other libraries use a different classification system using the name ERV3 instead of ERVL and ERV2 instead of ERVK so a I am adding those two values together for those two families.
 
-### SEQUENCING STATS:
+## REPEAT LANDSCAPE FOR MOWA
+#set up environment, obtaining TE library and genome sequence
+mkdir ~/MGWA_VELO045/RepeatMasker_MOWA_IF09D02
+cd  ~/MGWA_VELO045/RepeatMasker_MOWA_IF09D02
 
-#need to have conda installed. Install it the same way you did on Ramphocelus (see previous instructions at EDTA step) except intoall it into the directory /home/0_PROGRAMS/BIOD98_conda/"$USER" (define the variable USER). The .sh file for installing it can already be found in /home/0_PROGRAMS/BIOD98_conda
+#Now get a copy of your repeat library and genome into this folder.
 
-conda create --name multiqc
-conda activate multiqc
-conda install -c bioconda multiqc
-cd /home/0_BIOD98_GENOMES1/QC_reports
-multiqc ./*MGWA_VELO045* -n MGWA_VELO045_multiqc #for HETH, you will need to redefine GENOME using CAGU instead of HETH because of how the files are named here.
+cp /home/USER5/MOWA_IF09D02/repeat_library/MOWA_IF09D02_repeat_library_withFicalbUracya.lib .
+cp /home/USER5/MOWA_IF09D02/genome/MOWA_IF09D02.fasta .
 
-#Now you can check out the "$GENOME"_multiqc .html file that will be produced. Get it onto your personal computer using Filezilla and take a look at the results. Is there anything you would put in your report? Any figures you like?
+#Now make a conda environment
 
-#P.S. It is very normal to get various warnings about adapter content, overrepresented sequences, and GC content, but that does not mean that the data is necessarily bad.
+conda create --name RepeatMasker
+conda activate RepeatMasker
+conda install -c bioconda repeatmasker
+
+#Run repeatmasker
+
+conda activate RepeatMasker
+#RepeatMasker
 
 
-## GC CONTENT:
+#slow search, more sensitive
+
+time RepeatMasker -no_is -lib MGWA_VELO045_repeat_library_withFicalbUracya.lib -dir . MGWA_VELO045.fasta -pa 23 -s -a -inv -gccalc -xsmall > MGWA_VELO045_rmask.log #slow search, more sensitive
+
+
+# CURRENTLY RUNNING
+
+OUTPUT:
+
+
+less MOWA_IF09D02_rmask.log
+
+#Now, we can parse the results of RepeatMasker.
+
+#In these commands, you should change "1089534386" to be the length of your genome without Ns (which is reported by the RepeatMasker MOWA_IF09D02.fasta.tbl output file at the top)
+
+less MOWA_IF09D02.fasta.tbl
+
+#requires perl with bio::SeqIO
+export PERLBREW_ROOT=/opt/perl5 #perlbrew will be installed in opt
+/opt/perl5/bin/perlbrew switch perl-5.30.0 #A sub-shell is launched with perl-5.30.0 as the activated perl. Run 'exit' to finish it.
+
+#redefine GENOME now
+
+#parse the out file to find amount of DNA masked
+time perl /home/0_PROGRAMS/Parsing-RepeatMasker-Outputs/parseRM.pl -i MGWA_VELO045.fasta.out -p -g 1167167328 -r MGWA_VELO045_repeat_library_withFicalbUracya.lib -v
+
+#parse the align file to make landscape graph
+time perl /home/0_PROGRAMS/Parsing-RepeatMasker-Outputs/parseRM.pl -i MGWA_VELO045.fasta.align -g 1167167328 -r MGWA_VELO045_repeat_library_withFicalbUracya.lib -m 0.0033 -l 100,1 -v
+#done
+
+#To make a figure, you can plot histograms in Excel or the program of your choice.
+
+## GC CONTENT MGWA_VELO045: INCOMPLETE
 GOAL:Activity: calculate GC content (%G or C vs A or T) in sliding window across the genome
 
 #first, make a folder to work in
@@ -1811,6 +1925,11 @@ sys	0m0.012s
 cp ../genome/MGWA_VELO045.fasta .
 time perl /home/0_PROGRAMS/GC_content_in_sliding_window/GC_content.pl --fasta ./MGWA_VELO045.fasta --window 10000 --step 100
 
+OUTPUT:
+real	29m12.516s
+user	14m34.464s
+sys	0m4.323s
+
 #If you keep getting some scaffold fail, you could try this, to split all the scaffolds apart and then run each separately
 #This may cause issues later on if you are missing data on some of the scaffolds so beware
 
@@ -1823,9 +1942,6 @@ mv ./MGWA_VELO045.fasta garbage
 find ./*.fasta | parallel time perl /home/0_PROGRAMS/GC_content_in_sliding_window/GC_content.pl --fasta {1}.fasta --window 10000 --step 100
 
 #If it fails with an error about dividing by zero, that could mean that it encountered a window with NO G or C. You can try to get around this by increasing the window size
-
-OUTPUT:
-
 
 #Let's make a very simple plot in R to view the results. This as a placeholder skeleton which must be edited depending on the format of the output files.
 
