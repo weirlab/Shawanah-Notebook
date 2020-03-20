@@ -1728,8 +1728,8 @@ GOAL: So now we have a set of consensus TE sequences. We will use this to see ho
 #This is done most easily and conventionally using RepeatMasker.
 
 #set up environment, obtaining TE library and genome sequence
-mkdir ~/MGWA_VELO045/RepeatMasker
-cd  ~/MGWA_VELO045/RepeatMasker
+mkdir ~/MGWA_VELO045/RepeatMasker_MGWA_VELO045
+cd  ~/MGWA_VELO045/RepeatMasker_MGWA_VELO045
 
 #Now get a copy of your repeat library and genome into this folder.
 
@@ -1770,48 +1770,74 @@ time perl /home/0_PROGRAMS/Parsing-RepeatMasker-Outputs/parseRM.pl -i MGWA_VELO0
 
 #To make a figure, you can plot histograms in Excel or the program of your choice.
 
-## REPEAT LANDSCAPE FOR MOWA_IF09D02
-#set up environment, obtaining TE library and genome sequence
-mkdir ~/MOWA_IF09D02/RepeatMasker
-cd  ~/MOWA_IF09D02/RepeatMasker
-
-#Now get a copy of your repeat library and genome into this folder.
-
-cp  ~/MOWA_IF09D02/repeat_library/MOWA_IF09D02_repeat_library_withFicalbUracya.lib .
-cp ~/MOWA_IF09D02/genome/MOWA_IF09D02.fasta .
-
-#Now make a conda environment
-
-conda create --name RepeatMasker
-conda activate RepeatMasker
-conda install -c bioconda repeatmasker
-
-#Run repeatmasker
-
-conda activate RepeatMasker
-#RepeatMasker
-time RepeatMasker -no_is -lib MOWA_IF09D02_repeat_library_withFicalbUracya.lib -dir . MOWA_IF09D02.fasta -pa 23 -s -a -inv -gccalc -xsmall > MOWA_IF09D02_rmask.log #slow search, more sensitive
-#done
-
-less MOWA_IF09D02_rmask.log
-
-#Now, we can parse the results of RepeatMasker.
-
-#In these commands, you should change "1089534386" to be the length of your genome without Ns (which is reported by the RepeatMasker .tbl output file at the top)
-
-#requires perl with bio::SeqIO
-export PERLBREW_ROOT=/opt/perl5 #perlbrew will be installed in opt
-/opt/perl5/bin/perlbrew switch perl-5.30.0 #A sub-shell is launched with perl-5.30.0 as the activated perl. Run 'exit' to finish it.
-
-#redefine GENOME now
-
-#parse the out file to find amount of DNA masked
-time perl /home/0_PROGRAMS/Parsing-RepeatMasker-Outputs/parseRM.pl -i MOWA_IF09D02.fasta.out -p -g 1089534386 -r MOWA_IF09D02_repeat_library_withFicalbUracya.lib -v
-
-#parse the align file to make landscape graph
-time perl /home/0_PROGRAMS/Parsing-RepeatMasker-Outputs/parseRM.pl -i MOWA_IF09D02.fasta.align -g 1089534386 -r MOWA_IF09D02_repeat_library_withFicalbUracya.lib -m 0.0033 -l 100,1 -v
-#done
-
 ## REPORTABLE DATA FROM REPEAT LANDSCAPE:
 In the paper, I am reporting the fraction of the genome masked by each repeat class/family.
 To turn bp in fraction, I am using the length of the genome with runs of N's removed (since these do not represent real sequence that could be masked). This is conveniently reported in "$GENOME".fasta.tbl produced by repeatmasker: total length: 1112597196 bp (1089534386 bp excl N/X-runs). Then, I am using the parsed file from Parsing-RepeatMasker-Outputs/parseRM.pl to get number of basepairs masked by each family and class of repeat. All the unknowns are lumped into one number so to get the unknowns for LTR vs LINE I just subtract the identified LTR/LINE families from their respective totals to get the unknowns for each class. The other libraries use a different classification system using the name ERV3 instead of ERVL and ERV2 instead of ERVK so a I am adding those two values together for those two families.
+
+### SEQUENCING STATS:
+
+#need to have conda installed. Install it the same way you did on Ramphocelus (see previous instructions at EDTA step) except intoall it into the directory /home/0_PROGRAMS/BIOD98_conda/"$USER" (define the variable USER). The .sh file for installing it can already be found in /home/0_PROGRAMS/BIOD98_conda
+
+conda create --name multiqc
+conda activate multiqc
+conda install -c bioconda multiqc
+cd /home/0_BIOD98_GENOMES1/QC_reports
+multiqc ./*MGWA_VELO045* -n MGWA_VELO045_multiqc #for HETH, you will need to redefine GENOME using CAGU instead of HETH because of how the files are named here.
+
+#Now you can check out the "$GENOME"_multiqc .html file that will be produced. Get it onto your personal computer using Filezilla and take a look at the results. Is there anything you would put in your report? Any figures you like?
+
+#P.S. It is very normal to get various warnings about adapter content, overrepresented sequences, and GC content, but that does not mean that the data is necessarily bad.
+
+
+## GC CONTENT:
+GOAL:Activity: calculate GC content (%G or C vs A or T) in sliding window across the genome
+
+#first, make a folder to work in
+mkdir ~/MGWA_VELO045/GC_content
+cd ~/MGWA_VELO045/GC_content
+
+#load the correct perl environment
+export PERLBREW_ROOT=/opt/perl5 #perlbrew will be installed in opt
+/opt/perl5/bin/perlbrew switch perl-5.30.0 #A sub-shell is launched with perl-5.30.0 as the activated perl. Run 'exit' to finish it.
+
+#now run the program!
+time perl /home/0_PROGRAMS/GC_content_in_sliding_window/GC_content.pl --fasta ./MGWA_VELO045.fasta --window 10000 --step 100
+
+OUTPUT:
+real	0m8.480s
+user	0m0.151s
+sys	0m0.012s
+
+cp ../genome/MGWA_VELO045.fasta .
+time perl /home/0_PROGRAMS/GC_content_in_sliding_window/GC_content.pl --fasta ./MGWA_VELO045.fasta --window 10000 --step 100
+
+#If you keep getting some scaffold fail, you could try this, to split all the scaffolds apart and then run each separately
+#This may cause issues later on if you are missing data on some of the scaffolds so beware
+
+conda create -n fasplit
+conda activate fasplit
+conda install -c bioconda ucsc-fasplit
+faSplit byname MGWA_VELO045.fasta .
+
+mv ./MGWA_VELO045.fasta garbage
+find ./*.fasta | parallel time perl /home/0_PROGRAMS/GC_content_in_sliding_window/GC_content.pl --fasta {1}.fasta --window 10000 --step 100
+
+#If it fails with an error about dividing by zero, that could mean that it encountered a window with NO G or C. You can try to get around this by increasing the window size
+
+OUTPUT:
+
+
+#Let's make a very simple plot in R to view the results. This as a placeholder skeleton which must be edited depending on the format of the output files.
+
+R
+library(ggplot2)
+
+#load data
+scaffold <- read.table("anteater700.fasta_0.GC_content")
+scaffold <- as.data.frame(scaffold)
+
+#now you can plot it (but will not work on Ramphocelus node)
+plot(scaffold)
+
+
+
