@@ -1470,10 +1470,8 @@ conda activate python2
 #This does a single run, estimating both lambda and epsilon
 time /home/0_PROGRAMS/CAFExp-5.0b2/bin/cafexp -i filtered_Cafe_input.tsv -t phylogeny_1_WARBLER.tree -e -o error_model_cafe > error_model.log
 
+cd 
 less Base_error_model.txt #view results of the error model
-
-OUTPUT:
-
 
 #We can run cafe multiple times
 #run cafe again, but reuse the estimate of epsilon that you calculated before
@@ -1481,13 +1479,18 @@ OUTPUT:
 time /home/0_PROGRAMS/CAFExp-5.0b2/bin/cafexp -i filtered_Cafe_input.tsv -t phylogeny_1_WARBLER.tree -o single_lambda -eerror_model_cafe/Base_error_model.txt > single_lambda.log
 
 OUTPUT:
+real	58m53.084s
+user	91m5.845s
+sys	0m1.646s
 
 #This would run cafe with NO epsilon (ignores possibility of errors in data)
 
 time /home/0_PROGRAMS/CAFExp-5.0b2/bin/cafexp -i filtered_Cafe_input.tsv -t phylogeny_1_WARBLER.tree -o single_lambda_noe > single_lambda_noe.log
 
 OUTPUT:
-
+real	19m6.737s
+user	75m48.274s
+sys	0m1.204s
 
 #This would allow among-family rate variation in lambda, estimates lambda and alpha and three discrete gamma rate categories (essentially allow three different rates of gene gain/loss, for fast-evolving families, medium-evolving families, and slow-evolving families
 #This takes longer and may crash
@@ -1495,7 +1498,9 @@ OUTPUT:
 time /home/0_PROGRAMS/CAFExp-5.0b2/bin/cafexp -i filtered_Cafe_input.tsv -t pphylogeny_1_WARBLER.tree -k 3 -o three_lambda > three_lambda.log
 
 OUTPUT:
-
+real	0m0.004s
+user	0m0.004s
+sys	0m0.000s
 
 #It is a good idea to do many replicates. Here is an example of a loop that will do 10 runs in parallel. If you want to do more you can change the part that says {1...10} and change 10 to whatever number you want 
 
@@ -1503,6 +1508,7 @@ printf '%s\n' {1..10} | parallel /home/0_PROGRAMS/CAFExp-5.0b2/bin/cafexp -i fil
 
 #The above will not print anything to the terminal! (Because that would be too much to look at). Instead it will be printed to a log file which you could view like this:
 
+## stopped here
 cat 100runs*log
 
 #Now analyze the large families using the previous values of lambda, since you cannot estimate lambda for these families. 
@@ -1510,8 +1516,9 @@ cat 100runs*log
 #You may want to read the part about interpreting results first, to find your lambda. 
 #YOU MUST CHANGE THIS YOURSELF IN THE CODE! Lambda is the number in the command right after -l. I have set it to a unreasonably high value, 0.99999, so that it will fail if you do not change it to your own, more reasonable estimate found in previous runs.
 
-time /home/0_PROGRAMS/CAFExp-5.0b2/bin/cafexp -i large_filtered_Cafe_input.tsv -t phylogeny_1_WARBLER.tree -l 0.99999 -o large_results > large_results.log
+time /home/0_PROGRAMS/CAFExp-5.0b2/bin/cafexp -i large_filtered_Cafe_input.tsv -t phylogeny_1_WARBLER.tree -l 0.0014359744608925 -o large_results > large_results.log
 
+## I am here
 ##INTERPRETING YOUR RESULTS:
 
 #The estimates of lambda/epsilon are found in "$run"_results.txt.
@@ -1872,7 +1879,7 @@ conda activate RepeatMasker
 
 #slow search, more sensitive
 
-time RepeatMasker -no_is -lib MGWA_VELO045_repeat_library_withFicalbUracya.lib -dir . MGWA_VELO045.fasta -pa 23 -s -a -inv -gccalc -xsmall > MGWA_VELO045_rmask.log #slow search, more sensitive
+time RepeatMasker -no_is -lib MOWA_IF09D02_repeat_library_withFicalbUracya.lib -dir . MOWA_IF09D02.fasta -pa 23 -s -a -inv -gccalc -xsmall > MOWA_IF09D02_rmask.log #slow search, more sensitive
 
 
 # CURRENTLY RUNNING
