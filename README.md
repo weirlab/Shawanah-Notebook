@@ -1447,8 +1447,6 @@ cat > file_name. #press enter; and enter contents of file; press control D to sa
 
 #The numbers are divergence dates, measured in millions of years. The names are the names of bird species abbreviated to the first three letters of the genus name and first three of the species name.
 
-## RUNNING CAFE: INCOMPLETE
-
 #Now you will have the input files:
 
 #1. Your filtered_Cafe_input.tsv file from OrthoFinder results
@@ -1508,7 +1506,6 @@ printf '%s\n' {1..10} | parallel /home/0_PROGRAMS/CAFExp-5.0b2/bin/cafexp -i fil
 
 #The above will not print anything to the terminal! (Because that would be too much to look at). Instead it will be printed to a log file which you could view like this:
 
-## stopped here
 cat 100runs*log
 
 #Now analyze the large families using the previous values of lambda, since you cannot estimate lambda for these families. 
@@ -1525,19 +1522,51 @@ time /home/0_PROGRAMS/CAFExp-5.0b2/bin/cafexp -i large_filtered_Cafe_input.tsv -
 
 #Here are how to view some of the results files. They will likely look very terrible to look at with your eyes, a mess of numbers.
 
-less error_model/Base_asr.tre #gives reconstructed numbers of each gene family at each node
+cd error_model_cafe
+less Base_asr.tre #gives reconstructed numbers of each gene family at each node
 
-less error_model/Base_branch_probabilities.tab #gives calculated likelihood of the gene family size at each node for each gene family
+less Base_branch_probabilities.tab #gives calculated likelihood of the gene family size at each node for each gene family
 
-less error_model/Base_clade_results.txt #how many families are expanded or contracted at each node
+less Base_clade_results.txt #how many families are expanded or contracted at each node
 
 #Here you can list all the values of lambda that you estimating in any runs
 
 grep "Lambda" ./*/*_results.txt #rate of gene birth/death
 
+OUTPUT:
+./error_model_cafe/Base_results.txt:Lambda: 0.001435709726565
+./large_results/Base_results.txt:Lambda: 0.0014359744608925
+./replicate_run_10/Base_results.txt:Lambda: 0.0014357874854677
+./replicate_run_1/Base_results.txt:Lambda: 0.001435692848926
+./replicate_run_2/Base_results.txt:Lambda: 0.0014357316497559
+./replicate_run_3/Base_results.txt:Lambda: 0.0014357581235433
+./replicate_run_4/Base_results.txt:Lambda: 0.0014357555407923
+./replicate_run_5/Base_results.txt:Lambda: 0.0014357998834469
+./replicate_run_6/Base_results.txt:Lambda: 0.0014357073375892
+./replicate_run_7/Base_results.txt:Lambda: 0.0014355665866644
+./replicate_run_8/Base_results.txt:Lambda: 0.0014354812359537
+./replicate_run_9/Base_results.txt:Lambda: 0.00143567413594
+./single_lambda/Base_results.txt:Lambda: 0.0014357068050976
+./single_lambda_noe/Base_results.txt:Lambda: 0.002586175896848
+
+
 #Here you can list all the values of epsilon that you estimating in any runs
 
 grep "Epsilon" ./*/*_results.txt #error term
+
+OUTPUT:
+./error_model_cafe/Base_results.txt:Epsilon: 0.0252823
+./replicate_run_10/Base_results.txt:Epsilon: 0.0252803
+./replicate_run_1/Base_results.txt:Epsilon: 0.0252812
+./replicate_run_2/Base_results.txt:Epsilon: 0.0252814
+./replicate_run_3/Base_results.txt:Epsilon: 0.0252807
+./replicate_run_4/Base_results.txt:Epsilon: 0.0252812
+./replicate_run_5/Base_results.txt:Epsilon: 0.0252805
+./replicate_run_6/Base_results.txt:Epsilon: 0.0252805
+./replicate_run_7/Base_results.txt:Epsilon: 0.0252813
+./replicate_run_8/Base_results.txt:Epsilon: 0.0251684
+./replicate_run_9/Base_results.txt:Epsilon: 0.0252823
+./single_lambda/Base_results.txt:Epsilon: 0.0252823
 
 ##To interpret your results:
 
@@ -1546,21 +1575,308 @@ grep "Epsilon" ./*/*_results.txt #error term
 #get a list of the significantly expanded/contracted/rapid genes in your species
 #replace the path of error_model/ with the name of whatever Cafe run you want to view
 
-grep MGWA_VELO045 error_model/Base_asr.tre | sed 's/^.*OG/OG/g' | sed 's/ = .*$//g'
+grep MGWA_VELO045 Base_asr.tre | sed 's/^.*OG/OG/g' | sed 's/ = .*$//g'
 
 #Get list of families that have expanded in your species, not necessarily significant
 
 #First you will have to find out what column your species is in. 
 
-less error_model/Base_change.tab #What column has your species? For example, mine, Wilpoe, was in column 41
+less Base_change.tab #What column has your species? For example, mine, Wilpoe, was in column 41
+#MGWA_VELO045 Column 2
 
 #Now change "41" in this command to whatever number column your species is in
 
-cut -f 1,41 error_model/Base_change.tab | grep -v "+0" | grep -v "-" #This is the list of gene families that have expanded in your species relative to the sister lineage
+cut -f 1,2 Base_change.tab | grep -v "+0" | grep -v "-" #This is the list of gene families that have expanded in your species relative to the sister lineage
+
+OUTPUT:
+OG0000033	+1
+OG0000038	+1
+OG0000043	+1
+OG0000050	+1
+OG0000066	+1
+OG0000075	+1
+OG0000083	+1
+OG0000090	+2
+OG0000091	+1
+OG0000092	+1
+OG0000100	+1
+OG0000116	+1
+OG0000165	+1
+OG0000168	+1
+OG0000176	+1
+OG0000187	+1
+OG0000239	+1
+OG0000243	+1
+OG0000244	+1
+OG0000249	+2
+OG0000251	+1
+OG0000253	+1
+OG0000260	+2
+OG0000262	+1
+OG0000271	+1
+OG0000274	+1
+OG0000288	+1
+OG0000290	+2
+OG0000298	+1
+OG0000300	+2
+OG0000305	+1
+OG0000309	+1
+OG0000311	+1
+OG0000316	+1
+OG0000320	+1
+OG0000321	+1
+OG0000322	+1
+OG0000348	+1
+OG0000349	+1
+OG0000367	+1
+OG0000370	+1
+OG0000384	+1
+OG0000412	+1
+OG0000425	+1
+OG0000452	+1
+OG0000453	+1
+OG0000454	+1
+OG0000455	+1
+OG0000479	+1
+OG0000484	+1
+OG0000497	+1
+OG0000523	+1
+OG0000534	+1
+OG0000566	+1
+OG0000648	+1
+OG0000673	+1
+OG0000776	+1
+OG0000812	+1
+OG0000824	+1
+OG0000833	+1
+OG0000869	+1
+OG0000938	+1
+OG0000947	+1
+OG0000962	+1
+OG0000963	+1
+OG0000974	+1
+OG0000988	+1
+OG0000994	+1
+OG0000997	+1
+OG0001018	+1
+OG0001024	+1
+OG0001046	+1
+OG0001080	+1
+OG0001088	+1
+OG0001089	+1
+OG0001106	+1
+OG0001107	+1
+OG0001116	+1
+OG0001122	+1
+OG0001136	+1
+OG0001137	+1
+OG0001138	+1
+OG0001142	+2
+OG0001152	+1
+OG0001170	+1
+OG0001181	+1
+OG0001182	+2
+OG0001183	+1
+OG0001197	+1
+OG0001198	+1
+OG0001205	+1
+OG0001207	+2
+OG0001209	+1
+OG0001215	+1
+OG0001218	+1
+OG0001221	+1
+OG0001231	+1
+OG0001238	+1
+OG0001258	+1
+OG0001259	+1
+OG0001261	+2
+OG0001263	+1
+OG0001267	+1
+OG0001271	+1
+OG0001275	+1
+OG0001278	+2
+OG0001322	+2
+OG0001325	+1
+OG0001344	+1
+OG0001351	+2
+OG0001354	+1
+OG0001364	+1
+OG0001390	+1
+OG0001416	+1
+OG0001426	+1
+OG0001449	+1
+OG0001466	+1
+OG0001469	+1
+OG0001472	+1
+OG0001497	+1
+OG0001499	+1
+OG0001511	+1
+OG0001520	+1
+OG0001523	+1
+OG0001535	+1
+OG0001543	+1
+OG0001544	+1
+OG0001548	+1
+OG0001551	+1
+OG0001554	+1
+OG0001555	+1
+OG0001556	+1
+OG0001612	+1
+OG0001619	+1
+OG0001649	+1
+OG0001688	+1
+OG0001689	+1
+OG0001690	+1
+OG0001703	+1
+OG0001709	+1
+OG0001725	+1
+OG0001743	+1
+OG0001744	+1
+OG0001751	+1
+OG0001755	+1
+OG0001786	+1
+OG0001798	+1
+OG0001809	+1
+OG0001822	+1
+OG0001851	+1
+OG0001873	+1
+OG0001900	+1
+OG0001927	+1
+OG0001929	+1
+OG0001950	+1
+OG0002033	+1
+OG0002058	+1
+OG0002082	+2
+OG0002106	+1
+OG0002125	+1
+OG0002127	+1
+OG0002138	+1
+OG0002153	+1
+OG0002160	+1
+OG0002181	+1
+OG0002199	+1
+OG0002200	+1
+OG0002247	+1
+OG0002306	+1
+OG0002323	+1
+OG0002333	+1
+OG0002367	+1
+OG0002388	+1
+OG0002398	+1
+OG0002403	+1
+OG0002438	+1
+OG0002463	+1
+OG0002485	+1
+OG0002519	+1
+OG0002524	+1
+OG0002633	+1
+OG0002709	+1
+OG0002714	+1
+OG0002721	+1
+OG0002724	+2
+OG0002743	+1
+OG0002755	+1
+OG0002805	+1
+OG0002807	+1
+OG0002818	+1
+OG0002969	+1
+OG0002970	+1
+OG0003009	+1
+OG0003057	+1
+OG0003089	+1
+OG0003139	+1
+OG0003158	+1
+OG0003170	+1
+OG0003171	+1
+OG0003175	+1
+OG0003225	+1
+OG0003336	+1
+OG0003355	+1
+OG0003448	+1
+OG0003465	+1
+OG0003478	+1
+OG0003580	+1
+OG0003596	+1
+OG0003607	+1
+OG0003613	+1
+OG0003627	+1
+OG0003652	+1
+OG0003773	+1
+OG0003783	+1
+OG0003885	+1
+OG0003924	+1
+OG0003935	+1
+OG0003971	+1
+OG0003982	+1
+OG0004216	+1
+OG0004223	+1
+OG0004270	+1
+OG0004277	+1
+OG0004376	+1
+OG0004393	+1
+OG0004589	+1
+OG0004640	+1
+OG0004654	+1
+OG0004713	+1
+OG0004715	+1
+OG0004755	+1
+OG0004798	+1
+OG0004802	+1
+OG0004879	+1
+OG0004881	+1
+OG0005147	+1
+OG0005311	+1
+OG0005382	+1
+OG0006160	+1
+OG0006368	+1
+OG0006864	+1
+OG0007228	+1
+OG0007675	+1
+OG0009375	+1
+OG0009388	+1
+OG0009407	+1
+OG0009416	+1
+OG0009491	+1
+OG0009601	+1
+OG0009763	+1
+OG0009876	+1
+OG0010104	+1
+OG0010203	+1
+OG0010592	+1
+OG0010626	+1
+OG0010664	+1
+OG0010705	+1
+OG0010750	+1
+OG0010849	+1
+OG0010864	+1
+OG0010959	+1
+OG0010987	+1
+OG0011250	+1
+OG0011351	+1
+OG0011716	+1
+OG0011813	+1
+OG0011848	+1
+OG0011903	+1
+OG0011928	+1
+OG0011948	+1
+OG0011954	+1
+OG0011966	+1
+OG0012074	+1
+OG0012151	+1
+OG0012166	+1
+OG0012261	+1
+OG0012362	+1
+OG0012403	+1
+OG0012623	+1
+OG0012870	+1
+OG0012875	+1
+OG0013079	+1
 
 #count the number of expansions #again change "41" in this command to whatever number column your species is in
 
-cut -f 1,41 error_model/Base_change.tab | grep -v "+0" | grep -v "-" | wc -l
+cut -f 1,2 Base_change.tab | grep -v "+0" | grep -v "-" | wc -l
+
+OUTPUT: 283 expansions 
 
 #If you did many runs with the loop, here is how to summarise all of them and get an average for all runs
 
@@ -1571,14 +1887,23 @@ grep "Epsilon" ./replicate_run_*/Base_results.txt | sed 's/^.* //g' > epsilons.t
 
 R #opens R, so you are now coding in R language, not bash (Terminal).
 
+#q() to quit R
+
 epsilons <- read.table("epsilons.txt") #read files
 lambdas <- read.table("lambdas.txt")
 
 mean(epsilons[,1]) #reports the mean value of epsilon
+# mean ephsilon is 0.02526978
+
 sd(epsilons[,1]) #reports the standard deviation value of epsilon
+# 3.562611e-05
 
 mean(lambdas[,1]) #reports the mean value of lambda
+# 0.001435695
+
 sd(lambdas[,1]) #reports the standard deviation value of lambda
+# 1.007317e-07
+
 q() #quit R
 n #no to saving
 
@@ -1590,6 +1915,8 @@ n #no to saving
 #If not, change that number in all of the parts where it says {1...10}. 
 #You will also have to change Wilpoe<39> to the name of your species and the number in <> that is says in your cafe files. Only change Wilpoe<39> and keep the \* that appears in the code!
 
+# MGWA_VELO045.standardplus.namedproteins<2>
+
 #make folder
 
 mkdir analysis
@@ -1597,27 +1924,54 @@ cd analysis
 
 #get a list of the significantly expanded/contracted/rapid genes in your species
 
-printf '%s\n' {1..10} | while read number ; do grep "Wilpoe<39>\*" ../replicate_run_$number/Base_asr.tre | sed 's/^.*OG/OG/g' | sed 's/ = .*$//g' > sig_changes_error_model_"$number" ; done 
+printf '%s\n' {1..10} | while read number ; do grep "MGWA_VELO045.standardplus.namedproteins<2>\*" ../replicate_run_$number/Base_asr.tre | sed 's/^.*OG/OG/g' | sed 's/ = .*$//g' > sig_changes_error_model_"$number" ; done 
 
 #count how many were found at each run
 
 wc -l sig_changes_error_model_* #most found 50 in my species, except number 6 found 51. Ideally, they should all be the same.
 
+OUTPUT:
+ 98 sig_changes_error_model_1
+  96 sig_changes_error_model_10
+  96 sig_changes_error_model_2
+  96 sig_changes_error_model_3
+  96 sig_changes_error_model_4
+  96 sig_changes_error_model_5
+  96 sig_changes_error_model_6
+  98 sig_changes_error_model_7
+  96 sig_changes_error_model_8
+  98 sig_changes_error_model_9
+ 966 total
+
 #Since my run 6 was weird, this is how to see what is uniquely found in run 6 (could change to whatever number was weird for you, or skip)
 
-printf '%s\n' {1..10} | while read number ; do grep -v -f sig_changes_error_model_"$number" sig_changes_error_model_6 ; done
+printf '%s\n' {1..10} | while read number ; do grep -v -f sig_changes_error_model_"$number" sig_changes_error_model_7 ; done
+
+## RUN 1 OUTPUT:
+OG0013085
+OG0013859
+
+## RUN 7 OUTPUT:
+OG0013085
+OG0013859
+
+## RUN 9 OUTPUT:
+OG0013085
+OG0013859
 
 #OG0013931 in my run 6 is not found in the other runs
 #make sure all the others are identical
 
-printf '%s\n' {1..10} | while read number ; do grep -v -f sig_changes_error_model_"$number" sig_changes_error_model_1 ; done
+printf '%s\n' {1..10} | while read number ; do grep -v -f sig_changes_error_model_"$number" sig_changes_error_model_6 ; done
 
 #yep, all 50 were the same in all other runs (no output returned by the above command, means that nothing was different in them compared to run 1)
+
+# REMAINING RUNS RETURNED NO OUTPUT
 
 #Get list of families that have expanded in the species, whether or not significant
 #CHANGE the number 41 to the column number for your species!!!
 
-printf '%s\n' {1..10} | while read number ; do cut -f 1,41 ../error_model_$number/Base_change.tab | grep -v "+0" | grep -v "-" > expandedfams_"$number" ; done #1212 in all ten replicates for mine
+printf '%s\n' {1..10} | while read number ; do cut -f 1,2 ../replicate_run_$number/Base_change.tab | grep -v "+0" | grep -v "-" > expandedfams_"$number" ; done #1212 in all ten replicates for mine
 
 #compare expanded list to significant list to keep only significantly expanded ones
 
@@ -1625,7 +1979,20 @@ printf '%s\n' {1..10} | while read number ; do grep -f sig_changes_error_model_"
 
 #count how many there are
 
-wc -l antexpandedfams_error_model_*.sig #21 for all replicates except 22 for number 6 with OG0013931 uniquely
+wc -l expandedfams_error_model_*.sig #21 for all replicates except 22 for number 6 with OG0013931 uniquely
+
+OUTPUT:
+9 expandedfams_error_model_10.sig
+   9 expandedfams_error_model_1.sig
+   9 expandedfams_error_model_2.sig
+   9 expandedfams_error_model_3.sig
+   9 expandedfams_error_model_4.sig
+   9 expandedfams_error_model_5.sig
+   9 expandedfams_error_model_6.sig
+   9 expandedfams_error_model_7.sig
+   9 expandedfams_error_model_8.sig
+   9 expandedfams_error_model_9.sig
+  90 total
 
 #make sure all the others are identical
 
@@ -1636,58 +2003,64 @@ printf '%s\n' {1..10} | while read number ; do grep -v -f expandedfams_error_mod
 #repeat for contracted families
 #CHANGE 41 to your column number
 
-printf '%s\n' {1..10} | while read number ; do cut -f 1,41 ../error_model_$number/Base_change.tab | grep -v "+" > contractedfams_error_model_"$number" ; done #1733 contracted families in all ten replicates
+printf '%s\n' {1..10} | while read number ; do cut -f 1,2 ../replicate_run_$number/Base_change.tab | grep -v "+" > contractedfams_error_model_"$number" ; done #1733 contracted families in all ten replicates
 
 printf '%s\n' {1..10} | while read number ; do grep -f sig_changes_error_model_"$number" contractedfams_error_model_"$number" > contractedfams_error_model_"$number".sig ; done #keep only significantly contracted families
 
-wc -l antcontractedfams_error_model_*.sig #count: 29 significantly contracted families for all replicates
+wc -l contractedfams_error_model_*.sig #count: 29 significantly contracted families for all replicates
+
+OUTPUT:
+47 contractedfams_error_model_10.sig
+  49 contractedfams_error_model_1.sig
+  47 contractedfams_error_model_2.sig
+  47 contractedfams_error_model_3.sig
+  47 contractedfams_error_model_4.sig
+  47 contractedfams_error_model_5.sig
+  47 contractedfams_error_model_6.sig
+  49 contractedfams_error_model_7.sig
+  47 contractedfams_error_model_8.sig
+  49 contractedfams_error_model_9.sig
+ 476 total
 
 #make sure all the others are identical to round 1
 
 printf '%s\n' {1..10} | while read number ; do grep -v -f contractedfams_error_model_"$number".sig contractedfams_error_model_1.sig ; done
+
+OUTPUT:
+OG0013085	-1
+OG0013859	-1
 
 #yep, all 29 were found in all other runs (no output returned by the above command).
 
 #At the end, I got files listing significantly expanded or contracted orthogroups.
 #First things first. What genes are in these orthogroups?
 
-mkdir ~/"$GENOME"/cafe/expanded
-cd ~/"$GENOME"/cafe/expanded
+mkdir ~/MGWA_VELO045/cafe/expanded
+cd ~/MGWA_VELO045/cafe/expanded
 
 #get a fasta of the expanded families from the OrthoFinder output. This is using run 1 of the replicate runs, if you want to use a different one, change expandedfams_error_model_1 to the number you want here and also in the next command.
-
-cat ../analysis/expandedfams_error_model_1.sig | cut -f 1 | while read Orthogroup ; do cp /home/0_BIOD98/OrthoFinderpasserines/Orthogroup_Sequences/"$Orthogroup".fa . ; done
+#### 
+cat ../analysis/expandedfams_error_model_2.sig | cut -f 1 | while read Orthogroup ; do cp ~/home/0_BIOD98_GENOMES2/MGWA_VELO045/4__ORTHOFINDER/orthofinder/Results_MGWA_VELO045/Orthogroup_Sequences/"$Orthogroup".fa . ; done
 
 #Get a list of the genes in these orthogroups for your species
-
-cat ../analysis/antexpandedfams_error_model_1.sig | cut -f 1 | while read Orthogroup ; do grep "$GENOME" "$Orthogroup".fa >> expanded_geneIDs.txt ; done
-
+cat ../analysis/expandedfams_error_model_1.sig | cut -f 1 | while read Orthogroup ; do grep "$GENOME" "$Orthogroup".fa >> expanded_geneIDs.txt ; done
 sed -i 's/>//g' expanded_geneIDs.txt
 
 #Now, you will possible need to edit this. 
 #Take a look at your files and look at whether there is a suffix at the end of your gene names (for example, mine all end in -RA). If there is any extra stuff letters different that -RA, change this command (I think it should always be just -RA though)
-
 sed -i 's/-RA//g' expanded_geneIDs.txt #get rid of the -RA
 
 #repeat for contracted gene if you are interested in those too
-
 mkdir ~/"$GENOME"/cafe/contracted
 cd ~/"$GENOME"/cafe/contracted
 
 #get a fasta of the contracted families from the OrthoFinder output
-
 cat ../analysis/contractedfams_error_model_1.sig | cut -f 1 | while read Orthogroup ; do cp /home/0_BIOD98/OrthoFinderpasserines/Orthogroup_Sequences/"$Orthogroup".fa . ; done
 
 #Get a list of the genes in these orthogroups
-
 cat ../analysis/contractedfams_error_model_1.sig | cut -f 1 | while read Orthogroup ; do grep "$GENOME" "$Orthogroup".fa >> contracted_geneIDs.txt ; done
-
 sed -i 's/>//g' contracted_geneIDs.txt
-
 sed -i 's/-RA//g' contracted_geneIDs.txt
-
-##If you want to find out what these genes do, go to the next page: GO analysis
-
 ## TRANSFERRING ALL THE FILES ONTO MAIN SERVER FROM RAMPHOCELES:
 
 ##Transfers the short_summary_protein_annotation_eval_SHAWANAH_RAHMAN.txt to the main server path (/home/0_BIOD98_GENOMES1/BUSCO_REPORTS/)
@@ -1734,7 +2107,6 @@ scp -r USER6@192.168.0.5:~/MGWA_VELO045/RepeatMasker_MGWA_VELO045 .
 
 ##Transfers the files from FastQC to the ramphoceles (home/0_BIOD98_GENOMES2/MGWA_VELO045/5__POST_PIPELINE_ANALYSES)
 scp -r USER6@192.168.0.5:~/MGWA_VELO045/RepeatMasker_MGWA_VELO045 .
-
 
 ## CAFE FILE TRANSFER
 
@@ -1845,7 +2217,12 @@ export PERLBREW_ROOT=/opt/perl5 #perlbrew will be installed in opt
 #parse the out file to find amount of DNA masked
 time perl /home/0_PROGRAMS/Parsing-RepeatMasker-Outputs/parseRM.pl -i MGWA_VELO045.fasta.out -p -g 1167167328 -r MGWA_VELO045_repeat_library_withFicalbUracya.lib -v
 
-#parse the align file to make landscape graph
+OUTPUT:
+real	124m14.853s
+user	119m53.606s
+sys	3m33.262s
+
+# parse the align file to make landscape graph
 time perl /home/0_PROGRAMS/Parsing-RepeatMasker-Outputs/parseRM.pl -i MGWA_VELO045.fasta.align -g 1167167328 -r MGWA_VELO045_repeat_library_withFicalbUracya.lib -m 0.0033 -l 100,1 -v
 #done
 
@@ -1856,6 +2233,7 @@ In the paper, I am reporting the fraction of the genome masked by each repeat cl
 To turn bp in fraction, I am using the length of the genome with runs of N's removed (since these do not represent real sequence that could be masked). This is conveniently reported in "$GENOME".fasta.tbl produced by repeatmasker: total length: 1112597196 bp (1089534386 bp excl N/X-runs). Then, I am using the parsed file from Parsing-RepeatMasker-Outputs/parseRM.pl to get number of basepairs masked by each family and class of repeat. All the unknowns are lumped into one number so to get the unknowns for LTR vs LINE I just subtract the identified LTR/LINE families from their respective totals to get the unknowns for each class. The other libraries use a different classification system using the name ERV3 instead of ERVL and ERV2 instead of ERVK so a I am adding those two values together for those two families.
 
 ## REPEAT LANDSCAPE FOR MOWA
+
 #set up environment, obtaining TE library and genome sequence
 mkdir ~/MGWA_VELO045/RepeatMasker_MOWA_IF09D02
 cd  ~/MGWA_VELO045/RepeatMasker_MOWA_IF09D02
@@ -1881,11 +2259,10 @@ conda activate RepeatMasker
 
 time RepeatMasker -no_is -lib MOWA_IF09D02_repeat_library_withFicalbUracya.lib -dir . MOWA_IF09D02.fasta -pa 23 -s -a -inv -gccalc -xsmall > MOWA_IF09D02_rmask.log #slow search, more sensitive
 
-
-# CURRENTLY RUNNING
-
 OUTPUT:
-
+real	284m42.958s
+user	2305m1.705s
+sys	691m22.112s
 
 less MOWA_IF09D02_rmask.log
 
@@ -1895,6 +2272,58 @@ less MOWA_IF09D02_rmask.log
 
 less MOWA_IF09D02.fasta.tbl
 
+OUTPUT:
+file name: MOWA_IF09D02.fasta       
+sequences:         52214
+total length: 1183419931 bp  (1166181301 bp excl N/X-runs)
+GC level:         42.95 %
+bases masked:  186032687 bp ( 15.72 %)
+==================================================
+               number of      length   percentage
+               elements*    occupied  of sequence
+--------------------------------------------------
+SINEs:             2814       299628 bp    0.03 %
+      ALUs            0            0 bp    0.00 %
+      MIRs          621        71671 bp    0.01 %
+
+LINEs:           146631     42092978 bp    3.56 %
+      LINE1           0            0 bp    0.00 %
+      LINE2           0            0 bp    0.00 %
+      L3/CR1     146631     42092978 bp    3.56 %
+
+LTR elements:    116799     67991964 bp    5.75 %
+      ERVL        18464      9989382 bp    0.84 %
+      ERVL-MaLRs      0            0 bp    0.00 %
+      ERV_classI  22890     13192493 bp    1.11 %
+      ERV_classII 44736     33861797 bp    2.86 %
+
+DNA elements:      4713       429811 bp    0.04 %
+     hAT-Charlie      0            0 bp    0.00 %
+     TcMar-Tigger     0            0 bp    0.00 %
+
+Unclassified:    122234     44552303 bp    3.76 %
+
+Total interspersed repeats:155366684 bp   13.13 %
+
+Small RNA:         1881       992991 bp    0.08 %
+
+Satellites:       17963     15193514 bp    1.28 %
+Simple repeats:  239372     12167698 bp    1.03 %
+Low complexity:   48927      2761618 bp    0.23 %
+==================================================
+
+* most repeats fragmented by insertions or deletions
+  have been counted as one element
+                                                      
+
+The query species was assumed to be homo          
+RepeatMasker Combined Database: Dfam-Dfam_3.0
+                                    
+run with rmblastn version 2.9.0+
+The query was compared to classified sequences in "MOWA_IF09D02_repeat_library_withFicalbUracya.lib"
+
+#### END
+
 #requires perl with bio::SeqIO
 export PERLBREW_ROOT=/opt/perl5 #perlbrew will be installed in opt
 /opt/perl5/bin/perlbrew switch perl-5.30.0 #A sub-shell is launched with perl-5.30.0 as the activated perl. Run 'exit' to finish it.
@@ -1902,65 +2331,15 @@ export PERLBREW_ROOT=/opt/perl5 #perlbrew will be installed in opt
 #redefine GENOME now
 
 #parse the out file to find amount of DNA masked
-time perl /home/0_PROGRAMS/Parsing-RepeatMasker-Outputs/parseRM.pl -i MGWA_VELO045.fasta.out -p -g 1167167328 -r MGWA_VELO045_repeat_library_withFicalbUracya.lib -v
+time perl /home/0_PROGRAMS/Parsing-RepeatMasker-Outputs/parseRM.pl -i MOWA_IF09D02.fasta.out -p -g 1183419931 -r MOWA_IF09D02_repeat_library_withFicalbUracya.lib -v
 
-#parse the align file to make landscape graph
-time perl /home/0_PROGRAMS/Parsing-RepeatMasker-Outputs/parseRM.pl -i MGWA_VELO045.fasta.align -g 1167167328 -r MGWA_VELO045_repeat_library_withFicalbUracya.lib -m 0.0033 -l 100,1 -v
+OUTPUT:
+real	103m47.123s
+user	100m50.372s
+sys	2m11.349s
+
+# parse the align file to make landscape graph
+time perl /home/0_PROGRAMS/Parsing-RepeatMasker-Outputs/parseRM.pl -i MOWA_IF09D02.fasta.align -g 1183419931 -r MOWA_IF09D02_repeat_library_withFicalbUracya.lib -m 0.0033 -l 100,1 -v
 #done
 
 #To make a figure, you can plot histograms in Excel or the program of your choice.
-
-## GC CONTENT MGWA_VELO045: INCOMPLETE
-GOAL:Activity: calculate GC content (%G or C vs A or T) in sliding window across the genome
-
-#first, make a folder to work in
-mkdir ~/MGWA_VELO045/GC_content
-cd ~/MGWA_VELO045/GC_content
-
-#load the correct perl environment
-export PERLBREW_ROOT=/opt/perl5 #perlbrew will be installed in opt
-/opt/perl5/bin/perlbrew switch perl-5.30.0 #A sub-shell is launched with perl-5.30.0 as the activated perl. Run 'exit' to finish it.
-
-#now run the program!
-time perl /home/0_PROGRAMS/GC_content_in_sliding_window/GC_content.pl --fasta ./MGWA_VELO045.fasta --window 10000 --step 100
-
-OUTPUT:
-real	0m8.480s
-user	0m0.151s
-sys	0m0.012s
-
-cp ../genome/MGWA_VELO045.fasta .
-time perl /home/0_PROGRAMS/GC_content_in_sliding_window/GC_content.pl --fasta ./MGWA_VELO045.fasta --window 10000 --step 100
-
-OUTPUT:
-real	29m12.516s
-user	14m34.464s
-sys	0m4.323s
-
-#If you keep getting some scaffold fail, you could try this, to split all the scaffolds apart and then run each separately
-#This may cause issues later on if you are missing data on some of the scaffolds so beware
-
-conda create -n fasplit
-conda activate fasplit
-conda install -c bioconda ucsc-fasplit
-faSplit byname MGWA_VELO045.fasta .
-
-mv ./MGWA_VELO045.fasta garbage
-find ./*.fasta | parallel time perl /home/0_PROGRAMS/GC_content_in_sliding_window/GC_content.pl --fasta {1}.fasta --window 10000 --step 100
-
-#If it fails with an error about dividing by zero, that could mean that it encountered a window with NO G or C. You can try to get around this by increasing the window size
-
-#Let's make a very simple plot in R to view the results. This as a placeholder skeleton which must be edited depending on the format of the output files.
-
-R
-library(ggplot2)
-
-#load data
-scaffold <- read.table("anteater700.fasta_0.GC_content")
-scaffold <- as.data.frame(scaffold)
-
-#now you can plot it (but will not work on Ramphocelus node)
-plot(scaffold)
-
-
-
