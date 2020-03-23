@@ -2040,7 +2040,7 @@ cd ~/MGWA_VELO045/cafe/expanded
 
 #get a fasta of the expanded families from the OrthoFinder output. This is using run 1 of the replicate runs, if you want to use a different one, change expandedfams_error_model_1 to the number you want here and also in the next command.
 #### 
-cat ../analysis/expandedfams_error_model_2.sig | cut -f 1 | while read Orthogroup ; do cp ~/home/0_BIOD98_GENOMES2/MGWA_VELO045/4__ORTHOFINDER/orthofinder/Results_MGWA_VELO045/Orthogroup_Sequences/"$Orthogroup".fa . ; done
+cat ../analysis/expandedfams_error_model_1.sig | cut -f 1 | while read Orthogroup ; do cp  ~/home/0_BIOD98/OrthoFinder_passerines/WorkingDirectory/OrthoFinder/Results_MGWA_VELO045/Orthogroup_Sequences/"$Orthogroup".fa . ; done
 
 #Get a list of the genes in these orthogroups for your species
 cat ../analysis/expandedfams_error_model_1.sig | cut -f 1 | while read Orthogroup ; do grep "$GENOME" "$Orthogroup".fa >> expanded_geneIDs.txt ; done
@@ -2341,5 +2341,9 @@ sys	2m11.349s
 # parse the align file to make landscape graph
 time perl /home/0_PROGRAMS/Parsing-RepeatMasker-Outputs/parseRM.pl -i MOWA_IF09D02.fasta.align -g 1183419931 -r MOWA_IF09D02_repeat_library_withFicalbUracya.lib -m 0.0033 -l 100,1 -v
 #done
+
+real	72m36.070s
+user	71m56.549s
+sys	0m36.471s
 
 #To make a figure, you can plot histograms in Excel or the program of your choice.
